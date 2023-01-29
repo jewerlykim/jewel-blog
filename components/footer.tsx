@@ -4,16 +4,7 @@ const Footer = () => {
         <footer className="bg-white dark:bg-gray-800 w-full py-8">
             <div className="max-w-screen-xl px-4 mx-auto">
                 <ul className="flex flex-wrap justify-between max-w-screen-md mx-auto text-lg font-light">
-                    <li className="my-2">
-                        <a className="text-gray-400 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-200" href="#">
-                            FAQ
-                        </a>
-                    </li>
-                    <li className="my-2">
-                        <a className="text-gray-400 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-200" href="#">
-                            Configuration
-                        </a>
-                    </li>
+
                     <li className="my-2">
                         <a className="text-gray-400 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-200" href="#">
                             Github
@@ -58,7 +49,7 @@ const Footer = () => {
                     </a>
                 </div>
                 <div className="text-center text-gray-500 dark:text-gray-200 pt-10 sm:pt-12 font-light flex items-center justify-center">
-                    Created by Charlie
+                    Created by
                 </div>
             </div>
         </footer>
