@@ -1,15 +1,17 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import HomeContainer from '../components/home/home.container';
 
+// 블로그의 메인 페이지
 const Home: NextPage = () => {
   return (
     <>
       <main>
-        <h1>Next.js + TypeScript Example</h1>
+        <HomeContainer />
       </main>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
