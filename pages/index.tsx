@@ -7,7 +7,7 @@ import HomeContainer from '../components/home/home.container';
 const Home: NextPage = () => {
   return (
     <>
-      <main>
+      <main className="min-h-screen">
         <HomeContainer />
       </main>
     </>

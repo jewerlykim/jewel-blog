@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <footer className="bg-white  w-full py-8">
-      <div className="max-w-screen-xl px-4 mx-auto">
+      <div className="max-w-screen-xl px-4 mx-auto border-t-2 border-gray-300 my-2">
         <div className="pt-8 flex max-w-xs mx-auto items-center justify-between">
           <a
             href="https://twitter.com/GODJEWELKBS"
