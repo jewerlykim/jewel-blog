@@ -1,4 +1,6 @@
 import HomeIntroduction from './home.introduction';
+import HomePosts from './home.posts';
+import HomeSide from './home.side';
 
 /* 블로그의 메인 페이지이다. 총 세 군데의 컨테이너로 쪼갤예정이다. 
 가로로 3칸으로 나눌 예정이다.
@@ -14,8 +16,12 @@ const HomeContainer = () => {
           <div className="w-1/4 p-4">
             <HomeIntroduction />
           </div>
-          <div className="w-1/2 p-4">{/* 두 번째 컨테이너 */}</div>
-          <div className="w-1/4 p-4">{/* 세 번째 컨테이너 */}</div>
+          <div className="w-1/2 p-4">
+            <HomePosts />
+          </div>
+          <div className="w-1/4 p-4">
+            <HomeSide />
+          </div>
         </div>
       </main>
     </>
