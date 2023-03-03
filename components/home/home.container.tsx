@@ -13,13 +13,13 @@ const HomeContainer = () => {
     <>
       <main>
         <div className="flex">
-          <div className="w-1/4 p-4">
+          <div className="w-1/4 p-4 hidden sm:block">
             <HomeIntroduction />
           </div>
-          <div className="w-1/2 p-4">
+          <div className="w-full sm:w-1/2 p-4 ">
             <HomePosts />
           </div>
-          <div className="w-1/4 p-4">
+          <div className="w-1/4 p-4 hidden sm:block">
             <HomeSide />
           </div>
         </div>

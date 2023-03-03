@@ -39,7 +39,7 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-              <div className="block">
+              {/* <div className="block">
                 <div className="flex -mr-2">
                   <form className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
                     <div className=" relative ">
@@ -59,7 +59,7 @@ const Navbar = () => {
                   </form>
                 </div>
                 <div className="flex items-center ml-4 md:ml-6"></div>
-              </div>
+              </div> */}
             </div>
           </div>
         </nav>
