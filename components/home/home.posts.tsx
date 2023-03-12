@@ -41,9 +41,7 @@ const RecentPosts: NextPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch(postsURL, {
-        mode: 'no-cors',
-      });
+      const res = await fetch(postsURL);
       const posts = await res.json();
       console.log(`posts is ${JSON.stringify(posts)}`)
 
