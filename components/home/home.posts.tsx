@@ -45,6 +45,7 @@ const RecentPosts: NextPage = () => {
         mode: 'no-cors',
       });
       const posts = await res.json();
+      console.log(`posts is ${JSON.stringify(posts)}`)
 
 
       setPosts(posts);
