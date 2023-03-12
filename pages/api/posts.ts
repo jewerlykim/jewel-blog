@@ -26,7 +26,7 @@ export default function handler(
   });
 
   // CORS 헤더 설정
-  res.setHeader('Access-Control-Allow-Origin', 'https://www.godjewel.co.kr');
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
   res.status(200).json(postsData);
 }
