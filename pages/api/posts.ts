@@ -7,7 +7,7 @@ import Cors from 'cors';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
-  origin: 'https://www.godjewel.co.kr',
+  origin: ['https://www.godjewel.co.kr', 'https://godjewel.co.kr'],
 });
 
 function runMiddleware(
@@ -30,6 +30,22 @@ export default async function handler(
   res: NextApiResponse<PostData[]>,
 ) {
   await runMiddleware(req, res, cors);
+  // CORS 헤더 설정
+
+  res.setHeader('Access-Control-Allow-Origin', [
+    'https://www.godjewel.co.kr',
+    'https://godjewel.co.kr',
+  ]);
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS',
+  );
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With,content-type',
+  );
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
   const postsDirectory = path.join(process.cwd(), 'posts');
   const fileNames = fs.readdirSync(postsDirectory);
 
@@ -46,19 +62,6 @@ export default async function handler(
       contentHtml: '',
     };
   });
-
-  // CORS 헤더 설정
-
-  res.setHeader('Access-Control-Allow-Origin', 'https://www.godjewel.co.kr');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, OPTIONS',
-  );
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-Requested-With,content-type',
-  );
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   res.status(200).json(postsData);
 }
