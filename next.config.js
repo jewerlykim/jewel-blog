@@ -10,6 +10,6 @@ dotenv.config({
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['i.scdn.co'],
+    domains: ['cdn.discordapp.com'],
   },
 };

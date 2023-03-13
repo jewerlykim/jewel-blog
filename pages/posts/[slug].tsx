@@ -3,11 +3,13 @@ import { ParsedUrlQuery } from 'querystring';
 import { join } from 'path';
 import { promises as fs } from 'fs';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import PostData from '../../types/PostData';
 import Image from 'next/image';
 import { DiscussionEmbed } from "disqus-react";
+
 
 interface Params extends ParsedUrlQuery {
     slug: string;
@@ -18,6 +20,7 @@ interface Props {
     post: PostData;
 }
 
+
 const Post: NextPage<Props> = ({ post }) => {
     const disqusShortname = "https-www-godjewel-co-kr";
     const disqusConfig = {
@@ -26,6 +29,10 @@ const Post: NextPage<Props> = ({ post }) => {
         title: post.title,
         language: "ko_KR",
     };
+
+
+
+
     return (
         <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
             <div className="text-2xl font-bold">{post.title}</div>
@@ -41,7 +48,9 @@ const Post: NextPage<Props> = ({ post }) => {
                     />
                 </div>
             )}
-            <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
+            {/* <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div> */}
+            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
+                `${post.contentHtml}`} />
             <hr className="my-4 border-gray-300" />
             <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
         </div>
@@ -78,13 +87,13 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
     const fileContents = await fs.readFile(filePath, 'utf8');
     const { data, content } = matter(fileContents);
 
-    const result = await remark().use(html).process(content);
-    const contentHtml = result.toString();
+    // const result = await remark().use(html).use(gfm).use(breaks).process(content);
+    // const contentHtml = result.toString();
 
     const post: PostData = {
         title: data.title,
         date: data.date,
-        contentHtml,
+        contentHtml: content,
         thumbnail: data.thumbnail,
         slug: params.slug,
     };
