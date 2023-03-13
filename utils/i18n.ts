@@ -19,7 +19,7 @@ i18n.use(initReactI18next).init({
     ko: {
       translation: {
         blogIntroduction:
-          '쥬얼 블로그에서는 프론트엔드, 백엔드, 데이터베이스, 블록체인 등 다양한 개발 분야에 대한 글을 다루고 있습니다.',
+          '쥬얼로그에서는 프론트엔드, 백엔드, 데이터베이스, 블록체인 등 다양한 개발 분야에 대한 글을 다루고 있습니다.',
         popularPostsTitle: '인기 글',
         recentPostsTitle: '최신 글',
         visitorCounter: '방문자 수',

@@ -5,7 +5,7 @@ import { DiscussionEmbed } from "disqus-react";
 const Home: NextPage = () => {
     const disqusShortname = "https-www-godjewel-co-kr";
     const disqusConfig = {
-        url: "https://www.godjewel.co.kr/",
+        url: "https://www.godjewel.co.kr/guestbook",
         identifier: "guestbook",
         title: "방명록",
         language: "ko_KR",

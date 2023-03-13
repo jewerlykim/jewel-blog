@@ -7,9 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Head>
-        <title>Jewel Blog</title>
+        <title>JEWELOG</title>
         <meta name="description" content="Jewel Blog" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/jewel-tiger-logo.png" />
       </Head>
       <Navbar />
       <main>{children}</main>

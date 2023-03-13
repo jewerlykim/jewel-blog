@@ -7,6 +7,7 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import PostData from '../../types/PostData';
 import Image from 'next/image';
+import { DiscussionEmbed } from "disqus-react";
 
 interface Params extends ParsedUrlQuery {
     slug: string;
@@ -18,6 +19,13 @@ interface Props {
 }
 
 const Post: NextPage<Props> = ({ post }) => {
+    const disqusShortname = "https-www-godjewel-co-kr";
+    const disqusConfig = {
+        url: `https://www.godjewel.co.kr/posts/${post.slug}`,
+        identifier: post.slug,
+        title: post.title,
+        language: "ko_KR",
+    };
     return (
         <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
             <div className="text-2xl font-bold">{post.title}</div>
@@ -34,6 +42,8 @@ const Post: NextPage<Props> = ({ post }) => {
                 </div>
             )}
             <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
+            <hr className="my-4 border-gray-300" />
+            <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
         </div>
     );
 };
