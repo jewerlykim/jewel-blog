@@ -9,12 +9,6 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommand"
   ],
-  "overrides": [
-    {
-      "files": ["**/*.md"],
-      "processor": "disable"
-    }
-  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
