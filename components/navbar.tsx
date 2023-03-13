@@ -26,9 +26,9 @@ const Navbar = () => {
                     </a>
                     <a
                       className="text-gray-800 hover:text-gray-800 px-3 py-2 rounded-md text-md font-medium"
-                      href="/category"
+                      href="/posts"
                     >
-                      카테고리
+                      포스트
                     </a>
                     <a
                       className="text-gray-300  hover:text-gray-800 px-3 py-2 rounded-md text-md font-medium"

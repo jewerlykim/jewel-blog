@@ -59,10 +59,10 @@ const HomeSide: NextPage = () => {
   return (
     <div className="w-full p-4">
       <div className="sticky top-4">
-        <VisitorCounter />
+        {/* <VisitorCounter />
         <RecentGuestbook />
         <CommentSection />
-        <Advertisement />
+        <Advertisement /> */}
       </div>
     </div>
   );
