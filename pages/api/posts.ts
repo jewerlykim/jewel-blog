@@ -7,6 +7,7 @@ import Cors from 'cors';
 
 const cors = Cors({
   methods: ['GET', 'HEAD'],
+  origin: 'https://www.godjewel.co.kr',
 });
 
 function runMiddleware(
