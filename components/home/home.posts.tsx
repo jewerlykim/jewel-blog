@@ -33,15 +33,12 @@ const PopularPosts: NextPage = () => {
 const RecentPosts: NextPage = () => {
   const { t } = useTranslation();
   const [posts, setPosts] = useState<PostData[]>([]);
-  const postsURL = process.env.NEXT_PUBLIC_JEWEL_API_URL + '/posts';
-  console.log(`postsURL is ${postsURL}`)
-
 
 
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch(postsURL);
+      const res = await fetch('/api/posts');
       const posts = await res.json();
       console.log(`posts is ${JSON.stringify(posts)}`)
 
