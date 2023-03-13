@@ -3,11 +3,32 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import PostData from '../../types/PostData';
+import Cors from 'cors';
 
-export default function handler(
+const cors = Cors({
+  methods: ['GET', 'HEAD'],
+});
+
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: Function,
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<PostData[]>,
 ) {
+  await runMiddleware(req, res, cors);
   const postsDirectory = path.join(process.cwd(), 'posts');
   const fileNames = fs.readdirSync(postsDirectory);
 
