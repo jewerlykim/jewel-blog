@@ -32,5 +32,6 @@ export default function handler(
     thumbnail: data.thumbnail,
     contentHtml,
     slug,
+    category: data.category,
   });
 }

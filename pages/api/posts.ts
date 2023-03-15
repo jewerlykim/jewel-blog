@@ -60,6 +60,7 @@ export default async function handler(
       thumbnail: data.thumbnail,
       slug,
       contentHtml: '',
+      category: data.category,
     };
   });
 

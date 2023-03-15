@@ -4,6 +4,7 @@ interface PostData {
   thumbnail: string;
   contentHtml: string;
   slug: string;
+  category: string;
 }
 
 export default PostData;

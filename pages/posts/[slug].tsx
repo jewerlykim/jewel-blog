@@ -68,6 +68,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
     const paths = slugs.map(slug => ({ params: { slug } }));
 
+
     return {
         paths,
         fallback: false,
@@ -96,6 +97,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
         contentHtml: content,
         thumbnail: data.thumbnail,
         slug: params.slug,
+        category: data.category,
     };
 
 
