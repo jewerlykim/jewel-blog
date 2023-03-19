@@ -42,6 +42,15 @@ const RecentPosts: NextPage = () => {
       const posts = await res.json();
       console.log(`posts is ${JSON.stringify(posts)}`)
 
+      // post를 최신순으로 정렬
+      posts.sort((a: any, b: any) => {
+        if (a.date < b.date) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
 
       setPosts(posts);
     };
