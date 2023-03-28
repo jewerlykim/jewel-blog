@@ -33,6 +33,8 @@ const Post: NextPage<Props> = ({ post }) => {
 
 
 
+
+
     return (
         <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
             <div className="text-2xl font-bold">{post.title}</div>
@@ -48,7 +50,6 @@ const Post: NextPage<Props> = ({ post }) => {
                     />
                 </div>
             )}
-            {/* <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div> */}
             <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
                 `${post.contentHtml}`} />
             <hr className="my-4 border-gray-300" />
