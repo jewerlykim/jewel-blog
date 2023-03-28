@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ga } from 'react-ga';
+import KakaoAdfit from '../kakao.adfit';
 
 const VisitorCounter: NextPage = () => {
   const { t } = useTranslation();
@@ -57,14 +58,19 @@ const Advertisement: NextPage = () => {
 
 const HomeSide: NextPage = () => {
   return (
+
+
     <div className="w-full p-4">
-      <div className="sticky top-4">
-        {/* <VisitorCounter />
+      {/* <div className="sticky top-4"> */}
+      {/* <VisitorCounter />
         <RecentGuestbook />
         <CommentSection />
-        <Advertisement /> */}
-      </div>
+      <Advertisement /> */}
+      <KakaoAdfit width={160} height={600} adUnitId={"DAN-cNYOFcyV57Xyqoof"} />
+
+      {/* </div> */}
     </div>
+
   );
 };
 

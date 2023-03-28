@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PostData from '../../types/PostData';
 import Link from 'next/link';
 import Image from 'next/image';
+import KakaoAdfit from '../kakao.adfit';
 
 const PopularPosts: NextPage = () => {
   const { t } = useTranslation();

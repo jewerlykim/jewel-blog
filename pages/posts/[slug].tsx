@@ -9,6 +9,7 @@ import remarkBreaks from 'remark-breaks';
 import PostData from '../../types/PostData';
 import Image from 'next/image';
 import { DiscussionEmbed } from "disqus-react";
+import KakaoAdfit from '../../components/kakao.adfit';
 
 
 interface Params extends ParsedUrlQuery {
@@ -36,24 +37,30 @@ const Post: NextPage<Props> = ({ post }) => {
 
 
     return (
-        <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
-            <div className="text-2xl font-bold">{post.title}</div>
-            <div className="text-gray-500">{post.date}</div>
-            {post.thumbnail && (
-                <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>
-                    <Image
-                        src={post.thumbnail}
-                        alt="thumbnail"
-                        layout="fill"
-                        objectFit="cover"
-                        className="absolute top-0 left-0"
-                    />
-                </div>
-            )}
-            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
-                `${post.contentHtml}`} />
-            <hr className="my-4 border-gray-300" />
-            <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+        <div className='flex'>
+
+            <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
+                <div className="text-2xl font-bold">{post.title}</div>
+                <div className="text-gray-500">{post.date}</div>
+                {post.thumbnail && (
+                    <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>
+                        <Image
+                            src={post.thumbnail}
+                            alt="thumbnail"
+                            layout="fill"
+                            objectFit="cover"
+                            className="absolute top-0 left-0"
+                        />
+                    </div>
+                )}
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
+                    `${post.contentHtml}`} />
+                <hr className="my-4 border-gray-300" />
+                <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+            </div>
+            <div className="mr-4">
+                <KakaoAdfit width={160} height={600} adUnitId={"DAN-cNYOFcyV57Xyqoof"} />
+            </div>
         </div>
     );
 };

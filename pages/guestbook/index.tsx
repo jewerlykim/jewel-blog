@@ -13,12 +13,12 @@ const Home: NextPage = () => {
 
 
     return (
-        <main>
-            <div className="mx-[10%] mt-10 bg-gray-100 border border-gray-300 p-4">
-                <h1 className="text-2xl font-bold mb-4">방명록</h1>
-                <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
-            </div>
-        </main>
+
+        <div className="mx-[10%] mt-10 bg-gray-100 border border-gray-300 p-4">
+            <h1 className="text-2xl font-bold mb-4">방명록</h1>
+            <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+        </div>
+
     );
 };
 
