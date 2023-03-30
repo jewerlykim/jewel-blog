@@ -19,7 +19,7 @@ const Navbar = () => {
                     height={50}
                     alt="logo"
                   />
-                  <h1>
+                  <h1 className="text-black">
                     JEWELOG
                   </h1>
                 </a>
