@@ -67,3 +67,50 @@ code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.9rem;
 }
+
+/* blockquote */
+/* Add a class for blockquotes */
+blockquote {
+  margin: 1em 0;
+  padding-left: 1.5em;
+  border-left: 4px solid #ccc;
+  font-style: italic;
+  color: #666;
+  position: relative;
+}
+
+/* Add quotation marks to blockquotes */
+blockquote::before {
+  content: '“';
+  position: absolute;
+  top: -0.2em;
+  left: 0.5em;
+  font-size: 2em;
+  color: #ccc;
+}
+
+blockquote::after {
+  content: '”';
+  position: absolute;
+  bottom: -0.1em;
+  right: 0.5em;
+  font-size: 2em;
+  color: #ccc;
+}
+
+/* highlight */
+.highlight {
+  background-color: #ffff88;
+  padding: 0.1em 0.25em;
+  border-radius: 4px;
+}
+
+/* a tag */
+a {
+  color: blue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
