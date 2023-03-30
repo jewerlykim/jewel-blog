@@ -209,7 +209,7 @@ send_telegram_message(telegram_message)
 ### Telegram 초대 링크
 
 관심이 있는 분은 아래 링크를 통해 들어오실 수 있습니다.
-(초대링크)[https://t.me/+hGmnkVX7xTowNWY1]
+[초대링크](https://t.me/+hGmnkVX7xTowNWY1)
 
 ---
 
