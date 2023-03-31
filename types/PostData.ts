@@ -5,6 +5,7 @@ interface PostData {
   contentHtml: string;
   slug: string;
   category: string;
+  tags: string;
 }
 
 export default PostData;

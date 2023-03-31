@@ -6,6 +6,8 @@ date: '2023-03-30'
 thumbnail: https://images.unsplash.com/photo-1511818966892-d7d671e672a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80
 
 category: '독서'
+
+tags: 'Zero to One, Startup, Peter Thiel, Monopoly, Technology, Network Effects, Economies of Scale, Brand Strategy, 제로투원, 스타트업, 피터 틸, 독점, 기술, 네트워크 효과, 규모의 경제, 브랜드 전략'
 ---
 
 ![zerotooneimage](https://bimage.interpark.com/partner/goods_image/9/8/1/7/267619817g.jpg)

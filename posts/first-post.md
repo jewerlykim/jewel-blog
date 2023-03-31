@@ -6,6 +6,8 @@ date: '2023-03-13'
 thumbnail: 'https://cdn.discordapp.com/attachments/997271616234995782/1084832195014823956/Jewel_Logo_a_triangular_emblem_featuring_a_stylized_tigers_head_a45dce76-6d2b-402f-a7eb-9f9c8a4efedf.png'
 
 category: '회고'
+
+tags: 'blog, development, developer, dynamic work, reflection, business interest, learning programming, SW Officer School Jungle, startup, entrepreneurship, reading, book posts, AI, AI usage, thumbnail, Midjourney, 블로그, 개발, 개발자, 다이나믹한 일, 회고, 사업 관심, 프로그래밍 배우기, SW사관학교 정글, 창업, 기업가 정신, 독서, 책 포스트, 인공지능, AI 사용, 썸네일, 미드저니'
 ---
 
 ## **쥬하!**

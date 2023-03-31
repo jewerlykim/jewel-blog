@@ -33,5 +33,6 @@ export default function handler(
     contentHtml,
     slug,
     category: data.category,
+    tags: data.tags,
   });
 }

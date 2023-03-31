@@ -6,6 +6,8 @@ date: '2023-03-19'
 thumbnail: https://cdn.discordapp.com/attachments/997271616234995782/1086878412502732840/Jewel_Enchanted_woodland_filled_with_levitating_landmasses_and__319a8b2d-3f5a-4bcf-8514-003acb5d4643.png
 
 category: '기술'
+
+tags: 'blog culture, sharing knowledge, velog, Next.js, framework, vercel, API, markdown, getStaticProps, web development, frontend, route, file system, CMS, AWS, S3, SOP, CORS, developer, hackerthon,  블로그 문화, 지식 공유, 벨로그, Next.js, 프레임워크, 버셀, API, 마크다운, getStaticProps, 웹 개발, 프론트엔드, 라우트, 파일 시스템, CMS, AWS, S3, SOP, CORS, 개발자, 해커톤'
 ---
 
 **1. 시작하며**

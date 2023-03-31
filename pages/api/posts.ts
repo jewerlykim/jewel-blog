@@ -61,6 +61,7 @@ export default async function handler(
       slug,
       contentHtml: '',
       category: data.category,
+      tags: data.tags,
     };
   });
 

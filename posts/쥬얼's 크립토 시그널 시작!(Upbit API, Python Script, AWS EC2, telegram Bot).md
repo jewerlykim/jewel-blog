@@ -6,6 +6,8 @@ date: '2023-03-28'
 thumbnail: https://cdn.discordapp.com/attachments/997271616234995782/1088720195499069480/Jewel_Unlock_the_Future_of_Crypto_Signal_Notifications_and_Deve_ba1d5499-8835-473a-a0e0-29465a83b7f0.png
 
 category: '기술'
+
+tags: 'blog, developer, business, SW Military Academy Jungle, startup, reading, book, AI, mid-journey, Upbit API, Python Script, AWS EC2, telegram Bot, cryptocurrency, investment, indicators, RSI, MACD Oscillator, Bollinger Bands, Stochastic, price change, responsibility, disclaimer, invitation link, 블로그, 개발자, 사업, SW사관학교 정글, 창업, 독서, 책, 인공지능, 미드저니, 업빗 API, 파이썬 스크립트, AWS EC2, 텔레그램 봇, 암호화폐, 투자, 지표, RSI, MACD 오실레이터, 볼린저밴드, 스토캐스틱, 가격 변동, 책임, 면책, 초대 링크'
 ---
 
 # **쥬얼's 크립토 시그널 시작!**

@@ -10,6 +10,7 @@ import PostData from '../../types/PostData';
 import Image from 'next/image';
 import { DiscussionEmbed } from "disqus-react";
 import KakaoAdfit from '../../components/kakao.adfit';
+import { NextSeo } from 'next-seo';
 
 
 interface Params extends ParsedUrlQuery {
@@ -36,32 +37,70 @@ const Post: NextPage<Props> = ({ post }) => {
 
 
 
-    return (
-        <div className='flex'>
 
-            <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
-                <div className="text-2xl font-bold">{post.title}</div>
-                <div className="text-gray-500">{post.date}</div>
-                {post.thumbnail && (
-                    <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>
-                        <Image
-                            src={post.thumbnail}
-                            alt="thumbnail"
-                            layout="fill"
-                            objectFit="cover"
-                            className="absolute top-0 left-0"
-                        />
-                    </div>
-                )}
-                <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
-                    `${post.contentHtml}`} />
-                <hr className="my-4 border-gray-300" />
-                <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+
+    return (
+        <>
+            <NextSeo
+                title={post.title}
+                description={`${post.title} - ${post.category}`}
+                openGraph={{
+                    title: post.title,
+                    description: `${post.title} - ${post.category}`,
+                    images: [
+                        {
+                            url: post.thumbnail,
+                            width: 800,
+                            height: 600,
+                            alt: post.title,
+                        },
+                    ],
+                    site_name: 'godjewel',
+                    article: {
+                        tags: post.tags.split(', '),
+                    }
+                }}
+                additionalMetaTags={[
+                    {
+                        name: 'keywords',
+                        content: post.tags,
+                    }
+                ]}
+                twitter={{
+                    handle: '@GODJEWELKBS',
+                    site: '@GODJEWELKBS',
+                    cardType: 'summary_large_image',
+                }}
+
+
+            />
+
+            <div className='flex'>
+
+                <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
+                    <div className="text-2xl font-bold">{post.title}</div>
+                    <div className="text-gray-500">{post.date}</div>
+                    {post.thumbnail && (
+                        <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>
+                            <Image
+                                src={post.thumbnail}
+                                alt="thumbnail"
+                                layout="fill"
+                                objectFit="cover"
+                                className="absolute top-0 left-0"
+                            />
+                        </div>
+                    )}
+                    <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
+                        `${post.contentHtml}`} />
+                    <hr className="my-4 border-gray-300" />
+                    <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+                </div>
+                <div className="mr-4">
+                    <KakaoAdfit width={160} height={600} adUnitId={"DAN-cNYOFcyV57Xyqoof"} />
+                </div>
             </div>
-            <div className="mr-4">
-                <KakaoAdfit width={160} height={600} adUnitId={"DAN-cNYOFcyV57Xyqoof"} />
-            </div>
-        </div>
+        </>
     );
 };
 
@@ -106,6 +145,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
         thumbnail: data.thumbnail,
         slug: params.slug,
         category: data.category,
+        tags: data.tags,
     };
 
 
