@@ -79,25 +79,6 @@ blockquote {
   position: relative;
 }
 
-/* Add quotation marks to blockquotes */
-blockquote::before {
-  content: '“';
-  position: absolute;
-  top: -0.2em;
-  left: 0.5em;
-  font-size: 2em;
-  color: #ccc;
-}
-
-blockquote::after {
-  content: '”';
-  position: absolute;
-  bottom: -0.1em;
-  right: 0.5em;
-  font-size: 2em;
-  color: #ccc;
-}
-
 /* highlight */
 .highlight {
   background-color: #ffff88;
@@ -109,8 +90,4 @@ blockquote::after {
 a {
   color: blue;
   text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }

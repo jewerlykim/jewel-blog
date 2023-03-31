@@ -39,6 +39,7 @@ const Home: NextPage = () => {
             개발: 'gray-500',
             독서: 'pink-500',
             기타: 'indigo-500',
+            AI: 'orange-500',
         }
 
         console.log(`category is ${category} and color is ${colors[category]}`)
