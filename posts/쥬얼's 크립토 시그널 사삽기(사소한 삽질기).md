@@ -1,5 +1,5 @@
 ---
-title: 쥬얼's 크립토 시그널 - 사삽기(사소한 삽질기)
+title: "쥬얼's 크립토 시그널 - 사삽기(사소한 삽질기)"
 
 date: '2023-04-01'
 
@@ -7,7 +7,7 @@ thumbnail: https://user-images.githubusercontent.com/75651834/229263118-74cbbad1
 
 category: '기술'
 
-tags: 'Jewel's Crypto Signal, shoveling machine, small shoveling machine, Bitcoin dominance, CoinGecko API, Upbit API, pyupbit library, cryptocurrency market, market bullishness, market bearishness, buy_market_order, sell_market_order, insufficient funds, investment responsibility, 주얼의 크립토 신호, 삽질 기계, 작은 삽질 기계, 비트코인 지배력, 코인게코 API, 업비트 API, 파이업비트 라이브러리, 암호화폐 시장, 시장 상승세, 시장 하락세, 매수_시장_주문, 매도_시장_주문, 자금 부족, 투자 책임'
+tags: "Jewel's Crypto Signal, shoveling machine, small shoveling machine, Bitcoin dominance, CoinGecko API, Upbit API, pyupbit library, cryptocurrency market, market bullishness, market bearishness, buy_market_order, sell_market_order, insufficient funds, investment responsibility, 주얼의 크립토 신호, 삽질 기계, 작은 삽질 기계, 비트코인 지배력, 코인게코 API, 업비트 API, 파이업비트 라이브러리, 암호화폐 시장, 시장 상승세, 시장 하락세, 매수_시장_주문, 매도_시장_주문, 자금 부족, 투자 책임"
 ---
 
 # 쥬얼's 크립토 시그널 - 사삽기(사소한 삽질기)
