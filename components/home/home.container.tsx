@@ -1,3 +1,4 @@
+import KakaoAdfit from '../kakao.adfit';
 import HomeIntroduction from './home.introduction';
 import HomePosts from './home.posts';
 import HomeSide from './home.side';
@@ -13,8 +14,9 @@ const HomeContainer = () => {
     <>
       <main>
         <div className="flex">
-          <div className="w-1/4 p-4 hidden sm:block">
-            <HomeIntroduction />
+          <div className="w-1/4 p-4 hidden sm:block w-full text-right">
+            {/* <HomeIntroduction /> */}
+            <KakaoAdfit width={160} height={600} adUnitId={"DAN-a2VZu8kRc3ogJ35h"} />
           </div>
           <div className="w-full sm:w-1/2 p-4 ">
             <HomePosts />

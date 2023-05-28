@@ -77,26 +77,28 @@ const Post: NextPage<Props> = ({ post }) => {
 
             <div className='flex'>
 
-                <div className="mx-auto max-w-screen-lg px-[10%] pt-4 space-y-4">
-                    <div className="text-2xl font-bold">{post.title}</div>
-                    <div className="text-gray-500">{post.date}</div>
+
+                <div className="mx-auto w-screen sm:w-[80%] px-[10%] pt-4 space-y-4">
+                    <div className="text-2xl font-bold text-center">{post.title}</div>
+                    <div className="text-gray-500 text-center">{post.date}</div>
                     {post.thumbnail && (
-                        <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>
+                        <div className='flex justify-center items-center'>
                             <Image
                                 src={post.thumbnail}
                                 alt="thumbnail"
-                                layout="fill"
-                                objectFit="cover"
-                                className="absolute top-0 left-0"
+                                width={800}
+                                height={600}
+                                className="object-cover shadow-xl rounded-3xl"
                             />
                         </div>
+
                     )}
                     <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} children={
                         `${post.contentHtml}`} />
                     <hr className="my-4 border-gray-300" />
                     <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
                 </div>
-                <div className="mr-4">
+                <div className="mr-4 hidden sm:block">
                     <KakaoAdfit width={160} height={600} adUnitId={"DAN-cNYOFcyV57Xyqoof"} />
                 </div>
             </div>
