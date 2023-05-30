@@ -14,6 +14,7 @@ module.exports = {
       'cdn.discordapp.com',
       'images.unsplash.com',
       'user-images.githubusercontent.com',
+      'github.com',
     ],
   },
 };
