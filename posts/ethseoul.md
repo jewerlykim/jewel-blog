@@ -63,7 +63,8 @@ https://youtu.be/xEhGRgwTV5I
 
 ![02132-628949563-((best quality)), ((masterpiece)), ((realistic)), hair on fire, a man](https://github.com/jewerlykim/jewel-blog/assets/75651834/710724c9-df7f-4f38-870e-f8db785e89e5)
 
-최근에 읽은 디스콰이엇에서의 "Y Combinator에서 배운 5가지 핵심" 글에서 발췌한 내용입니다. (https://disquiet.io/@springpark/makerlog/10113?utm_source=stibee&utm_medium=newsletter&utm_campaign=contents-distribution&utm_content=23-06-23-MR-newsletter)
+최근에 읽은 디스콰이엇에서의 "Y Combinator에서 배운 5가지 핵심" 글에서 발췌한 내용입니다.
+[원문링크](https://disquiet.io/@springpark/makerlog/10113?utm_source=stibee&utm_medium=newsletter&utm_campaign=contents-distribution&utm_content=23-06-23-MR-newsletter)
 
 > YC에서 항상 강조하는 부분은 “Hair on Fire Problem을 찾아라”였다. Hair on Fire Problem은 머리에 불이 붙은 사람은 불을 끄기 위해서 벽돌도 산다는 만큼 급박한 문제로, **문제를 해결하기 위해 잠재고객이 바로 비용을 지불할 의사가 있는 문제**를 의미한다. 처음에 말한 피상적인 문제를 깊게 파서 근본적인 문제를 발견하지 않으면 제대로 된 문제를 절대 발견할 수가 없다.
 
