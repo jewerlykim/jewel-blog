@@ -16,6 +16,13 @@ const Home: NextPage = () => {
         <meta property="og:image:width" content="640" />
         <meta property="og:image:height" content="640" />
         <meta name="twitter:card" content="summary_large_image" />
+        {/* 네이버 서치어드바이저 */}
+        <meta name="NaverBot" content="All" />
+        <meta name="NaverBot" content="index,follow" />
+        <meta name="Yeti" content="All" />
+        <meta name="Yeti" content="index,follow" />
+        {/* 네이버 서치어드바이저 */}
+
         <title>JewelLog</title>
       </Head>
       <main className="min-h-screen">
