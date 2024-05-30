@@ -99,7 +99,7 @@
               alt="파리올림픽"
               title=""
               coords="43,3056,216,3108"
-              href="card/07.html"
+              href="https://www.instagram.com/p/C7kqjlhPW-k/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
               target="_blank"
             />
             <area
@@ -107,7 +107,7 @@
               alt="인스타그램_이벤트"
               title=""
               coords="37,3488,212,3538"
-              href="card/08.html"
+              href="https://www.instagram.com/p/C7knqiFvUeu/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
               target="_blank"
             />
           </map>
