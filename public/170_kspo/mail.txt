@@ -1,19 +1,121 @@
-<table width="730" align="center" border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse;"> <!-- https://godjewel.co.kr/170_kspo/src/cover01.jpg --> 
-<tbody>
-<tr> 
-<td> <img src="https://godjewel.co.kr/170_kspo/src/cover01.jpg" alt="뉴스레터 상단" style="display: block;" width="730" /> <img src="https://godjewel.co.kr/170_kspo/src/cover02.jpg" usemap="#map" alt="뉴스레터 하단" style="display: block;" width="730" /> 
-<map name="map"> 
-<area shape="rect" alt="글로벌 스포츠산업 트렌드 전망" title="" coords="35,261,203,318" href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4636" target="_blank" /> 
-<area shape="rect" alt="스포츠굿즈서비스" title="" coords="32,727,212,779" href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4637" target="_blank" /> 
-<area shape="rect" alt="*" title="선도기업 성과사례" coords="343,1318,514,1372" href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4638" target="_blank" /> 
-<area shape="rect" alt="*" title="이슈페이퍼" coords="354,1839,524,1892" href="https://www.sports.re.kr/front/spobiz/spobizContents_view.do?menu_seq=993&amp;pageNo=1&amp;boardCode=IS&amp;noticeSeq=4622&amp;keyKind=ALL&amp;keyWord=" target="_blank" /> 
-<area shape="rect" alt="*" title="SI포커스" coords="134,2062,319,2123" href="https://www.sports.re.kr/front/spobiz/spobizContents_view.do?menu_seq=991&amp;pageNo=1&amp;keyKind=&amp;boardCode=SI&amp;noticeSeq=4621&amp;keyWord=" target="_blank" /> 
-<area shape="rect" alt="스포츠동향아카이브" title="" coords="31,2809,221,2858" href="https://www.sports.re.kr/front/board/bs/boardView.do?board_seq=105&amp;pageNo=1&amp;menu_seq=+990&amp;con_seq=6111&amp;keyKind3=&amp;keyKind4=&amp;keyKind5=&amp;keyKind6=&amp;keyKind7=&amp;keyKind=TITLE&amp;keyWord=" target="_blank" /> 
-<area shape="rect" alt="스포츠컨퍼런스박람회" title="" coords="33,3213,217,3271" href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4639" target="_blank" /> 
-<area shape="rect" alt="" title="한국스포츠정책과학원" coords="472,3508,540,3569" href="https://spobiz.kspo.or.kr/front/index.do" target="_blank" /> 
-<area shape="rect" alt="" title="인스타그램" coords="548,3506,623,3573" href="https://www.instagram.com/kspo_newsletter/" target="_blank" /> 
-<area shape="rect" alt="스낵스포츠" title="" coords="419,3972,606,4032" href="https://www.instagram.com/p/C8rbQH6vS0Q/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" /> 
-</map> </td>
-</tr> 
-</tbody>
-</table>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>KSPO 170 뉴스레터</title>
+  </head>
+
+  <body>
+    <table
+      width="730"
+      align="center"
+      border="0"
+      cellpadding="1"
+      cellspacing="0"
+      style="border-collapse: collapse"
+    >
+      <!-- https://godjewel.co.kr/170_kspo/src/cover01.jpg -->
+      <tbody>
+        <tr>
+          <td>
+            <img
+              src="https://godjewel.co.kr/170_kspo/src/cover01.jpg"
+              alt="뉴스레터 상단"
+              style="display: block"
+              width="730"
+            />
+            <img
+              src="https://godjewel.co.kr/170_kspo/src/cover02.jpg"
+              usemap="#map"
+              alt="뉴스레터 하단"
+              style="display: block"
+              width="730"
+            />
+            <map name="map">
+              <area
+                shape="rect"
+                alt="글로벌 스포츠산업 트렌드 전망"
+                title=""
+                coords="35,261,203,318"
+                href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4636"
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="스포츠굿즈서비스"
+                title=""
+                coords="32,727,212,779"
+                href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4637"
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="*"
+                title="선도기업 성과사례"
+                coords="343,1318,514,1372"
+                href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4638"
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="*"
+                title="이슈페이퍼"
+                coords="354,1839,524,1892"
+                href="https://www.sports.re.kr/front/spobiz/spobizContents_view.do?menu_seq=993&amp;pageNo=1&amp;boardCode=IS&amp;noticeSeq=4622&amp;keyKind=ALL&amp;keyWord="
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="*"
+                title="SI포커스"
+                coords="134,2062,319,2123"
+                href="https://www.sports.re.kr/front/spobiz/spobizContents_view.do?menu_seq=991&amp;pageNo=1&amp;keyKind=&amp;boardCode=SI&amp;noticeSeq=4621&amp;keyWord="
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="스포츠동향아카이브"
+                title=""
+                coords="31,2809,221,2858"
+                href="https://www.sports.re.kr/front/board/bs/boardView.do?board_seq=105&amp;pageNo=1&amp;menu_seq=+990&amp;con_seq=6111&amp;keyKind3=&amp;keyKind4=&amp;keyKind5=&amp;keyKind6=&amp;keyKind7=&amp;keyKind=TITLE&amp;keyWord="
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="스포츠컨퍼런스박람회"
+                title=""
+                coords="33,3213,217,3271"
+                href="https://spobiz.kspo.or.kr/front/www/trend/view.do?board_id=30002&amp;topMenuSeq=3&amp;notice_seq=4639"
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt=""
+                title="한국스포츠정책과학원"
+                coords="472,3508,540,3569"
+                href="https://spobiz.kspo.or.kr/front/index.do"
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt=""
+                title="인스타그램"
+                coords="548,3506,623,3573"
+                href="https://www.instagram.com/kspo_newsletter/"
+                target="_blank"
+              />
+              <area
+                shape="rect"
+                alt="스낵스포츠"
+                title=""
+                coords="419,3972,606,4032"
+                href="https://www.instagram.com/p/C8rbQH6vS0Q/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA=="
+                target="_blank"
+              />
+            </map>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
