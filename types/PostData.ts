@@ -1,8 +1,9 @@
 interface PostData {
+  id: number;
   title: string;
   date: string;
-  thumbnail: string;
-  contentHtml: string;
+  image: string;
+  content: string;
   slug: string;
   category: string;
   tags: string;

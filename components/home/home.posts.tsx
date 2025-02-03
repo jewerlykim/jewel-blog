@@ -29,46 +29,30 @@ const PopularPosts: NextPage = () => {
   );
 };
 
-
-
 const RecentPosts: NextPage = () => {
   const { t } = useTranslation();
   const [posts, setPosts] = useState<PostData[]>([]);
-
-
 
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await fetch('/api/posts');
       const posts = await res.json();
-      console.log(`posts is ${JSON.stringify(posts)}`)
 
-      // post를 최신순으로 정렬
-      posts.sort((a: any, b: any) => {
-        if (a.date < b.date) {
-          return 1;
-        } else {
-          return -1;
-        }
-      });
-
-
-      setPosts(posts);
+      setPosts(posts.data);
     };
     fetchPosts();
   }, []);
-
 
   return (
     <div className="flex flex-col space-y-4">
       <div className="text-lg font-bold">{t('recentPostsTitle')}</div>
       <div className="grid gap-4 md:grid-cols-2 items-center">
         {posts.map((post) => (
-          <Link key={post.slug} href={`/posts/${post.slug}`}>
+          <Link key={post.id} href={`/posts/${post.id}`}>
             <div className="relative bg-white rounded-lg overflow-hidden shadow-md cursor-pointer">
               <div className="h-48">
                 <Image
-                  src={post.thumbnail}
+                  src={post.image}
                   alt="thumbnail"
                   layout="fill"
                   objectFit="cover"
@@ -81,7 +65,6 @@ const RecentPosts: NextPage = () => {
               </div>
             </div>
           </Link>
-
         ))}
       </div>
     </div>
