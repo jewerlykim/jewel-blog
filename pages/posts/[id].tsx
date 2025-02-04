@@ -15,27 +15,42 @@ import { useSearchParams } from 'next/navigation';
 const Post: NextPage = () => {
   const [post, setPost] = useState<PostData | null>(null);
 
-  const id = useSearchParams().get('id');
+  const [disqusShortname, setDisqusShortname] = useState<string>('');
+  const [disqusConfig, setDisqusConfig] = useState<{
+    url: string;
+    identifier: string;
+    title: string;
+    language: string;
+  }>({
+    url: '',
+    identifier: '',
+    title: '',
+    language: '',
+  });
 
-  const disqusShortname = 'https-www-godjewel-co-kr';
-  const disqusConfig = {
-    url: 'https://www.godjewel.co.kr/guestbook',
-    identifier: 'guestbook',
-    title: '방명록',
-    language: 'ko_KR',
-  };
+  const id = useSearchParams().get('id') || '';
 
   const fetchPost = async () => {
     const res = await fetch('/api/posts/' + id);
     const post = await res.json();
 
-    console.log(post);
-
     setPost(post.data);
   };
 
+  const fetchComments = async () => {
+    setDisqusShortname('https-godjewel-co-kr');
+    setDisqusConfig({
+      url: 'https://www.godjewel.co.kr/posts/' + id,
+      identifier: `godjewel-posts-${id}`,
+      title: 'post',
+      language: 'ko_KR',
+    });
+  };
+
   useEffect(() => {
+    if (!id) return;
     fetchPost();
+    fetchComments();
   }, [id]);
 
   return (
@@ -82,7 +97,12 @@ const Post: NextPage = () => {
             {post?.content || ''}
           </ReactMarkdown>
           <hr className="my-4 border-gray-300" />
-          <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+          {id && (
+            <DiscussionEmbed
+              shortname={disqusShortname}
+              config={disqusConfig}
+            />
+          )}
         </div>
         <div className="mr-4 hidden sm:block">
           <KakaoAdfit
