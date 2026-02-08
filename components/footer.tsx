@@ -23,6 +23,22 @@ const Footer = () => (
           >
             GitHub
           </a>
+          <a
+            href="https://coredot.io"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm text-text-secondary hover:text-white transition-colors"
+          >
+            Coredot
+          </a>
+          <a
+            href="https://sallylab.io"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm text-text-secondary hover:text-white transition-colors"
+          >
+            SallyLab
+          </a>
         </div>
 
         <div className="flex flex-col gap-3">

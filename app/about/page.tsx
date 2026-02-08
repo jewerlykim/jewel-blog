@@ -184,7 +184,22 @@ export default function About() {
                   >
                     LinkedIn
                   </a>
-
+                  <a
+                    href="https://coredot.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-white hover:text-[#999] transition-colors duration-200 text-sm"
+                  >
+                    Coredot
+                  </a>
+                  <a
+                    href="https://sallylab.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-white hover:text-[#999] transition-colors duration-200 text-sm"
+                  >
+                    SallyLab
+                  </a>
                 </div>
               </div>
 
