@@ -22,7 +22,7 @@ export default function PostPage() {
 
     const fetchPost = async () => {
       try {
-        const res = await fetch('/api/posts/' + id);
+        const res = await fetch('/api/insights/' + id);
         const result = await res.json();
         setPost(result.data);
       } catch {
@@ -36,16 +36,16 @@ export default function PostPage() {
 
   const disqusShortname = 'https-godjewel-co-kr';
   const disqusConfig = {
-    url: 'https://www.godjewel.co.kr/posts/' + id,
-    identifier: `godjewel-posts-${id}`,
-    title: post?.title || 'post',
-    language: 'ko_KR',
+    url: 'https://www.godjewel.co.kr/insights/' + id,
+    identifier: `godjewel-insights-${id}`,
+    title: post?.title || 'Insight',
+    language: 'en',
   };
 
   if (loading) {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-text-secondary">로딩 중...</p>
+        <p className="text-text-secondary">Loading...</p>
       </main>
     );
   }
@@ -54,10 +54,10 @@ export default function PostPage() {
     return (
       <main className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
         <p className="text-text-secondary text-lg">
-          포스트를 찾을 수 없습니다.
+          Post not found.
         </p>
-        <Link href="/posts" className="text-accent hover:text-accent-hover">
-          ← 목록으로 돌아가기
+        <Link href="/insights" className="text-accent hover:text-accent-hover">
+          &larr; Back to Insights
         </Link>
       </main>
     );
@@ -68,10 +68,10 @@ export default function PostPage() {
       <article className="max-w-3xl mx-auto px-4 py-16 sm:py-24">
         <div className="mb-8">
           <Link
-            href="/posts"
+            href="/insights"
             className="text-sm text-text-secondary hover:text-accent transition-colors"
           >
-            ← 포스트 목록
+            &larr; All Insights
           </Link>
         </div>
 

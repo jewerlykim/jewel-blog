@@ -35,10 +35,10 @@ const Footer = () => (
 
         <div className="flex flex-col gap-3">
           <Link
-            href="/posts"
+            href="/insights"
             className="text-sm text-text-secondary hover:text-white transition-colors"
           >
-            Writing
+            Insights
           </Link>
           <a
             href="mailto:jewel@godjewel.co.kr"

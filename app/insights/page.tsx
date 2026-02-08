@@ -22,7 +22,7 @@ export default function Posts() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/posts');
+        const res = await fetch('/api/insights');
         const result = await res.json();
         setPosts(result.data || []);
       } catch {
@@ -43,10 +43,10 @@ export default function Posts() {
     <main className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-6 sm:px-12 py-24 sm:py-32">
         <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-text-primary mb-4">
-          Posts
+          Insights
         </h1>
         <p className="text-[#666] mb-10 text-lg">
-          Writing about AI, technology, business, and culture.
+          Thoughts on AI, technology, business, and culture.
         </p>
 
         {/* Filter Pills */}
@@ -75,7 +75,7 @@ export default function Posts() {
             {filtered.map((post) => (
               <Link
                 key={post.slug || post.id}
-                href={`/posts/${post.slug || post.id}`}
+                href={`/insights/${post.slug || post.id}`}
                 className="group flex flex-col sm:flex-row gap-6 sm:gap-10 py-10 border-t border-[#1a1a1a] first:border-t-0"
               >
                 {/* Text */}

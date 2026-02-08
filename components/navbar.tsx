@@ -11,10 +11,8 @@ interface NavLink {
 
 const navLinks: NavLink[] = [
   { href: '/', label: 'Home' },
-  { href: '/posts', label: 'Writing' },
-  { href: '/projects', label: 'Projects' },
+  { href: '/insights', label: 'Insights' },
   { href: '/about', label: 'About' },
-  { href: '/prototype', label: 'Prototype' },
 ];
 
 const Navbar = () => {
@@ -41,9 +39,9 @@ const Navbar = () => {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/posts"
+              href="/insights"
               className="text-text-secondary hover:text-white transition-colors"
-              aria-label="Writing"
+              aria-label="Insights"
             >
               <svg
                 width="16"

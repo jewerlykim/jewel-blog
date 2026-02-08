@@ -124,7 +124,7 @@ export default function Home() {
       {/* Show More */}
       <section className="px-6 sm:px-12 lg:px-24 py-12 flex justify-center">
         <Link
-          href="/posts"
+          href="/insights"
           className="rounded-full border border-[#333] px-8 py-2.5 text-sm text-[#666] hover:text-white hover:border-[#666] transition-colors duration-200"
         >
           Show more
