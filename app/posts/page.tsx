@@ -6,7 +6,7 @@ import PostData from '../../types/PostData';
 import Image from 'next/image';
 
 const CATEGORIES = [
-  { label: '전체', value: 'all' },
+  { label: 'All', value: 'all' },
   { label: 'AI Insight', value: 'ai-insight' },
   { label: 'Business', value: 'business' },
   { label: 'Projects', value: 'projects' },
@@ -41,23 +41,24 @@ export default function Posts() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-5xl mx-auto px-4 py-16 sm:py-24">
-        <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
-          POSTS
+      <div className="max-w-5xl mx-auto px-6 sm:px-12 py-24 sm:py-32">
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-text-primary mb-4">
+          Posts
         </h1>
-        <p className="text-text-secondary mb-8">
-          AI, 기술, 비즈니스, 그리고 문화에 대한 글을 공유합니다.
+        <p className="text-[#666] mb-10 text-lg">
+          Writing about AI, technology, business, and culture.
         </p>
 
-        <div className="flex flex-wrap gap-2 mb-10">
+        {/* Filter Pills */}
+        <div className="flex flex-wrap gap-2 mb-12">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-sm transition-colors duration-200 ${
                 activeCategory === cat.value
-                  ? 'bg-accent text-white'
-                  : 'bg-surface text-text-secondary hover:text-text-primary border border-border'
+                  ? 'bg-white text-black'
+                  : 'border border-[#333] text-[#666] hover:text-white hover:border-[#666]'
               }`}
             >
               {cat.label}
@@ -66,43 +67,42 @@ export default function Posts() {
         </div>
 
         {loading ? (
-          <div className="text-text-secondary text-center py-20">
-            로딩 중...
-          </div>
+          <div className="text-[#666] text-center py-20">Loading...</div>
         ) : filtered.length === 0 ? (
-          <div className="text-text-secondary text-center py-20">
-            포스트가 없습니다.
-          </div>
+          <div className="text-[#666] text-center py-20">No posts yet.</div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="space-y-0">
             {filtered.map((post) => (
               <Link
                 key={post.slug || post.id}
                 href={`/posts/${post.slug || post.id}`}
-                className="group bg-surface border border-border rounded-xl overflow-hidden hover:border-accent/50 transition-colors"
+                className="group flex flex-col sm:flex-row gap-6 sm:gap-10 py-10 border-t border-[#1a1a1a] first:border-t-0"
               >
-                <div className="relative h-48 w-full bg-surface-elevated">
-                  <Image
-                    src={post.image || '/jewel-tiger-logo-big.png'}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-5">
+                {/* Text */}
+                <div className="flex-1 flex flex-col justify-center min-w-0">
                   {post.category && (
-                    <span className="text-xs font-medium text-accent uppercase tracking-wider">
+                    <span className="text-xs text-[#666] uppercase tracking-widest mb-2">
                       {post.category}
                     </span>
                   )}
-                  <h2 className="text-lg font-semibold text-text-primary mt-1 group-hover:text-accent transition-colors">
+                  <h2 className="text-xl font-semibold text-white leading-snug group-hover:text-[#999] transition-colors duration-200">
                     {post.title}
                   </h2>
                   {post.date && (
-                    <p className="text-sm text-text-secondary mt-2">
-                      {post.date}
-                    </p>
+                    <p className="text-xs text-[#666] mt-3">{post.date}</p>
                   )}
+                </div>
+
+                {/* Thumbnail */}
+                <div className="w-full sm:w-[240px] flex-shrink-0">
+                  <div className="relative w-full aspect-[16/10] rounded-lg overflow-hidden bg-[#111]">
+                    <Image
+                      src={post.image || '/jewel-tiger-logo-big.png'}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               </Link>
             ))}

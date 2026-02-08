@@ -12,57 +12,57 @@ interface PrototypeScreen {
 const screens: PrototypeScreen[] = [
   {
     id: 1,
-    title: '크리에이터 디스커버리',
+    title: 'Creator Discovery',
     description:
-      'AI가 추천하는 크리에이터를 탐색하고, 카테고리별 필터링 및 상세 프로필을 확인합니다.',
+      'Browse AI-recommended creators with category filters and detailed profiles.',
     file: '01_creator_discovery.html',
     image: 'screen1-viewport.png',
   },
   {
     id: 2,
-    title: '크리에이터 상세',
+    title: 'Creator Detail',
     description:
-      '크리에이터의 채널 분석, 콘텐츠 성과, 팔로워 데모그래픽 등 상세 정보를 확인합니다.',
+      'View channel analytics, content performance, and follower demographics.',
     file: '02_creator_detail.html',
     image: 'screen2-viewport.png',
   },
   {
     id: 3,
-    title: '브랜드 입력',
+    title: 'Brand Input',
     description:
-      '캠페인 목표, 예산, 타겟 오디언스 등 브랜드 정보를 입력하여 매칭을 시작합니다.',
+      'Enter campaign goals, budget, and target audience to start matching.',
     file: '03_brand_input.html',
     image: 'screen3-viewport.png',
   },
   {
     id: 4,
-    title: '브랜드 현황',
+    title: 'Brand Status',
     description:
-      '진행 중인 캠페인 현황과 매칭 상태를 대시보드에서 한눈에 확인합니다.',
+      'Monitor ongoing campaigns and matching status from your dashboard.',
     file: '04_brand_status.html',
     image: 'screen4-viewport.png',
   },
   {
     id: 5,
-    title: '매칭',
+    title: 'Matching',
     description:
-      'AI가 분석한 브랜드-크리에이터 궁합 점수와 추천 결과를 확인합니다.',
+      'Review AI-analyzed brand-creator compatibility scores and recommendations.',
     file: '05_matching.html',
     image: 'screen5-viewport.png',
   },
   {
     id: 6,
-    title: '캠페인 라이브',
+    title: 'Campaign Live',
     description:
-      '진행 중인 캠페인의 실시간 성과와 크리에이터 활동을 모니터링합니다.',
+      'Track real-time campaign performance and creator activity.',
     file: '06_campaign_live.html',
     image: 'screen6-viewport.png',
   },
   {
     id: 7,
-    title: '캠페인 리포트',
+    title: 'Campaign Report',
     description:
-      '캠페인 종료 후 성과 분석 보고서를 확인합니다. ROI, 도달률, 참여율 등.',
+      'Access post-campaign analytics including ROI, reach, and engagement rates.',
     file: '07_campaign_report.html',
     image: 'screen7-viewport.png',
   },
@@ -70,23 +70,24 @@ const screens: PrototypeScreen[] = [
 
 export default function Prototype() {
   return (
-    <div className="bg-background min-h-screen py-16 px-4 sm:px-8">
-      <div className="max-w-6xl mx-auto">
+    <main className="bg-background min-h-screen">
+      <div className="max-w-5xl mx-auto px-6 sm:px-12 py-24 sm:py-32">
         <Link
           href="/"
-          className="inline-block text-text-secondary hover:text-accent text-sm font-medium mb-8 transition-colors duration-150"
+          className="inline-block text-[#666] hover:text-white text-sm transition-colors duration-200 mb-10"
         >
-          &larr; 홈으로
+          &larr; Back to home
         </Link>
 
-        <div className="mb-16">
-          <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
-            SALLY PROTOTYPE
-          </h1>
-          <p className="text-text-secondary text-lg max-w-2xl">
-            셀리랩 &mdash; AI 기반 크리에이터-브랜드 매칭 플랫폼 프로토타입
-          </p>
-        </div>
+        <p className="text-xs text-[#666] uppercase tracking-widest mb-6">
+          Prototype
+        </p>
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-white mb-4">
+          Sally Prototype
+        </h1>
+        <p className="text-[#666] text-lg max-w-2xl mb-16">
+          SallyLab &mdash; AI-powered creator-brand matching platform prototype.
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {screens.map((screen) => (
@@ -95,7 +96,7 @@ export default function Prototype() {
               href={`/prototype/${screen.file}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-surface border border-border rounded-lg hover:border-accent transition-colors duration-200 flex flex-col h-full group"
+              className="border border-[#1a1a1a] rounded-lg hover:border-[#333] transition-colors duration-200 flex flex-col h-full group"
             >
               <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
                 <Image
@@ -108,26 +109,26 @@ export default function Prototype() {
               </div>
 
               <div className="p-6 flex flex-col flex-grow">
-                <span className="text-accent text-xs font-medium mb-2">
-                  SCREEN {screen.id}
+                <span className="text-xs text-[#666] uppercase tracking-widest mb-2">
+                  Screen {screen.id}
                 </span>
 
-                <h2 className="text-xl font-bold text-text-primary mb-2">
+                <h2 className="text-lg font-semibold text-white mb-2">
                   {screen.title}
                 </h2>
 
-                <p className="text-text-secondary text-sm mb-4 flex-grow">
+                <p className="text-[#666] text-sm mb-4 flex-grow">
                   {screen.description}
                 </p>
 
-                <span className="text-accent group-hover:text-accent-hover text-sm font-medium transition-colors duration-150">
-                  열기 &rarr;
+                <span className="text-sm text-[#666] group-hover:text-white transition-colors duration-200">
+                  Open &rarr;
                 </span>
               </div>
             </a>
           ))}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

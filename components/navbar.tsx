@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 
 interface NavLink {
@@ -10,121 +9,106 @@ interface NavLink {
   label: string;
 }
 
+const navLinks: NavLink[] = [
+  { href: '/', label: 'Home' },
+  { href: '/posts', label: 'Writing' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/prototype', label: 'Prototype' },
+];
+
 const Navbar = () => {
   const currentPath = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const navLinks: NavLink[] = [
-    { href: '/', label: '홈' },
-    { href: '/projects', label: '프로젝트' },
-    { href: '/posts', label: '포스트' },
-    { href: '/guestbook', label: '방명록' },
-    { href: '/about', label: '소개' },
-    { href: '/prototype', label: '프로토타입' },
-  ];
-
-  const isActive = (href: string): boolean => {
-    if (href === '/') {
-      return currentPath === '/';
-    }
-    return currentPath.startsWith(href);
-  };
-
-  const getLinkClasses = (href: string): string => {
-    const baseClasses =
-      'text-sm font-medium px-3 py-2 rounded-md transition-all duration-200';
-    const activeClasses = isActive(href)
-      ? 'text-accent bg-surface-elevated'
-      : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated/50';
-    return `${baseClasses} ${activeClasses}`;
-  };
-
   return (
-    <nav className="fixed top-4 left-4 right-4 z-50 bg-surface/95 backdrop-blur-md border border-border rounded-lg shadow-lg">
-      <div className="px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
-            <Image
-              src="/jewel-tiger-logo-big.png"
-              width={40}
-              height={40}
-              alt="JEWELOG logo"
-            />
-            <h1 className="text-text-primary font-bold text-lg hidden sm:block">
-              JEWELOG
-            </h1>
-          </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden sm:block">
-            <div className="flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={getLinkClasses(link.href)}
-                  aria-current={isActive(link.href) ? 'page' : undefined}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile Menu Button */}
+    <>
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+        <div className="flex items-center gap-8 bg-[#111]/80 backdrop-blur-md rounded-full px-6 py-3">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="sm:hidden p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
-            aria-label="Toggle navigation menu"
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
+            className="text-sm text-text-secondary hover:text-white transition-colors"
           >
-            <svg
-              className="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
+            Menu
+          </button>
+
+          <Link
+            href="/"
+            className="font-serif text-base font-medium text-white tracking-wide"
+          >
+            Jewel
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/posts"
+              className="text-text-secondary hover:text-white transition-colors"
+              aria-label="Writing"
             >
-              <path
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
-                d={
-                  isOpen
-                    ? 'M6 18L18 6M6 6l12 12'
-                    : 'M4 6h16M4 12h16M4 18h16'
-                }
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div
-            id="mobile-menu"
-            className="sm:hidden border-t border-border mt-4 pt-4"
-          >
-            <div className="space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`${getLinkClasses(link.href)} block w-full text-left`}
-                  onClick={() => setIsOpen(false)}
-                  aria-current={isActive(link.href) ? 'page' : undefined}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </Link>
+            <a
+              href="mailto:jewel@godjewel.co.kr"
+              className="text-text-secondary hover:text-white transition-colors"
+              aria-label="Email"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+            </a>
           </div>
-        )}
-      </div>
-    </nav>
+        </div>
+      </nav>
+
+      {isOpen && (
+        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-6 right-6 text-text-secondary hover:text-white text-sm transition-colors"
+          >
+            Close
+          </button>
+          <div className="flex flex-col items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`text-3xl sm:text-5xl font-serif transition-colors ${
+                  currentPath === link.href ||
+                  (link.href !== '/' && currentPath.startsWith(link.href))
+                    ? 'text-white'
+                    : 'text-text-secondary hover:text-white'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

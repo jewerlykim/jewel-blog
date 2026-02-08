@@ -16,19 +16,21 @@ const projects: Project[] = [
   {
     id: 'jewel-blog',
     title: 'JEWEL BLOG',
-    subtitle: '개인 블로그 플랫폼',
-    description: 'Next.js App Router와 Supabase를 활용한 풀스택 블로그. 마크다운 지원, 다국어 i18n, 반응형 디자인.',
-    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Supabase', 'React'],
+    subtitle: 'Personal Blog Platform',
+    description:
+      'Full-stack blog built with Next.js App Router and Keystatic CMS. Markdown support, responsive design, dark editorial theme.',
+    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Keystatic', 'React'],
     links: [
       { label: 'Live', url: 'https://godjewel.co.kr' },
-      { label: 'GitHub', url: 'https://github.com' },
+      { label: 'GitHub', url: 'https://github.com/jewerlykim/jewel-blog' },
     ],
   },
   {
     id: 'portfolio-v2',
     title: 'PORTFOLIO V2',
-    subtitle: '포트폴리오 웹사이트',
-    description: '개인 작업물과 경력을 소개하는 포트폴리오. 다크 테마, 부드러운 애니메이션, 모바일 최적화.',
+    subtitle: 'Portfolio Website',
+    description:
+      'A portfolio showcasing personal work and career. Dark theme, smooth animations, mobile-optimized.',
     tech: ['React', 'Framer Motion', 'Tailwind CSS', 'Vercel'],
     links: [
       { label: 'Live', url: '#' },
@@ -38,8 +40,9 @@ const projects: Project[] = [
   {
     id: 'design-system',
     title: 'DESIGN SYSTEM',
-    subtitle: '재사용 가능한 컴포넌트 라이브러리',
-    description: '일관된 UI/UX를 위한 컴포넌트 라이브러리. 토큰 기반 색상 시스템, 접근성 고려.',
+    subtitle: 'Reusable Component Library',
+    description:
+      'Component library for consistent UI/UX. Token-based color system with accessibility in mind.',
     tech: ['React', 'TypeScript', 'Storybook', 'CSS-in-JS'],
     links: [
       { label: 'Storybook', url: '#' },
@@ -49,8 +52,9 @@ const projects: Project[] = [
   {
     id: 'cli-tool',
     title: 'CLI TOOL',
-    subtitle: '개발자 생산성 도구',
-    description: '프로젝트 초기화, 파일 생성, 빌드 자동화를 위한 CLI 도구. Node.js 기반.',
+    subtitle: 'Developer Productivity Tool',
+    description:
+      'CLI tool for project initialization, file generation, and build automation. Built on Node.js.',
     tech: ['Node.js', 'TypeScript', 'Commander.js', 'Chalk'],
     links: [
       { label: 'npm', url: '#' },
@@ -60,8 +64,9 @@ const projects: Project[] = [
   {
     id: 'data-viz',
     title: 'DATA VISUALIZATION',
-    subtitle: '데이터 시각화 대시보드',
-    description: '실시간 데이터를 시각화하는 대시보드. 차트, 그래프, 인터랙티브 필터.',
+    subtitle: 'Data Visualization Dashboard',
+    description:
+      'Dashboard for visualizing real-time data. Charts, graphs, and interactive filters.',
     tech: ['React', 'D3.js', 'Chart.js', 'PostgreSQL'],
     links: [
       { label: 'Live', url: '#' },
@@ -71,8 +76,9 @@ const projects: Project[] = [
   {
     id: 'mobile-app',
     title: 'MOBILE APP',
-    subtitle: '크로스플랫폼 모바일 애플리케이션',
-    description: 'iOS/Android 지원 모바일 앱. 오프라인 지원, 푸시 알림, 로컬 스토리지.',
+    subtitle: 'Cross-Platform Mobile Application',
+    description:
+      'iOS/Android mobile app with offline support, push notifications, and local storage.',
     tech: ['React Native', 'TypeScript', 'Firebase', 'Redux'],
     links: [
       { label: 'App Store', url: '#' },
@@ -83,75 +89,77 @@ const projects: Project[] = [
 
 export default function Projects() {
   return (
-    <div className="bg-background min-h-screen py-16 px-4 sm:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-16">
-          <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
-            PROJECTS
-          </h1>
-          <p className="text-text-secondary text-lg max-w-2xl">
-            최근 진행한 프로젝트들입니다. 각 프로젝트는 새로운 기술과 도전을 담고 있습니다.
-          </p>
-        </div>
+    <main className="bg-background min-h-screen">
+      <div className="max-w-5xl mx-auto px-6 sm:px-12 py-24 sm:py-32">
+        <p className="text-xs text-[#666] uppercase tracking-widest mb-6">
+          Work
+        </p>
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-text-primary mb-4">
+          Projects
+        </h1>
+        <p className="text-[#666] text-lg max-w-2xl mb-16">
+          A selection of recent projects. Each one explores new technologies and
+          challenges.
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-0">
           {projects.map((project) => (
             <div
               key={project.id}
-              className="bg-surface border border-border rounded-lg p-6 hover:border-accent transition-colors duration-200 flex flex-col h-full"
+              className="border-t border-[#1a1a1a] py-10 sm:py-12"
             >
-              <h2 className="text-xl font-bold text-text-primary mb-2">
-                {project.title}
-              </h2>
-
-              <p className="text-accent text-sm font-medium mb-3">
-                {project.subtitle}
-              </p>
-
-              <p className="text-text-secondary text-sm mb-4 flex-grow">
-                {project.description}
-              </p>
-
-              <div className="mb-6">
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="inline-block bg-surface-elevated border border-border text-text-secondary text-xs px-3 py-1 rounded"
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-white">
+                    {project.title}
+                  </h2>
+                  <p className="text-sm text-[#666] mt-1">
+                    {project.subtitle}
+                  </p>
+                </div>
+                <div className="flex gap-4 flex-shrink-0">
+                  {project.links.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.url}
+                      className="text-sm text-[#666] hover:text-white transition-colors duration-200"
                     >
-                      {tech}
-                    </span>
+                      {link.label} &rarr;
+                    </Link>
                   ))}
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t border-border">
-                {project.links.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.url}
-                    className="text-accent hover:text-accent-hover text-sm font-medium transition-colors duration-150"
+              <p className="text-[#999] text-sm leading-relaxed mb-4 max-w-2xl">
+                {project.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((tech) => (
+                  <span
+                    key={tech}
+                    className="text-xs text-[#666] border border-[#1a1a1a] rounded-full px-3 py-1"
                   >
-                    {link.label} →
-                  </Link>
+                    {tech}
+                  </span>
                 ))}
               </div>
             </div>
           ))}
+          <div className="border-t border-[#1a1a1a]" />
         </div>
 
-        <div className="mt-20 pt-12 border-t border-border">
-          <p className="text-text-secondary mb-4">
-            더 많은 프로젝트를 보고 싶으신가요?
-          </p>
+        <div className="mt-16 flex justify-center">
           <Link
-            href="https://github.com"
-            className="inline-block text-accent hover:text-accent-hover font-medium transition-colors duration-150"
+            href="https://github.com/jewerlykim"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-[#333] px-8 py-2.5 text-sm text-[#666] hover:text-white hover:border-[#666] transition-colors duration-200"
           >
-            GitHub 프로필 방문 →
+            View GitHub Profile
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

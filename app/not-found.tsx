@@ -1,17 +1,25 @@
+import Link from 'next/link';
+
 export default function NotFound() {
   return (
-    <div className="relative h-screen overflow-hidden bg-blue-300">
-      <div className="absolute inset-0 bg-black opacity-25"></div>
-      <div className="container relative z-10 flex items-center px-6 py-32 mx-auto md:px-12 xl:py-40">
-        <div className="relative z-10 flex flex-col items-center w-full font-mono">
-          <h1 className="mt-4 text-5xl font-extrabold leading-tight text-center text-white">
-            글을 찾을 수 없습니다 :(
-          </h1>
-          <p className="font-extrabold text-white text-8xl my-44 animate-bounce">
-            404
-          </p>
-        </div>
+    <main className="min-h-screen bg-background flex items-center justify-center px-6">
+      <div className="text-center">
+        <p className="text-[#666] text-sm uppercase tracking-widest mb-6">
+          Error
+        </p>
+        <h1 className="font-serif text-7xl sm:text-9xl font-normal text-white mb-8">
+          404
+        </h1>
+        <p className="text-[#666] text-lg mb-12">
+          This page could not be found.
+        </p>
+        <Link
+          href="/"
+          className="rounded-full border border-[#333] px-8 py-2.5 text-sm text-[#666] hover:text-white hover:border-[#666] transition-colors duration-200"
+        >
+          Back to home
+        </Link>
       </div>
-    </div>
+    </main>
   );
 }

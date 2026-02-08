@@ -18,6 +18,10 @@ const config: Config = {
         accent: 'var(--color-accent)',
         'accent-hover': 'var(--color-accent-hover)',
       },
+      fontFamily: {
+        serif: ['var(--font-playfair)', 'Georgia', 'serif'],
+        sans: ['var(--font-inter)', '-apple-system', 'sans-serif'],
+      },
     },
   },
   darkMode: 'class',
