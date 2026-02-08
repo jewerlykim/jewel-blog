@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SallyLab - 브랜드 정보 입력</title>
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif']
+                    },
+                    colors: {
+                        'sally-indigo': '#6366F1',
+                        'sally-violet': '#8B5CF6',
+                        'sally-pink': '#EC4899',
+                        'sally-blue': '#007DFF',
+                        'bg-main': '#FFFFFF',
+                        'bg-sidebar': '#F7F8F9',
+                        'bg-card': '#FFFFFF',
+                        'border-color': '#E1E3E6',
+                        'text-primary': '#1A1C1E',
+                        'text-secondary': '#5F6368',
+                        'success': '#10B981',
+                        'warning': '#FF9F43',
+                        'pro-yellow': '#FFC145',
+                    },
+                    boxShadow: {
+                        'card': '0 1px 3px rgba(0,0,0,0.1)',
+                        'card-hover': '0 4px 12px rgba(0,0,0,0.08)',
+                        'glow': '0 0 15px rgba(99, 102, 241, 0.3)'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E1E3E6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C4C7CC;
+        }
+        
+        /* Hide number input arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        /* Range Slider Customization */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #6366F1;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #E1E3E6;
+            border-radius: 2px;
+        }
+        input[type=range]:focus::-webkit-slider-thumb {
+            box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.2);
+        }
+        
+        /* Clickable pulse animation */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08); }
+        }
+        .clickable-pulse {
+            animation: subtle-pulse 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-text-primary font-sans antialiased overflow-hidden h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-[240px] bg-bg-sidebar border-r border-border-color flex flex-col h-full flex-shrink-0 z-20">
+        <!-- Logo Area -->
+        <div class="h-16 flex items-center px-6 border-b border-transparent">
+            <svg width="140" height="30" viewBox="0 0 264 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#007DFF" d="M1.73999 44.22V35.22H24.78L26.88 33.12V28.2L24.78 26.1H6.65999L-1.20997e-05 19.38V6.66003L6.65999 2.88486e-05H35.58V9.00003H13.14L11.04 11.1V15L13.14 17.1H31.26L37.92 23.76V37.56L31.26 44.22H1.73999ZM46.6608 44.22L40.0008 37.56V30.9L46.6608 24.24H61.6008V22.14L59.4408 19.98H43.7208V12.9H66.1008L72.8208 19.56V44.22H61.6008V39.96L57.4608 44.22H46.6608ZM53.2608 38.1H56.5008L61.6008 33V29.82H53.2608L51.1608 31.92V36L53.2608 38.1ZM77.6109 44.22V2.88486e-05H88.8309V44.22H77.6109ZM94.2539 44.22V2.88486e-05H105.474V44.22H94.2539ZM112.817 55.44V47.82H130.577L132.677 45.72V39.54L126.917 44.22H116.957L110.297 37.56V12.9H121.517V35.76L123.617 37.86H126.077L132.677 32.22V12.9H143.237V48.66L136.517 55.44H112.817ZM160.596 44.22V2.88486e-05H171.816V35.1H192.096V44.22H160.596ZM199.077 44.22L192.417 37.56V30.9L199.077 24.24H214.017V22.14L211.857 19.98H196.137V12.9H218.517L225.237 19.56V44.22H214.017V39.96L209.877 44.22H199.077ZM205.677 38.1H208.917L214.017 33V29.82H205.677L203.577 31.92V36L205.677 38.1ZM230.027 44.22V2.88486e-05H241.247V16.74L245.747 12.84H257.027L263.687 19.56V37.56L257.027 44.22H245.807L241.247 40.44V44.22H230.027ZM246.587 37.8H251.327L252.767 36.3V20.88L251.327 19.26H246.527L241.247 23.88V33.18L246.587 37.8Z"/>
+            </svg>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+            <!-- Active Item -->
+            <a href="03_brand_input.html" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md bg-[#E8EAEB] text-sally-indigo relative">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-sally-indigo rounded-r-full"></div>
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-sally-indigo"></i>
+                대시보드
+            </a>
+            
+            <a href="01_creator_discovery.html" class="clickable-pulse group flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors">
+                <i data-lucide="users" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-text-primary"></i>
+                크리에이터
+            </a>
+            
+            <a href="05_matching.html" class="clickable-pulse group flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors">
+                <i data-lucide="megaphone" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-text-primary"></i>
+                캠페인
+            </a>
+            
+            <a href="07_campaign_report.html" class="clickable-pulse group flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-text-primary"></i>
+                성과 분석
+            </a>
+
+            <!-- Workspace Section -->
+            <div class="pt-6 pb-2">
+                <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">WORKSPACE</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="#" class="group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 rounded-full bg-sally-pink mr-3"></span>
+                            관심 리스트
+                        </div>
+                        <span class="bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs group-hover:bg-white">3</span>
+                    </a>
+                    <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-400 hover:text-sally-indigo hover:bg-indigo-50 transition-colors">
+                        <i data-lucide="plus" class="w-4 h-4 mr-3"></i>
+                        새 리스트 만들기
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Bottom User Section -->
+        <div class="p-4 border-t border-border-color bg-bg-sidebar">
+            <!-- Pro Badge -->
+            <div class="flex items-center justify-between mb-4 bg-white border border-border-color rounded-lg p-2.5 shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-success/10 flex items-center justify-center mr-2">
+                        <i data-lucide="check" class="w-3 h-3 text-success"></i>
+                    </div>
+                    <span class="text-xs font-semibold text-text-primary">Pro 사용 중</span>
+                </div>
+                <button class="text-xs text-sally-indigo hover:underline">관리</button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="flex items-center">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                    R
+                </div>
+                <div class="ml-3 flex-1 min-w-0">
+                    <p class="text-sm font-medium text-text-primary truncate">김서연 매니저</p>
+                    <p class="text-xs text-text-secondary truncate">롬앤 (rom&nd)</p>
+                </div>
+                <button class="text-gray-400 hover:text-text-primary">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-bg-main relative">
+        <div class="p-10 max-w-7xl mx-auto pb-40">
+            
+            <!-- Header -->
+            <header class="flex justify-between items-start mb-10">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-sally-indigo text-xs font-bold border border-indigo-100">STEP 2</span>
+                        <span class="text-text-secondary text-sm">캠페인 생성 마법사</span>
+                    </div>
+                    <h1 class="text-3xl font-bold text-text-primary mb-2">브랜드 정보 입력</h1>
+                    <p class="text-text-secondary text-lg">AI가 브랜드를 분석하고 최적의 크리에이터를 추천해드립니다</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-xs text-text-secondary mb-1">예상 소요 시간</p>
+                        <p class="text-sm font-bold text-sally-indigo flex items-center justify-end">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i>
+                            약 5분
+                        </p>
+                    </div>
+                    <button class="p-2 text-gray-400 hover:text-text-primary hover:bg-gray-100 rounded-full transition-colors relative">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Enhanced Step Indicator -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between relative">
+                    <!-- Line Background -->
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-0.5 bg-gray-200 -z-10"></div>
+                    
+                    <!-- Step 1: Completed -->
+                    <div class="flex flex-col items-center relative bg-bg-main px-4 group cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-success text-white flex items-center justify-center font-bold shadow-sm ring-4 ring-white transition-transform group-hover:scale-110">
+                            <i data-lucide="check" class="w-5 h-5"></i>
+                        </div>
+                        <span class="mt-2 text-sm font-medium text-success">기본 설정</span>
+                        <span class="text-xs text-gray-400 mt-0.5">계정 연동 완료</span>
+                    </div>
+
+                    <!-- Connector 1-2 (Active) -->
+                    <div class="absolute left-[10%] top-1/2 -translate-y-1/2 w-[25%] h-0.5 bg-success -z-10"></div>
+
+                    <!-- Step 2: Active -->
+                    <div class="flex flex-col items-center relative bg-bg-main px-4">
+                        <div class="absolute -top-8 text-sally-indigo font-bold text-xs bg-indigo-50 px-2 py-1 rounded-full border border-indigo-100 animate-bounce">
+                            현재 단계
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-sally-indigo text-white flex items-center justify-center font-bold shadow-md ring-4 ring-white ring-offset-2 ring-offset-indigo-50">
+                            2
+                        </div>
+                        <span class="mt-2 text-sm font-bold text-sally-indigo">브랜드/제품 정보</span>
+                        <span class="text-xs text-sally-indigo/80 mt-0.5 font-medium">50% 완료</span>
+                    </div>
+
+                    <!-- Step 3: Pending -->
+                    <div class="flex flex-col items-center relative bg-bg-main px-4 opacity-60">
+                        <div class="w-10 h-10 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center font-bold ring-4 ring-white">
+                            3
+                        </div>
+                        <span class="mt-2 text-sm font-medium text-gray-400">타겟 & 목표</span>
+                        <span class="text-xs text-gray-400 mt-0.5">오디언스 설정</span>
+                    </div>
+
+                    <!-- Step 4: Pending -->
+                    <div class="flex flex-col items-center relative bg-bg-main px-4 opacity-60">
+                        <div class="w-10 h-10 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center font-bold ring-4 ring-white">
+                            4
+                        </div>
+                        <span class="mt-2 text-sm font-medium text-gray-400">캠페인 설정</span>
+                        <span class="text-xs text-gray-400 mt-0.5">예산 및 일정</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="flex gap-8 items-start">
+                
+                <!-- Left Column: Form Area (70%) -->
+                <div class="w-[70%] space-y-8">
+                    
+                    <!-- Card 1: Brand Basic Info -->
+                    <div class="bg-white border border-border-color rounded-xl shadow-card p-8 relative overflow-hidden">
+                        <!-- Decorative Background -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-50 to-transparent rounded-bl-full opacity-50 pointer-events-none"></div>
+
+                        <div class="mb-8" data-component="brand-basic-info">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-lg font-bold text-text-primary flex items-center">
+                                    <span class="w-1 h-6 bg-sally-indigo rounded-full mr-3"></span>
+                                    브랜드 기본 정보
+                                </h2>
+                                <span class="text-xs font-medium text-success bg-green-50 px-2.5 py-1 rounded-full border border-green-100 flex items-center">
+                                    <i data-lucide="check-circle-2" class="w-3 h-3 mr-1.5"></i>
+                                    기본 데이터 연동됨
+                                </span>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Brand Name & Founding Year Row -->
+                                <div class="grid grid-cols-3 gap-6">
+                                    <div class="col-span-2">
+                                        <label class="block text-sm font-medium text-text-secondary mb-2">
+                                            브랜드명 <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="text" value="롬앤 (rom&nd)" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary font-medium bg-gray-50 pr-10" readonly>
+                                            <i data-lucide="lock" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-text-secondary mb-2">설립연도</label>
+                                        <input type="number" value="2016" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary">
+                                    </div>
+                                </div>
+
+                                <!-- Brand Scale & Category Row -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-text-secondary mb-2">브랜드 규모</label>
+                                        <div class="relative">
+                                            <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary appearance-none bg-white">
+                                                <option>스타트업 (설립 3년 미만)</option>
+                                                <option selected>중소기업 (SME)</option>
+                                                <option>중견기업</option>
+                                                <option>대기업</option>
+                                                <option>공공기관</option>
+                                            </select>
+                                            <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-text-secondary mb-2">업종 / 카테고리</label>
+                                        <div class="relative">
+                                            <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary appearance-none bg-white">
+                                                <option selected>뷰티 / 코스메틱</option>
+                                                <option>패션 / 의류</option>
+                                                <option>푸드 / 음료</option>
+                                                <option>라이프스타일</option>
+                                                <option>테크 / 가전</option>
+                                            </select>
+                                            <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Website -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-2">브랜드 웹사이트</label>
+                                    <div class="flex gap-3">
+                                        <div class="relative flex-1">
+                                            <input type="text" value="https://romand.co.kr" class="w-full px-4 py-3 rounded-lg border border-sally-indigo/30 bg-indigo-50/10 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary pr-24">
+                                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                                <span class="clickable-pulse text-[10px] font-bold text-white bg-sally-blue px-1.5 py-0.5 rounded">AI 자동입력</span>
+                                                <i data-lucide="check-circle" class="w-4 h-4 text-success"></i>
+                                            </div>
+                                        </div>
+                                        <button class="px-5 py-3 bg-white text-text-secondary font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center whitespace-nowrap border border-gray-200 shadow-sm">
+                                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                                            재분석
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Instagram -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-2">브랜드 Instagram</label>
+                                    <div class="flex gap-3">
+                                        <div class="relative flex-1">
+                                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                <i data-lucide="instagram" class="w-4 h-4"></i>
+                                            </span>
+                                            <input type="text" value="@romand_official" class="w-full pl-11 pr-24 py-3 rounded-lg border border-sally-indigo/30 bg-indigo-50/10 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary">
+                                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                                <span class="clickable-pulse text-[10px] font-bold text-white bg-sally-blue px-1.5 py-0.5 rounded">AI 자동입력</span>
+                                                <i data-lucide="check-circle" class="w-4 h-4 text-success"></i>
+                                            </div>
+                                        </div>
+                                        <button class="px-5 py-3 bg-white text-text-secondary font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center whitespace-nowrap border border-gray-200 shadow-sm">
+                                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                                            재분석
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Sales Channels (Multi-select) -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-3">주요 판매 채널 (복수 선택)</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only" checked>
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                자사몰
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only" checked>
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                올리브영
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only" checked>
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                쿠팡
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only">
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                무신사
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only" checked>
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                지그재그
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only">
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                에이블리
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only">
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                컬리
+                                            </div>
+                                        </label>
+                                        <label class="cursor-pointer group">
+                                            <input type="checkbox" class="peer sr-only" checked>
+                                            <div class="px-4 py-2 rounded-full border border-gray-200 bg-white text-text-secondary text-sm font-medium transition-all peer-checked:border-sally-indigo peer-checked:bg-indigo-50 peer-checked:text-sally-indigo group-hover:border-gray-300">
+                                                해외 직배송 (Qoo10 등)
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Product Info -->
+                    <div class="bg-white border border-border-color rounded-xl shadow-card p-8">
+                        <div class="mb-10" data-component="product-info">
+                            <h2 class="text-lg font-bold text-text-primary mb-6 flex items-center">
+                                <span class="w-1 h-6 bg-sally-indigo rounded-full mr-3"></span>
+                                제품 정보
+                            </h2>
+
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Product Name -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-2">제품명 <span class="text-red-500">*</span></label>
+                                    <input type="text" value="글래스팅 멜팅 밤 (신제품)" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary font-medium">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-6">
+                                    <!-- Product Category -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-text-secondary mb-2">제품 카테고리</label>
+                                        <div class="relative">
+                                            <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary appearance-none bg-white">
+                                                <option selected>립 메이크업</option>
+                                                <option>아이 메이크업</option>
+                                                <option>베이스 메이크업</option>
+                                                <option>스킨케어</option>
+                                                <option>헤어/바디</option>
+                                            </select>
+                                            <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"></i>
+                                        </div>
+                                    </div>
+                                    <!-- Price Input -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-text-secondary mb-2">소비자 가격</label>
+                                        <div class="relative">
+                                            <input type="text" value="13,000" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary text-right pr-8">
+                                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">원</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Price Positioning Slider -->
+                                <div class="bg-gray-50 p-5 rounded-lg border border-gray-100">
+                                    <label class="block text-sm font-medium text-text-secondary mb-4">가격 포지셔닝</label>
+                                    <div class="px-2">
+                                        <input type="range" min="1" max="5" value="2" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <div class="flex justify-between mt-2 text-xs text-gray-500 font-medium">
+                                            <span>초저가</span>
+                                            <span>저가</span>
+                                            <span class="text-sally-indigo font-bold">중저가</span>
+                                            <span>고가</span>
+                                            <span>프리미엄</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- USP (Unique Selling Point) -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-2">
+                                        제품 USP (핵심 차별점)
+                                        <span class="ml-2 text-xs text-sally-indigo bg-indigo-50 px-2 py-0.5 rounded">AI 추천</span>
+                                    </label>
+                                    <textarea class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary h-24 resize-none leading-relaxed" placeholder="제품의 가장 큰 특징을 입력해주세요.">투명하고 맑은 광택감, 끈적임 없는 멜팅 텍스처, 식물성 오일 함유로 고보습 케어 가능</textarea>
+                                </div>
+
+                                <!-- Competitors -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-3">경쟁 제품 / 브랜드</label>
+                                    <div class="flex flex-wrap gap-2 mb-2">
+                                        <div class="flex items-center bg-white border border-gray-200 text-text-primary px-3 py-1.5 rounded-full text-sm shadow-sm">
+                                            <span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>
+                                            페리페라 잉크 무드
+                                            <button class="ml-2 text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                        </div>
+                                        <div class="flex items-center bg-white border border-gray-200 text-text-primary px-3 py-1.5 rounded-full text-sm shadow-sm">
+                                            <span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>
+                                            어뮤즈 젤핏 틴트
+                                            <button class="ml-2 text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                        </div>
+                                        <div class="flex items-center bg-white border border-gray-200 text-text-primary px-3 py-1.5 rounded-full text-sm shadow-sm">
+                                            <span class="w-2 h-2 rounded-full bg-gray-300 mr-2"></span>
+                                            헤라 센슈얼
+                                            <button class="ml-2 text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                        </div>
+                                        <button class="flex items-center text-sally-indigo text-sm font-medium px-3 py-1.5 hover:bg-indigo-50 rounded-full transition-colors">
+                                            <i data-lucide="plus" class="w-3 h-3 mr-1"></i>
+                                            추가하기
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Product Images Grid -->
+                                <div>
+                                    <label class="block text-sm font-medium text-text-secondary mb-3">제품 이미지 (최대 5장)</label>
+                                    <div class="grid grid-cols-4 gap-4">
+                                        <!-- Image 1 (Main) -->
+                                        <div class="aspect-square rounded-lg overflow-hidden border border-sally-indigo shadow-sm relative group">
+                                            <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&h=300&fit=crop" alt="Product" class="w-full h-full object-cover">
+                                            <div class="absolute top-2 left-2 bg-sally-indigo text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">대표</div>
+                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                <button class="p-1.5 bg-white rounded-full hover:bg-gray-100"><i data-lucide="eye" class="w-4 h-4 text-gray-700"></i></button>
+                                                <button class="p-1.5 bg-white rounded-full hover:bg-gray-100"><i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i></button>
+                                            </div>
+                                        </div>
+                                        <!-- Image 2 (Empty) -->
+                                        <div class="aspect-square rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-sally-indigo hover:text-sally-indigo hover:bg-indigo-50/30 transition-all cursor-pointer group">
+                                            <i data-lucide="plus" class="w-6 h-6 mb-1 group-hover:scale-110 transition-transform"></i>
+                                            <span class="text-xs">추가</span>
+                                        </div>
+                                        <!-- Image 3 (Empty) -->
+                                        <div class="aspect-square rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-sally-indigo hover:text-sally-indigo hover:bg-indigo-50/30 transition-all cursor-pointer group">
+                                            <i data-lucide="plus" class="w-6 h-6 mb-1 group-hover:scale-110 transition-transform"></i>
+                                            <span class="text-xs">추가</span>
+                                        </div>
+                                        <!-- Image 4 (Empty) -->
+                                        <div class="aspect-square rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-sally-indigo hover:text-sally-indigo hover:bg-indigo-50/30 transition-all cursor-pointer group">
+                                            <i data-lucide="plus" class="w-6 h-6 mb-1 group-hover:scale-110 transition-transform"></i>
+                                            <span class="text-xs">추가</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="border-gray-100 my-8">
+
+                        <!-- Section: Brand Story -->
+                        <div class="mb-6" data-component="brand-story">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-lg font-bold text-text-primary flex items-center">
+                                    <span class="w-1 h-6 bg-sally-indigo rounded-full mr-3"></span>
+                                    브랜드 스토리
+                                </h2>
+                                <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">선택사항</span>
+                            </div>
+                            <textarea class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sally-indigo focus:border-sally-indigo outline-none transition-all text-text-primary h-32 resize-none leading-relaxed" placeholder="브랜드의 철학이나 제품 탄생 배경을 들려주세요.">롬앤은 '감각적인 색감과 트렌디한 감성'을 추구하는 K-뷰티 브랜드입니다. 자연스럽고 세련된 메이크업을 지향하며, 20-30대 여성 고객층을 중심으로 글로벌 시장에서도 인지도를 높여가고 있습니다.</textarea>
+                        </div>
+
+                        <!-- Section: Keywords -->
+                        <div data-component="keywords">
+                            <h2 class="text-lg font-bold text-text-primary mb-6 flex items-center">
+                                <span class="w-1 h-6 bg-sally-indigo rounded-full mr-3"></span>
+                                핵심 키워드
+                            </h2>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <div class="flex items-center bg-indigo-50 text-sally-indigo px-3 py-1.5 rounded-full text-sm font-medium border border-indigo-100">
+                                    #클린뷰티
+                                    <button class="ml-2 hover:text-indigo-900"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                </div>
+                                <div class="flex items-center bg-indigo-50 text-sally-indigo px-3 py-1.5 rounded-full text-sm font-medium border border-indigo-100">
+                                    #글로시
+                                    <button class="ml-2 hover:text-indigo-900"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                </div>
+                                <div class="flex items-center bg-indigo-50 text-sally-indigo px-3 py-1.5 rounded-full text-sm font-medium border border-indigo-100">
+                                    #데일리메이크업
+                                    <button class="ml-2 hover:text-indigo-900"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                </div>
+                                <div class="flex items-center bg-indigo-50 text-sally-indigo px-3 py-1.5 rounded-full text-sm font-medium border border-indigo-100">
+                                    #K뷰티
+                                    <button class="ml-2 hover:text-indigo-900"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                </div>
+                                <div class="flex items-center bg-indigo-50 text-sally-indigo px-3 py-1.5 rounded-full text-sm font-medium border border-indigo-100">
+                                    #합리적가격
+                                    <button class="ml-2 hover:text-indigo-900"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                </div>
+                                <input type="text" placeholder="키워드 입력 + Enter" class="px-3 py-1.5 rounded-full text-sm border border-gray-200 focus:border-sally-indigo focus:ring-1 focus:ring-sally-indigo outline-none min-w-[120px]">
+                            </div>
+                            <p class="text-xs text-text-secondary">브랜드나 제품을 가장 잘 나타내는 키워드를 5개 이상 입력해주세요.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Target Audience Preview (NEW) -->
+                    <div class="bg-white border border-border-color rounded-xl shadow-card p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-lg font-bold text-text-primary flex items-center">
+                                <span class="w-1 h-6 bg-sally-indigo rounded-full mr-3"></span>
+                                AI 타겟 오디언스 분석
+                            </h2>
+                            <span class="text-xs font-medium text-sally-indigo bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100 flex items-center">
+                                <i data-lucide="sparkles" class="w-3 h-3 mr-1.5"></i>
+                                AI 자동 생성됨
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-8">
+                            <!-- Age Distribution Donut Chart -->
+                            <div class="flex flex-col items-center">
+                                <h3 class="text-sm font-medium text-text-secondary mb-4">연령대 분포</h3>
+                                <div class="relative w-40 h-40">
+                                    <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
+                                        <!-- Background Circle -->
+                                        <path class="text-gray-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8" />
+                                        <!-- Segment 1: 18-24 (45%) -->
+                                        <path class="text-sally-indigo" stroke-dasharray="45, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8" />
+                                        <!-- Segment 2: 25-34 (35%) -->
+                                        <path class="text-sally-violet" stroke-dasharray="35, 100" stroke-dashoffset="-45" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8" />
+                                        <!-- Segment 3: Others (20%) -->
+                                        <path class="text-gray-300" stroke-dasharray="20, 100" stroke-dashoffset="-80" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8" />
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span class="text-2xl font-bold text-text-primary">18-24</span>
+                                        <span class="text-xs text-text-secondary">주요 타겟</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 mt-4 text-xs">
+                                    <div class="flex items-center"><span class="w-2 h-2 bg-sally-indigo rounded-full mr-1"></span>18-24세</div>
+                                    <div class="flex items-center"><span class="w-2 h-2 bg-sally-violet rounded-full mr-1"></span>25-34세</div>
+                                    <div class="flex items-center"><span class="w-2 h-2 bg-gray-300 rounded-full mr-1"></span>기타</div>
+                                </div>
+                            </div>
+
+                            <!-- Gender & Persona -->
+                            <div class="space-y-6">
+                                <!-- Gender Bar -->
+                                <div>
+                                    <h3 class="text-sm font-medium text-text-secondary mb-2">성별 비율</h3>
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <span class="text-xs font-bold text-sally-pink w-8">여성</span>
+                                        <div class="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                            <div class="h-full bg-sally-pink w-[92%] rounded-full"></div>
+                                        </div>
+                                        <span class="text-xs font-bold text-text-primary w-8 text-right">92%</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs font-bold text-sally-blue w-8">남성</span>
+                                        <div class="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                            <div class="h-full bg-sally-blue w-[8%] rounded-full"></div>
+                                        </div>
+                                        <span class="text-xs font-bold text-text-primary w-8 text-right">8%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Persona Tags -->
+                                <div>
+                                    <h3 class="text-sm font-medium text-text-secondary mb-2">핵심 페르소나</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-2.5 py-1 bg-gray-100 text-text-secondary text-xs rounded-md border border-gray-200">#트렌드세터</span>
+                                        <span class="px-2.5 py-1 bg-gray-100 text-text-secondary text-xs rounded-md border border-gray-200">#코덕</span>
+                                        <span class="px-2.5 py-1 bg-gray-100 text-text-secondary text-xs rounded-md border border-gray-200">#퍼스널컬러진심</span>
+                                        <span class="px-2.5 py-1 bg-gray-100 text-text-secondary text-xs rounded-md border border-gray-200">#올영세일</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-100 flex justify-end">
+                            <button class="text-sm text-sally-indigo font-medium flex items-center hover:underline">
+                                다음 단계에서 상세 타겟 설정하기
+                                <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Budget Estimator (NEW) -->
+                    <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl shadow-card p-6 text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                        
+                        <div class="flex justify-between items-start relative z-10">
+                            <div>
+                                <h3 class="text-lg font-bold mb-1">예상 캠페인 비용</h3>
+                                <p class="text-gray-400 text-sm mb-6">선택한 카테고리와 타겟 기준 평균 단가입니다.</p>
+                                
+                                <div class="flex items-baseline gap-2 mb-2">
+                                    <span class="text-3xl font-bold text-pro-yellow">₩ 500만 ~ 2,000만</span>
+                                    <span class="text-sm text-gray-400">/ 월 기준</span>
+                                </div>
+                                <p class="text-xs text-gray-400">
+                                    * 마이크로 크리에이터 5~10명 진행 시 예상 견적
+                                </p>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-64">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-sm text-gray-300">예상 ROI</span>
+                                    <span class="text-lg font-bold text-success flex items-center">
+                                        <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+                                        250% +
+                                    </span>
+                                </div>
+                                <div class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden mb-2">
+                                    <div class="bg-success h-full w-[75%]"></div>
+                                </div>
+                                <p class="text-[10px] text-gray-400 text-right">동종 업계 평균 대비 1.5배 높음</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: AI Agent Panel (30%) -->
+                <div class="w-[30%] space-y-6 sticky top-10">
+                    
+                    <!-- AI Panel Container -->
+                    <div class="bg-indigo-50/50 border-l-4 border-sally-indigo rounded-r-xl p-6 shadow-sm backdrop-blur-sm">
+                        
+                        <!-- AI Header -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-sally-indigo rounded-lg flex items-center justify-center text-white mr-3 shadow-sm shadow-indigo-200">
+                                    <i data-lucide="bot" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-sally-indigo block text-sm">Sally AI</span>
+                                    <span class="text-[10px] text-indigo-400 font-medium">실시간 분석 중</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-xs font-medium text-sally-indigo bg-white px-2 py-1 rounded-full shadow-sm border border-indigo-100">
+                                <span class="w-2 h-2 bg-sally-indigo rounded-full mr-1.5 animate-pulse"></span>
+                                3/4 완료
+                            </div>
+                        </div>
+
+                        <!-- Analysis Content -->
+                        <div class="space-y-4">
+                            
+                            <!-- Website Analysis -->
+                            <div class="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm transition-all hover:shadow-md">
+                                <div class="flex items-center mb-2 text-success font-semibold text-sm">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 mr-2"></i>
+                                    웹사이트 데이터 추출
+                                </div>
+                                <ul class="space-y-1.5 text-xs text-text-secondary ml-6 list-disc list-outside">
+                                    <li>K-뷰티 코스메틱 브랜드 식별</li>
+                                    <li>주요 제품군: 립틴트, 아이섀도</li>
+                                    <li>브랜드 컬러: 핑크, 코랄 계열</li>
+                                </ul>
+                            </div>
+
+                            <!-- Instagram Analysis -->
+                            <div class="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm transition-all hover:shadow-md">
+                                <div class="flex items-center mb-2 text-success font-semibold text-sm">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 mr-2"></i>
+                                    SNS 영향력 분석
+                                </div>
+                                <div class="ml-6 space-y-2">
+                                    <div class="flex items-center text-sm font-medium text-text-primary">
+                                        <i data-lucide="instagram" class="w-3.5 h-3.5 mr-1.5 text-gray-400"></i>
+                                        @romand_official
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 mt-1">
+                                        <div class="bg-gray-50 p-2 rounded text-center">
+                                            <p class="text-[10px] text-gray-400">팔로워</p>
+                                            <p class="text-xs font-bold text-text-primary">1.2M</p>
+                                        </div>
+                                        <div class="bg-gray-50 p-2 rounded text-center">
+                                            <p class="text-[10px] text-gray-400">참여율</p>
+                                            <p class="text-xs font-bold text-sally-indigo">3.8%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Brand Tone Analysis (NEW) -->
+                            <div class="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm transition-all hover:shadow-md">
+                                <div class="flex items-center mb-3 text-sally-indigo font-semibold text-sm">
+                                    <i data-lucide="palette" class="w-4 h-4 mr-2"></i>
+                                    브랜드 톤앤매너
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="px-2 py-1 bg-indigo-50 text-sally-indigo text-[10px] font-medium rounded border border-indigo-100">#감성적인</span>
+                                    <span class="px-2 py-1 bg-indigo-50 text-sally-indigo text-[10px] font-medium rounded border border-indigo-100">#트렌디한</span>
+                                    <span class="px-2 py-1 bg-indigo-50 text-sally-indigo text-[10px] font-medium rounded border border-indigo-100">#생기있는</span>
+                                    <span class="px-2 py-1 bg-indigo-50 text-sally-indigo text-[10px] font-medium rounded border border-indigo-100">#소녀감성</span>
+                                </div>
+                            </div>
+
+                            <!-- Similar Brands (NEW) -->
+                            <div class="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm transition-all hover:shadow-md">
+                                <div class="flex items-center mb-3 text-text-primary font-semibold text-sm">
+                                    <i data-lucide="copy" class="w-4 h-4 mr-2 text-gray-400"></i>
+                                    유사 브랜드 레퍼런스
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center text-xs">
+                                        <span class="text-text-secondary">데이지크 (Dasique)</span>
+                                        <span class="text-sally-indigo font-bold">92% 일치</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+                                        <div class="bg-sally-indigo h-full w-[92%]"></div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center text-xs pt-1">
+                                        <span class="text-text-secondary">릴리바이레드</span>
+                                        <span class="text-sally-indigo font-bold">88% 일치</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+                                        <div class="bg-sally-indigo h-full w-[88%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Suggestion -->
+                            <div class="bg-gradient-to-br from-sally-indigo to-sally-violet p-5 rounded-lg shadow-lg text-white relative overflow-hidden group cursor-pointer">
+                                <div class="absolute top-0 right-0 -mt-2 -mr-2 w-20 h-20 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+                                
+                                <div class="flex items-center mb-3 font-bold text-sm">
+                                    <i data-lucide="sparkles" class="w-4 h-4 mr-2 text-yellow-300 animate-pulse"></i>
+                                    추천 크리에이터 미리보기
+                                </div>
+                                
+                                <div class="flex -space-x-2 mb-4">
+                                    <img class="w-8 h-8 rounded-full border-2 border-indigo-500" src="https://i.pravatar.cc/100?img=5" alt="Creator">
+                                    <img class="w-8 h-8 rounded-full border-2 border-indigo-500" src="https://i.pravatar.cc/100?img=9" alt="Creator">
+                                    <img class="w-8 h-8 rounded-full border-2 border-indigo-500" src="https://i.pravatar.cc/100?img=12" alt="Creator">
+                                    <div class="w-8 h-8 rounded-full border-2 border-indigo-500 bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                                        +44
+                                    </div>
+                                </div>
+
+                                <p class="text-xs leading-relaxed opacity-90 mb-1">
+                                    브랜드 핏이 맞는 크리에이터 <span class="font-bold text-yellow-300">47명</span>을 찾았습니다.
+                                </p>
+                                <div class="mt-3 pt-3 border-t border-white/20 flex justify-between items-center">
+                                    <span class="text-[10px] opacity-75">다음 단계에서 확인 가능</span>
+                                    <i data-lucide="arrow-right" class="w-3 h-3 opacity-75"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Input Progress Summary (NEW) -->
+            <div class="mt-10 bg-white border border-border-color rounded-xl p-6 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-6">
+                    <div class="relative w-16 h-16">
+                        <svg class="w-full h-full transform -rotate-90">
+                            <circle cx="32" cy="32" r="28" stroke="#F3F4F6" stroke-width="6" fill="none" />
+                            <circle cx="32" cy="32" r="28" stroke="#6366F1" stroke-width="6" fill="none" stroke-dasharray="175.9" stroke-dashoffset="87.95" stroke-linecap="round" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center text-sm font-bold text-sally-indigo">
+                            50%
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-text-primary mb-1">입력 진행 상황</h4>
+                        <p class="text-sm text-text-secondary">필수 정보 입력이 완료되었습니다. 다음 단계로 이동할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="flex gap-8">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center text-sm text-text-primary">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-success mr-2"></i>
+                            브랜드 기본정보
+                        </div>
+                        <div class="flex items-center text-sm text-text-primary">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-success mr-2"></i>
+                            제품 상세정보
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center text-sm text-text-primary">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-success mr-2"></i>
+                            브랜드 스토리
+                        </div>
+                        <div class="flex items-center text-sm text-gray-400">
+                            <i data-lucide="circle" class="w-4 h-4 mr-2"></i>
+                            타겟 오디언스
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Navigation -->
+    <div class="fixed bottom-0 left-[240px] right-0 bg-white border-t border-border-color p-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-10">
+            <button class="px-6 py-3 rounded-lg border border-gray-300 text-text-secondary font-medium hover:bg-gray-50 hover:text-text-primary transition-colors flex items-center">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                이전 단계
+            </button>
+            
+            <div class="flex items-center gap-4">
+                <span class="text-xs text-gray-400 flex items-center">
+                    <i data-lucide="clock" class="w-3 h-3 mr-1"></i>
+                    마지막 자동 저장: 1분 전
+                </span>
+                <button class="text-text-secondary hover:text-sally-indigo font-medium text-sm underline decoration-gray-300 hover:decoration-sally-indigo underline-offset-4 transition-all">
+                    임시저장
+                </button>
+            </div>
+
+            <button onclick="window.location.href='04_brand_status.html'" class="clickable-pulse px-8 py-3 rounded-lg bg-sally-indigo text-white font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center transform hover:-translate-y-0.5">
+                다음 단계
+                <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple interaction for range slider (Visual feedback)
+        const rangeInput = document.querySelector('input[type="range"]');
+        if(rangeInput) {
+            rangeInput.addEventListener('input', (e) => {
+                // Add visual logic here if needed
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SallyLab - 캠페인 모니터링</title>
+    <link as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sally-indigo': '#6366F1',
+                        'sally-violet': '#8B5CF6',
+                        'sally-pink': '#EC4899',
+                        'sally-blue': '#007DFF',
+                        'bg-main': '#FFFFFF',
+                        'bg-sidebar': '#F7F8F9',
+                        'border-color': '#E1E3E6',
+                        'text-primary': '#1A1C1E',
+                        'text-secondary': '#5F6368',
+                        'success': '#10B981',
+                        'warning': '#FF9F43',
+                        'pro-yellow': '#FFC145',
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E1E3E6;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C4C7C5;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(225, 227, 230, 0.5);
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .7; }
+        }
+
+        .chart-tooltip {
+            display: none;
+            position: absolute;
+            background: #1A1C1E;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            transform: translate(-50%, -100%);
+            margin-top: -8px;
+        }
+        
+        .chart-point:hover + .chart-tooltip {
+            display: block;
+        }
+        /* Clickable pulse animation */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08); }
+        }
+        .clickable-pulse {
+            animation: subtle-pulse 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-text-primary font-sans antialiased overflow-hidden h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-[240px] bg-bg-sidebar border-r border-border-color flex-shrink-0 flex flex-col transition-all duration-300 relative h-full" data-component="Sidebar">
+        <!-- Logo -->
+        <div class="p-6 pb-2">
+            <svg fill="none" height="30" viewbox="0 0 264 56" width="140" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.73999 44.22V35.22H24.78L26.88 33.12V28.2L24.78 26.1H6.65999L-1.20997e-05 19.38V6.66003L6.65999 2.88486e-05H35.58V9.00003H13.14L11.04 11.1V15L13.14 17.1H31.26L37.92 23.76V37.56L31.26 44.22H1.73999ZM46.6608 44.22L40.0008 37.56V30.9L46.6608 24.24H61.6008V22.14L59.4408 19.98H43.7208V12.9H66.1008L72.8208 19.56V44.22H61.6008V39.96L57.4608 44.22H46.6608ZM53.2608 38.1H56.5008L61.6008 33V29.82H53.2608L51.1608 31.92V36L53.2608 38.1ZM77.6109 44.22V2.88486e-05H88.8309V44.22H77.6109ZM94.2539 44.22V2.88486e-05H105.474V44.22H94.2539ZM112.817 55.44V47.82H130.577L132.677 45.72V39.54L126.917 44.22H116.957L110.297 37.56V12.9H121.517V35.76L123.617 37.86H126.077L132.677 32.22V12.9H143.237V48.66L136.517 55.44H112.817ZM160.596 44.22V2.88486e-05H171.816V35.1H192.096V44.22H160.596ZM199.077 44.22L192.417 37.56V30.9L199.077 24.24H214.017V22.14L211.857 19.98H196.137V12.9H218.517L225.237 19.56V44.22H214.017V39.96L209.877 44.22H199.077ZM205.677 38.1H208.917L214.017 33V29.82H205.677L203.577 31.92V36L205.677 38.1ZM230.027 44.22V2.88486e-05H241.247V16.74L245.747 12.84H257.027L263.687 19.56V37.56L257.027 44.22H245.807L241.247 40.44V44.22H230.027ZM246.587 37.8H251.327L252.767 36.3V20.88L251.327 19.26H246.527L241.247 23.88V33.18L246.587 37.8Z" fill="#007DFF"></path>
+            </svg>
+        </div>
+        <!-- Main Nav -->
+        <div class="px-3 mt-6">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">MAIN</div>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="03_brand_input.html">
+                <i class="w-4 h-4" data-lucide="layout-dashboard"></i>
+                대시보드
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="01_creator_discovery.html">
+                <i class="w-4 h-4" data-lucide="users"></i>
+                크리에이터
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-[#E8EAEB] text-text-primary rounded-lg relative mb-1" href="05_matching.html">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-sally-indigo rounded-r"></div>
+                <i class="w-4 h-4 text-sally-indigo" data-lucide="megaphone"></i>
+                캠페인
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="07_campaign_report.html">
+                <i class="w-4 h-4" data-lucide="bar-chart-3"></i>
+                성과 분석
+            </a>
+        </div>
+        <div class="my-4 mx-6 h-[1px] bg-border-color"></div>
+        <!-- Workspace -->
+        <div class="px-3">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">WORKSPACE</div>
+            <a class="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+                <div class="flex items-center gap-3">
+                    <i class="w-4 h-4" data-lucide="clipboard-list"></i>
+                    관심 리스트
+                </div>
+                <span class="text-xs bg-gray-200 px-1.5 py-0.5 rounded-full">3</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+                <i class="w-4 h-4" data-lucide="plus-circle"></i>
+                새 리스트 만들기
+            </a>
+        </div>
+        <!-- Bottom -->
+        <div class="mt-auto p-4 border-t border-border-color">
+            <div class="bg-pro-yellow/20 border border-pro-yellow/50 rounded-lg p-3 mb-4">
+                <div class="flex items-center gap-2 mb-1 text-yellow-800 font-bold text-xs">
+                    <i class="w-3 h-3 fill-yellow-600 text-yellow-600" data-lucide="star"></i>
+                    PRO Plan
+                </div>
+                <p class="text-[10px] text-yellow-700">AI 분석 무제한 이용 중</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white font-bold text-xs shadow-sm">R</div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-text-primary truncate">롬앤 (rom&nd)</p>
+                    <p class="text-xs text-text-secondary truncate">김서연 매니저</p>
+                </div>
+                <button class="text-text-secondary hover:text-text-primary">
+                    <i class="w-4 h-4" data-lucide="settings"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-white">
+        
+        <!-- Header -->
+        <header data-component="header" class="h-16 border-b border-border-color flex items-center justify-between px-8 bg-white flex-shrink-0 z-10">
+            <div class="flex items-center gap-4">
+                <h1 class="text-xl font-bold text-text-primary">캠페인 모니터링</h1>
+                <div class="h-6 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-text-secondary">글래스팅 멜팅 밤 런칭</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                        진행 중
+                    </span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-sally-indigo/10 text-sally-indigo border border-sally-indigo/20">
+                        D-18 남음
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center text-sm text-text-secondary bg-gray-50 px-3 py-1.5 rounded-md border border-gray-100">
+                    <i data-lucide="calendar" class="w-4 h-4 mr-2 text-gray-400"></i>
+                    2026.02.15 ~ 03.15
+                </div>
+                <button class="p-2 text-gray-400 hover:text-text-primary rounded-full hover:bg-gray-100 clickable-pulse">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="max-w-7xl mx-auto space-y-6">
+
+                <!-- KPI Cards -->
+                <div data-component="kpi-cards" class="grid grid-cols-5 gap-4">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-text-secondary font-medium">총 도달</span>
+                            <div class="p-1.5 bg-blue-50 rounded-md">
+                                <i data-lucide="eye" class="w-4 h-4 text-sally-blue"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-text-primary">42,350</span>
+                        </div>
+                        <div class="mt-2 flex items-center text-xs">
+                            <span class="text-sally-blue font-medium">목표의 56%</span>
+                            <span class="text-gray-400 mx-1">•</span>
+                            <span class="text-gray-400">예상 초과 달성</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-text-secondary font-medium">총 참여</span>
+                            <div class="p-1.5 bg-indigo-50 rounded-md">
+                                <i data-lucide="mouse-pointer-2" class="w-4 h-4 text-sally-indigo"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-text-primary">2,847</span>
+                        </div>
+                        <div class="mt-2 flex items-center text-xs">
+                            <span class="text-sally-indigo font-medium">참여율 6.7%</span>
+                            <span class="text-gray-400 mx-1">•</span>
+                            <span class="text-gray-400">업계 평균 상회</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-text-secondary font-medium">예상 전환</span>
+                            <div class="p-1.5 bg-violet-50 rounded-md">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 text-sally-violet"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-text-primary">89건</span>
+                        </div>
+                        <div class="mt-2 flex items-center text-xs">
+                            <span class="text-warning font-medium">목표의 45%</span>
+                            <span class="text-gray-400 mx-1">•</span>
+                            <span class="text-gray-400">약간 저조</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-text-secondary font-medium">콘텐츠 발행</span>
+                            <div class="p-1.5 bg-green-50 rounded-md">
+                                <i data-lucide="file-check" class="w-4 h-4 text-success"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-text-primary">5<span class="text-lg text-gray-400 font-normal">/8</span></span>
+                        </div>
+                        <div class="mt-2 flex items-center text-xs">
+                            <span class="text-success font-medium">정상 진행</span>
+                            <span class="text-gray-400 mx-1">•</span>
+                            <span class="text-gray-400">지연 없음</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-text-secondary font-medium">잔여 예산</span>
+                            <div class="p-1.5 bg-gray-100 rounded-md">
+                                <i data-lucide="credit-card" class="w-4 h-4 text-gray-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-text-primary">2.15M</span>
+                        </div>
+                        <div class="mt-2 flex items-center text-xs">
+                            <span class="text-gray-500 font-medium">₩2,150,000</span>
+                            <span class="text-gray-400 mx-1">•</span>
+                            <span class="text-gray-400">43% 남음</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Section -->
+                <div data-component="timeline" class="bg-white p-6 rounded-xl border border-border-color shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-base font-bold text-text-primary">캠페인 타임라인</h3>
+                        <span class="text-xs font-medium text-sally-indigo bg-indigo-50 px-2 py-1 rounded">Day 12 / 30</span>
+                    </div>
+                    
+                    <div class="relative pt-2 pb-6 px-4">
+                        <!-- Progress Bar Background -->
+                        <div class="absolute top-5 left-0 w-full h-1.5 bg-gray-100 rounded-full"></div>
+                        
+                        <!-- Active Progress -->
+                        <div class="absolute top-5 left-0 h-1.5 bg-gradient-to-r from-sally-blue to-sally-indigo rounded-full" style="width: 40%;"></div>
+
+                        <!-- Markers Container -->
+                        <div class="relative flex justify-between w-full">
+                            
+                            <!-- Start -->
+                            <div class="flex flex-col items-center group cursor-pointer">
+                                <div class="w-3 h-3 rounded-full bg-sally-blue ring-4 ring-white z-10 mb-2"></div>
+                                <span class="text-xs font-medium text-text-secondary">Day 1</span>
+                                <span class="text-[10px] text-gray-400 mt-0.5">시작</span>
+                            </div>
+
+                            <!-- Milestone 1 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 10%;">
+                                <div class="w-3 h-3 rounded-full bg-success ring-4 ring-white z-10 mb-2 flex items-center justify-center">
+                                    <i data-lucide="check" class="w-2 h-2 text-white"></i>
+                                </div>
+                                <div class="absolute top-6 flex flex-col items-center w-32 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs rounded py-1 px-2 z-20 pointer-events-none">
+                                    뷰티하나 피드 #1
+                                    <div class="absolute -top-1 w-2 h-2 bg-gray-900 rotate-45"></div>
+                                </div>
+                            </div>
+
+                            <!-- Milestone 2 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 16%;">
+                                <div class="w-3 h-3 rounded-full bg-success ring-4 ring-white z-10 mb-2 flex items-center justify-center">
+                                    <i data-lucide="check" class="w-2 h-2 text-white"></i>
+                                </div>
+                                <div class="absolute top-6 flex flex-col items-center w-32 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs rounded py-1 px-2 z-20 pointer-events-none">
+                                    데일리수아 릴스 #1
+                                </div>
+                            </div>
+
+                            <!-- Milestone 3 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 26%;">
+                                <div class="w-3 h-3 rounded-full bg-success ring-4 ring-white z-10 mb-2 flex items-center justify-center">
+                                    <i data-lucide="check" class="w-2 h-2 text-white"></i>
+                                </div>
+                                <div class="absolute top-6 flex flex-col items-center w-32 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs rounded py-1 px-2 z-20 pointer-events-none">
+                                    뷰티하나 릴스 #1
+                                </div>
+                            </div>
+
+                            <!-- Milestone 4 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 33%;">
+                                <div class="w-3 h-3 rounded-full bg-success ring-4 ring-white z-10 mb-2 flex items-center justify-center">
+                                    <i data-lucide="check" class="w-2 h-2 text-white"></i>
+                                </div>
+                                <div class="absolute top-6 flex flex-col items-center w-32 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs rounded py-1 px-2 z-20 pointer-events-none">
+                                    데일리수아 피드 #1
+                                </div>
+                            </div>
+
+                            <!-- Current Day -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 40%;">
+                                <div class="relative z-10 mb-2">
+                                    <div class="w-4 h-4 rounded-full bg-sally-indigo ring-4 ring-white flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                                    </div>
+                                    <div class="absolute top-0 left-0 w-4 h-4 bg-sally-indigo rounded-full animate-ping opacity-75"></div>
+                                </div>
+                                <span class="text-xs font-bold text-sally-indigo">Day 12</span>
+                                <span class="text-[10px] text-sally-indigo mt-0.5 font-medium">오늘</span>
+                                <div class="absolute -top-8 bg-white border border-sally-indigo text-sally-indigo text-xs px-2 py-1 rounded shadow-sm whitespace-nowrap">
+                                    뷰티하나 피드 #2
+                                </div>
+                            </div>
+
+                            <!-- Future Milestone 1 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 60%;">
+                                <div class="w-3 h-3 rounded-full bg-gray-200 ring-4 ring-white z-10 mb-2"></div>
+                                <span class="text-xs text-gray-400 mt-6 absolute">Day 18</span>
+                                <div class="absolute -top-8 text-gray-400 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                                    데일리수아 릴스 #2
+                                </div>
+                            </div>
+
+                            <!-- Future Milestone 2 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 73%;">
+                                <div class="w-3 h-3 rounded-full bg-gray-200 ring-4 ring-white z-10 mb-2"></div>
+                                <span class="text-xs text-gray-400 mt-6 absolute">Day 22</span>
+                                <div class="absolute -top-8 text-gray-400 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                                    뷰티하나 스토리
+                                </div>
+                            </div>
+
+                            <!-- Future Milestone 3 -->
+                            <div class="flex flex-col items-center group cursor-pointer" style="position: absolute; left: 93%;">
+                                <div class="w-3 h-3 rounded-full bg-gray-200 ring-4 ring-white z-10 mb-2"></div>
+                                <span class="text-xs text-gray-400 mt-6 absolute">Day 28</span>
+                                <div class="absolute -top-8 text-gray-400 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                                    데일리수아 피드 #2
+                                </div>
+                            </div>
+
+                            <!-- End -->
+                            <div class="flex flex-col items-center group cursor-pointer">
+                                <div class="w-3 h-3 rounded-full bg-gray-200 ring-4 ring-white z-10 mb-2"></div>
+                                <span class="text-xs font-medium text-gray-400">Day 30</span>
+                                <span class="text-[10px] text-gray-400 mt-0.5">종료</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="grid grid-cols-12 gap-6">
+                    
+                    <!-- Left Column: Chart & Creators -->
+                    <div class="col-span-8 space-y-6">
+                        
+                        <!-- Performance Chart -->
+                        <div data-component="performance-chart" class="bg-white p-6 rounded-xl border border-border-color shadow-sm">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="text-base font-bold text-text-primary">일별 성과 추이</h3>
+                                    <p class="text-sm text-text-secondary mt-1">지난 12일간의 도달 및 참여 지표</p>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-3 h-3 rounded-full bg-sally-blue"></span>
+                                        <span class="text-xs text-text-secondary">도달</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-3 h-3 rounded-full bg-sally-indigo"></span>
+                                        <span class="text-xs text-text-secondary">참여</span>
+                                    </div>
+                                    <select class="text-xs border-gray-200 rounded-md text-text-secondary focus:ring-sally-blue focus:border-sally-blue">
+                                        <option>최근 14일</option>
+                                        <option>전체 기간</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- SVG Chart -->
+                            <div class="relative h-[280px] w-full">
+                                <svg class="w-full h-full overflow-visible" viewBox="0 0 800 280" preserveAspectRatio="none">
+                                    <!-- Gradients -->
+                                    <defs>
+                                        <linearGradient id="gradBlue" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#007DFF" stop-opacity="0.2"/>
+                                            <stop offset="100%" stop-color="#007DFF" stop-opacity="0"/>
+                                        </linearGradient>
+                                        <linearGradient id="gradIndigo" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#6366F1" stop-opacity="0.2"/>
+                                            <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Grid Lines -->
+                                    <line x1="0" y1="280" x2="800" y2="280" stroke="#F3F4F6" stroke-width="1"/>
+                                    <line x1="0" y1="210" x2="800" y2="210" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4 4"/>
+                                    <line x1="0" y1="140" x2="800" y2="140" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4 4"/>
+                                    <line x1="0" y1="70" x2="800" y2="70" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4 4"/>
+                                    <line x1="0" y1="0" x2="800" y2="0" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4 4"/>
+
+                                    <!-- Reach Area & Line (Blue) -->
+                                    <!-- Points: 0,250 70,220 140,240 210,180 280,150 350,100 420,80 490,40 560,60 630,50 700,30 770,20 -->
+                                    <path d="M0,250 L70,220 L140,240 L210,180 L280,150 L350,100 L420,80 L490,40 L560,60 L630,50 L700,30 L770,20 L770,280 L0,280 Z" fill="url(#gradBlue)"/>
+                                    <path d="M0,250 L70,220 L140,240 L210,180 L280,150 L350,100 L420,80 L490,40 L560,60 L630,50 L700,30 L770,20" fill="none" stroke="#007DFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+                                    <!-- Engagement Area & Line (Indigo) -->
+                                    <!-- Points: 0,270 70,265 140,260 210,250 280,240 350,220 420,210 490,190 560,200 630,180 700,160 770,150 -->
+                                    <path d="M0,270 L70,265 L140,260 L210,250 L280,240 L350,220 L420,210 L490,190 L560,200 L630,180 L700,160 L770,150 L770,280 L0,280 Z" fill="url(#gradIndigo)"/>
+                                    <path d="M0,270 L70,265 L140,260 L210,250 L280,240 L350,220 L420,210 L490,190 L560,200 L630,180 L700,160 L770,150" fill="none" stroke="#6366F1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+                                    <!-- Interactive Points (Last few) -->
+                                    <circle cx="700" cy="30" r="4" fill="white" stroke="#007DFF" stroke-width="2" class="chart-point cursor-pointer hover:r-6 transition-all"/>
+                                    <div class="chart-tooltip">Day 11: 7,850 Reach</div>
+                                    
+                                    <circle cx="770" cy="20" r="4" fill="white" stroke="#007DFF" stroke-width="2" class="chart-point cursor-pointer hover:r-6 transition-all"/>
+                                    <div class="chart-tooltip">Day 12: 8,200 Reach</div>
+
+                                    <circle cx="700" cy="160" r="4" fill="white" stroke="#6366F1" stroke-width="2" class="chart-point cursor-pointer hover:r-6 transition-all"/>
+                                    <div class="chart-tooltip">Day 11: 450 Eng</div>
+
+                                    <circle cx="770" cy="150" r="4" fill="white" stroke="#6366F1" stroke-width="2" class="chart-point cursor-pointer hover:r-6 transition-all"/>
+                                    <div class="chart-tooltip">Day 12: 520 Eng</div>
+                                </svg>
+                                
+                                <!-- X Axis Labels -->
+                                <div class="flex justify-between text-xs text-gray-400 mt-2 px-2">
+                                    <span>Day 1</span>
+                                    <span>Day 2</span>
+                                    <span>Day 3</span>
+                                    <span>Day 4</span>
+                                    <span>Day 5</span>
+                                    <span>Day 6</span>
+                                    <span>Day 7</span>
+                                    <span>Day 8</span>
+                                    <span>Day 9</span>
+                                    <span>Day 10</span>
+                                    <span>Day 11</span>
+                                    <span>Day 12</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Creator Cards Row -->
+                        <div data-component="creator-cards" class="grid grid-cols-2 gap-6">
+                            
+                            <!-- Creator 1 -->
+                            <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Beauty Hana" class="w-12 h-12 rounded-full object-cover border border-gray-100">
+                                        <div>
+                                            <h4 class="font-bold text-text-primary">뷰티하나</h4>
+                                            <div class="flex items-center text-xs text-text-secondary">
+                                                <i data-lucide="instagram" class="w-3 h-3 mr-1"></i>
+                                                @beauty_hana
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-md">우수 성과</span>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                                    <div class="bg-gray-50 p-2 rounded-lg">
+                                        <div class="text-xs text-text-secondary">도달</div>
+                                        <div class="font-bold text-sally-blue">23.1K</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-2 rounded-lg">
+                                        <div class="text-xs text-text-secondary">참여</div>
+                                        <div class="font-bold text-sally-indigo">1,623</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-2 rounded-lg">
+                                        <div class="text-xs text-text-secondary">참여율</div>
+                                        <div class="font-bold text-text-primary">7.0%</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-text-secondary">콘텐츠 발행 (3/4)</span>
+                                        <span class="text-sally-blue font-medium">75%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                        <div class="bg-sally-blue h-1.5 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-2 overflow-x-auto pb-2">
+                                    <div class="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden group cursor-pointer">
+                                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=150&h=150&fit=crop" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                                        <div class="absolute inset-0 bg-black/40 flex items-end p-1">
+                                            <span class="text-[10px] text-white font-medium">♥ 4.1K</span>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden group cursor-pointer">
+                                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=150&h=150&fit=crop" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                                        <div class="absolute inset-0 bg-black/40 flex items-end p-1">
+                                            <span class="text-[10px] text-white font-medium">▷ 12.3K</span>
+                                        </div>
+                                        <div class="absolute top-1 right-1 bg-black/50 rounded p-0.5">
+                                            <i data-lucide="play" class="w-3 h-3 text-white fill-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden group cursor-pointer">
+                                        <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=150&h=150&fit=crop" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                                        <div class="absolute inset-0 bg-black/40 flex items-end p-1">
+                                            <span class="text-[10px] text-white font-medium">♥ 3.8K</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Creator 2 -->
+                            <div class="bg-white p-5 rounded-xl border border-border-color shadow-sm">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Daily Sua" class="w-12 h-12 rounded-full object-cover border border-gray-100">
+                                        <div>
+                                            <h4 class="font-bold text-text-primary">데일리수아</h4>
+                                            <div class="flex items-center text-xs text-text-secondary">
+                                                <i data-lucide="instagram" class="w-3 h-3 mr-1"></i>
+                                                <span class="mr-2">@daily_sua</span>
+                                                <span class="text-gray-300">|</span>
+                                                <span class="ml-2 text-xs">TikTok</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-md">진행 중</span>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                                    <div class="bg-gray-50 p-2 rounded-lg">
+                                        <div class="text-xs text-text-secondary">도달</div>
+                                        <div class="font-bold text-sally-blue">19.2K</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-2 rounded-lg">
+                                        <div class="text-xs text-text-secondary">참여</div>
+                                        <div class="font-bold text-sally-indigo">1,224</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-2 rounded-lg">
+                                        <div class="text-xs text-text-secondary">참여율</div>
+                                        <div class="font-bold text-text-primary">6.4%</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-text-secondary">콘텐츠 발행 (2/4)</span>
+                                        <span class="text-sally-blue font-medium">50%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                        <div class="bg-sally-blue h-1.5 rounded-full" style="width: 50%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-2 overflow-x-auto pb-2">
+                                    <div class="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden group cursor-pointer">
+                                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=150&h=150&fit=crop" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                                        <div class="absolute inset-0 bg-black/40 flex items-end p-1">
+                                            <span class="text-[10px] text-white font-medium">▷ 15.2K</span>
+                                        </div>
+                                        <div class="absolute top-1 right-1 bg-black/50 rounded p-0.5">
+                                            <i data-lucide="play" class="w-3 h-3 text-white fill-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden group cursor-pointer">
+                                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=150&h=150&fit=crop" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                                        <div class="absolute inset-0 bg-black/40 flex items-end p-1">
+                                            <span class="text-[10px] text-white font-medium">♥ 5.1K</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0 w-20 h-20 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center">
+                                        <span class="text-xs text-gray-400">예정</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: AI Alerts -->
+                    <div class="col-span-4">
+                        <div data-component="ai-alerts" class="bg-amber-50/50 border border-amber-100 rounded-xl p-5 h-full flex flex-col">
+                            <div class="flex items-center gap-2 mb-5">
+                                <div class="p-1.5 bg-amber-100 rounded-lg">
+                                    <i data-lucide="bot" class="w-5 h-5 text-amber-600"></i>
+                                </div>
+                                <h3 class="font-bold text-text-primary">AI 실시간 인사이트</h3>
+                                <span class="ml-auto flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-amber-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                </span>
+                            </div>
+
+                            <div class="space-y-4 flex-1 overflow-y-auto pr-1">
+                                <!-- Alert 1 -->
+                                <div class="bg-white p-4 rounded-lg border border-green-100 shadow-sm relative overflow-hidden">
+                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-success"></div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-0.5">
+                                            <i data-lucide="check-circle-2" class="w-4 h-4 text-success"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium leading-snug">뷰티하나의 릴스 #1이 예상 도달률을 <span class="text-success font-bold">185%</span> 초과 달성했습니다.</p>
+                                            <p class="text-xs text-text-secondary mt-1">1시간 전 감지됨</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Alert 2 -->
+                                <div class="bg-white p-4 rounded-lg border border-blue-100 shadow-sm relative overflow-hidden">
+                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-sally-blue"></div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-0.5">
+                                            <i data-lucide="lightbulb" class="w-4 h-4 text-sally-blue"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium leading-snug">데일리수아의 다음 콘텐츠(릴스 #2)는 <span class="text-sally-blue font-bold">저녁 7-9시</span>에 발행하면 도달률이 약 23% 더 높을 것으로 예상됩니다.</p>
+                                            <button class="mt-2 text-xs bg-blue-50 text-sally-blue px-2 py-1 rounded hover:bg-blue-100 transition-colors">
+                                                발행 예약 변경하기
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Alert 3 -->
+                                <div class="bg-white p-4 rounded-lg border border-amber-100 shadow-sm relative overflow-hidden">
+                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-warning"></div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-0.5">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 text-warning"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium leading-snug">캠페인 전환율이 목표 대비 약간 낮습니다. 스토리 콘텐츠에 <span class="text-warning font-bold">직접 구매 링크</span>를 추가하는 것을 추천합니다.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Alert 4 -->
+                                <div class="bg-white p-4 rounded-lg border border-green-100 shadow-sm relative overflow-hidden">
+                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-success"></div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-0.5">
+                                            <i data-lucide="trending-up" class="w-4 h-4 text-success"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium leading-snug">현재 추세를 유지하면 캠페인 종료 시 목표 도달률 <span class="text-success font-bold">110%</span> 달성이 예상됩니다.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-amber-200/50 text-center">
+                                <button class="text-xs text-amber-700 font-medium hover:underline flex items-center justify-center w-full clickable-pulse" onclick="window.location.href='07_campaign_report.html'">
+                                    전체 인사이트 리포트 보기
+                                    <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="mt-12 mb-4 text-center">
+                <p class="text-xs text-gray-400">© 2026 SallyLab. All rights reserved.</p>
+            </div>
+        </div>
+    </main>
+
+    <aside class="w-[340px] bg-[#FAFAFF] border-l-2 border-sally-indigo/20 flex flex-col h-full flex-shrink-0 relative z-10" style="box-shadow: -8px 0 30px -5px rgba(99,102,241,0.1);">
+        <div class="h-16 bg-gradient-to-r from-sally-indigo to-sally-violet px-6 flex items-center justify-between flex-shrink-0">
+            <div>
+                <div class="flex items-center gap-2 text-white mb-0.5">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span class="font-bold text-lg">Sally AI</span>
+                </div>
+                <p class="text-xs text-white/70 font-medium">캠페인 모니터링 어시스턴트</p>
+            </div>
+            <button class="text-white/70 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 space-y-6 bg-[#F8F7FF]/50">
+            
+            <div class="flex flex-col items-end">
+                <span class="text-[10px] text-text-secondary mb-1 mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    현재 캠페인 성과가 목표 대비 어떤 상황인가요?
+                </div>
+            </div>
+
+            <!-- Thinking Steps -->
+            <div class="ml-8 my-1">
+                <div class="flex items-center gap-1.5 text-xs text-sally-violet/70 font-medium mb-2">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    분석
+                </div>
+                <div class="space-y-1.5 ml-1 border-l-2 border-sally-indigo/15 pl-3">
+                    <div class="flex items-center gap-2 text-[11px] text-text-secondary">
+                        <div class="w-4 h-4 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-2.5 h-2.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        실시간 캠페인 성과 데이터 로딩
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] text-text-secondary">
+                        <div class="w-4 h-4 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-2.5 h-2.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        유사 캠페인 벤치마크 비교
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-start">
+                <div class="flex items-center gap-2 mb-1 ml-1">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold">S</div>
+                    <span class="text-[10px] text-text-secondary">Sally AI</span>
+                </div>
+                <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                    <p class="leading-relaxed mb-2">
+                        Day 12 기준 도달은 목표의 <span class="font-bold text-sally-indigo">42%</span> 달성으로 정상 궤도입니다. 셀리 내부 벤치마크상 유사 캠페인의 Day 12 평균 달성률은 <span class="font-bold text-sally-indigo">38%</span>이므로, <span class="font-bold text-sally-indigo">4%p 앞서고</span> 있어요.
+                    </p>
+                    <span class="inline-flex items-center bg-sally-indigo/10 text-sally-indigo text-[10px] px-2 py-0.5 rounded-full font-medium">
+                        <i data-lucide="lock" class="w-3 h-3 mr-1"></i>
+                        셀리 독점 데이터
+                    </span>
+                </div>
+            </div>
+
+            <!-- Suggested Questions -->
+            <div class="flex flex-wrap gap-1.5 ml-8">
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    발행 시간 최적화
+                </button>
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    실시간 경쟁사 비교
+                </button>
+            </div>
+
+            <div class="flex flex-col items-end">
+                <span class="text-[10px] text-text-secondary mb-1 mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    뷰티하나 콘텐츠 발행 시간을 조정하면 효과가 있을까요?
+                </div>
+            </div>
+
+            <div class="flex flex-col items-start">
+                <div class="flex items-center gap-2 mb-1 ml-1">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold">S</div>
+                    <span class="text-[10px] text-text-secondary">Sally AI</span>
+                </div>
+                <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                    <p class="leading-relaxed mb-2">
+                        셀리의 시간대별 참여율 데이터를 보면, 롬앤 타겟층(20-30대 여성)은 <span class="font-bold text-sally-indigo">오후 9-10시</span>에 참여율이 낮 시간 대비 <span class="font-bold text-sally-indigo">47% 높습니다</span>. 현재 발행 시간(오후 2시)을 9시로 변경하면 참여 <span class="font-bold text-sally-indigo">+1,200건</span> 추가 가능합니다.
+                    </p>
+                    <span class="inline-flex items-center bg-sally-indigo/10 text-sally-indigo text-[10px] px-2 py-0.5 rounded-full font-medium">
+                        <i data-lucide="lock" class="w-3 h-3 mr-1"></i>
+                        셀리 독점 데이터
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end">
+                <span class="text-[10px] text-text-secondary mb-1 mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    경쟁사 캠페인과 비교하면 우리가 어떤 위치인가요?
+                </div>
+            </div>
+
+            <div class="flex flex-col items-start">
+                <div class="flex items-center gap-2 mb-1 ml-1">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold">S</div>
+                    <span class="text-[10px] text-text-secondary">Sally AI</span>
+                </div>
+                <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                    <p class="leading-relaxed mb-2">
+                        현재 셀리에서 진행 중인 뷰티 캠페인 <span class="font-bold text-sally-indigo">23건</span> 대비, 롬앤 캠페인의 참여율(<span class="font-bold text-sally-indigo">6.7%</span>)은 <span class="font-bold text-sally-indigo">상위 12%</span>에 해당합니다. 특히 립 카테고리에서는 <span class="font-bold text-sally-indigo">1위</span>입니다! 🎉
+                    </p>
+                    <span class="inline-flex items-center bg-sally-indigo/10 text-sally-indigo text-[10px] px-2 py-0.5 rounded-full font-medium">
+                        <i data-lucide="lock" class="w-3 h-3 mr-1"></i>
+                        셀리 독점 데이터
+                    </span>
+                </div>
+            </div>
+
+            <!-- Suggested Questions -->
+            <div class="flex flex-wrap gap-1.5 ml-8">
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1 clickable-pulse">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    자동 리마인드 설정
+                </button>
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1 clickable-pulse">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    전환율 개선 방법
+                </button>
+            </div>
+
+            <div class="flex flex-col items-end">
+                <span class="text-[10px] text-text-secondary mb-1 mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    데일리수아 콘텐츠가 아직 발행 안 됐는데, 리마인드 보내야 할까요?
+                </div>
+            </div>
+
+            <div class="flex flex-col items-start">
+                <div class="flex items-center gap-2 mb-1 ml-1">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold">S</div>
+                    <span class="text-[10px] text-text-secondary">Sally AI</span>
+                </div>
+                <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                    <p class="leading-relaxed">
+                        데일리수아의 다음 콘텐츠 발행 예정일은 <span class="font-bold text-sally-indigo">2월 22일</span>입니다. 셀리의 크리에이터 이행률 데이터에 의하면, 예정일 <span class="font-bold text-sally-indigo">2일 전 리마인드</span> 시 정시 발행률이 94%로 높아집니다. 내일 자동 리마인드를 설정해드릴까요?
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-4 bg-white border-t border-border-color">
+            <div class="relative">
+                <input type="text" placeholder="질문을 입력하세요..." class="w-full bg-gray-50 border border-gray-200 rounded-full pl-4 pr-12 py-2.5 text-sm focus:outline-none focus:border-sally-indigo focus:ring-1 focus:ring-sally-indigo transition-all">
+                <button class="absolute right-1 top-1 w-8 h-8 bg-sally-indigo text-white rounded-full flex items-center justify-center hover:bg-sally-violet transition-colors shadow-sm">
+                    <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

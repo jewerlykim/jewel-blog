@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SallyLab - Creator Discovery</title>
+<!-- Fonts -->
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+<!-- Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'sally-indigo': '#6366F1',
+                        'sally-violet': '#8B5CF6',
+                        'sally-pink': '#EC4899',
+                        'sally-blue': '#007DFF',
+                        'bg-main': '#FFFFFF',
+                        'bg-sidebar': '#F7F8F9',
+                        'bg-card': '#FFFFFF',
+                        'border-color': '#E1E3E6',
+                        'text-primary': '#1A1C1E',
+                        'text-secondary': '#5F6368',
+                        'success': '#10B981',
+                        'warning': '#FF9F43',
+                        'pro-yellow': '#FFC145',
+                    },
+                    boxShadow: {
+                        'card': '0 1px 3px rgba(0,0,0,0.1)',
+                        'card-hover': '0 4px 12px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for horizontal scrolling */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .card-transition {
+            transition: all 0.2s ease-in-out;
+        }
+        .card-transition:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: #D1D3D6;
+        }
+
+        /* Modal Backdrop */
+        #upgrade-modal {
+            backdrop-filter: blur(4px);
+        }
+
+        /* Clickable pulse animation */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08); }
+        }
+        .clickable-pulse {
+            animation: subtle-pulse 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-text-primary font-sans antialiased overflow-hidden h-screen flex">
+<!-- SIDEBAR -->
+<aside class="w-[240px] bg-bg-sidebar border-r border-border-color flex-shrink-0 flex flex-col transition-all duration-300 relative h-full" data-component="Sidebar" id="sidebar">
+<!-- Logo -->
+<div class="p-6 pb-2">
+<svg fill="none" height="30" viewbox="0 0 264 56" width="140" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.73999 44.22V35.22H24.78L26.88 33.12V28.2L24.78 26.1H6.65999L-1.20997e-05 19.38V6.66003L6.65999 2.88486e-05H35.58V9.00003H13.14L11.04 11.1V15L13.14 17.1H31.26L37.92 23.76V37.56L31.26 44.22H1.73999ZM46.6608 44.22L40.0008 37.56V30.9L46.6608 24.24H61.6008V22.14L59.4408 19.98H43.7208V12.9H66.1008L72.8208 19.56V44.22H61.6008V39.96L57.4608 44.22H46.6608ZM53.2608 38.1H56.5008L61.6008 33V29.82H53.2608L51.1608 31.92V36L53.2608 38.1ZM77.6109 44.22V2.88486e-05H88.8309V44.22H77.6109ZM94.2539 44.22V2.88486e-05H105.474V44.22H94.2539ZM112.817 55.44V47.82H130.577L132.677 45.72V39.54L126.917 44.22H116.957L110.297 37.56V12.9H121.517V35.76L123.617 37.86H126.077L132.677 32.22V12.9H143.237V48.66L136.517 55.44H112.817ZM160.596 44.22V2.88486e-05H171.816V35.1H192.096V44.22H160.596ZM199.077 44.22L192.417 37.56V30.9L199.077 24.24H214.017V22.14L211.857 19.98H196.137V12.9H218.517L225.237 19.56V44.22H214.017V39.96L209.877 44.22H199.077ZM205.677 38.1H208.917L214.017 33V29.82H205.677L203.577 31.92V36L205.677 38.1ZM230.027 44.22V2.88486e-05H241.247V16.74L245.747 12.84H257.027L263.687 19.56V37.56L257.027 44.22H245.807L241.247 40.44V44.22H230.027ZM246.587 37.8H251.327L252.767 36.3V20.88L251.327 19.26H246.527L241.247 23.88V33.18L246.587 37.8Z" fill="#007DFF"></path>
+</svg>
+</div>
+        <!-- Main Nav -->
+        <div class="px-3 mt-6">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">MAIN</div>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="03_brand_input.html">
+                <i class="w-4 h-4" data-lucide="layout-dashboard"></i>
+                대시보드
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-[#E8EAEB] text-text-primary rounded-lg relative mb-1" href="01_creator_discovery.html">
+                <!-- Active Indicator -->
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-sally-indigo rounded-r"></div>
+                <i class="w-4 h-4 text-sally-indigo" data-lucide="users"></i>
+                크리에이터
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="05_matching.html">
+                <i class="w-4 h-4" data-lucide="megaphone"></i>
+                캠페인
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="07_campaign_report.html">
+                <i class="w-4 h-4" data-lucide="bar-chart-3"></i>
+                성과 분석
+            </a>
+        </div>
+<div class="my-4 mx-6 h-[1px] bg-border-color"></div>
+<!-- Workspace Nav -->
+<div class="px-3">
+<div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">WORKSPACE</div>
+<a class="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+<div class="flex items-center gap-3">
+<i class="w-4 h-4" data-lucide="clipboard-list"></i>
+                    관심 리스트
+                </div>
+<span class="text-xs bg-gray-200 px-1.5 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+<i class="w-4 h-4" data-lucide="plus-circle"></i>
+                새 리스트 만들기
+            </a>
+</div>
+<!-- Bottom Actions -->
+<div class="mt-auto p-4 border-t border-border-color">
+<div class="bg-pro-yellow/20 border border-pro-yellow/50 rounded-lg p-3 mb-4 cursor-pointer hover:bg-pro-yellow/30 transition-colors">
+<div class="flex items-center gap-2 mb-1 text-yellow-800 font-bold text-xs">
+<i class="w-3 h-3 fill-yellow-600 text-yellow-600" data-lucide="star"></i>
+                    Pro로 업그레이드
+                </div>
+<div class="text-xs text-yellow-900">궁합 분석 &amp; AI 추천</div>
+</div>
+<div class="flex items-center gap-3 px-2 mb-4">
+<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs">R</div>
+<div class="flex-1 min-w-0">
+<div class="text-sm font-semibold truncate">롬앤 (rom&amp;nd)</div>
+<div class="text-xs text-text-secondary truncate">김서연 매니저</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-success"></div>
+</div>
+<div class="flex items-center justify-between text-text-secondary px-2">
+<button class="hover:text-text-primary p-1"><i class="w-4 h-4" data-lucide="settings"></i></button>
+<button class="hover:text-text-primary p-1"><i class="w-4 h-4" data-lucide="help-circle"></i></button>
+<button class="hover:text-text-primary p-1" id="sidebar-toggle"><i class="w-4 h-4" data-lucide="chevron-left"></i></button>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT -->
+<main class="flex-1 overflow-y-auto bg-bg-main" data-component="MainContent">
+<div class="p-10 max-w-7xl mx-auto">
+<!-- HEADER -->
+<div class="flex items-center justify-between mb-8" data-component="PageHeader">
+<div class="flex items-center gap-3">
+<h1 class="text-[32px] font-bold text-text-primary">크리에이터 탐색</h1>
+<div class="relative">
+<i class="w-5 h-5 text-text-secondary cursor-pointer hover:text-text-primary" data-lucide="bell"></i>
+<div class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
+</div>
+</div>
+</div>
+<!-- SEARCH & FILTER BAR -->
+<div class="bg-white border border-border-color rounded-xl p-4 mb-12 shadow-sm" data-component="SearchFilterBar">
+<div class="flex items-center gap-4 mb-4">
+<div class="relative flex-1">
+<i class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" data-lucide="search"></i>
+<input class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-border-color rounded-lg text-sm focus:outline-none focus:border-sally-indigo focus:ring-1 focus:ring-sally-indigo transition-all" placeholder="크리에이터 이름, 태그, 스타일 검색" type="text"/>
+</div>
+</div>
+<div class="flex items-center flex-wrap gap-2">
+<span class="text-sm font-medium text-text-primary mr-2">카테고리:</span>
+<!-- Category Chips -->
+<button class="category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-transparent bg-sally-indigo text-white transition-colors" data-active="true">전체</button>
+<button class="category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-border-color bg-white text-text-secondary hover:bg-gray-50 hover:border-gray-300 transition-colors" data-active="false">뷰티</button>
+<button class="category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-border-color bg-white text-text-secondary hover:bg-gray-50 hover:border-gray-300 transition-colors" data-active="false">패션</button>
+<button class="category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-border-color bg-white text-text-secondary hover:bg-gray-50 hover:border-gray-300 transition-colors" data-active="false">푸드</button>
+<button class="category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-border-color bg-white text-text-secondary hover:bg-gray-50 hover:border-gray-300 transition-colors" data-active="false">여행</button>
+<button class="category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-border-color bg-white text-text-secondary hover:bg-gray-50 hover:border-gray-300 transition-colors" data-active="false">라이프스타일</button>
+<div class="w-[1px] h-6 bg-border-color mx-2"></div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-text-secondary hover:bg-gray-100 transition-colors">
+                        팔로워 범위
+                        <i class="w-3 h-3" data-lucide="chevron-down"></i>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-text-secondary hover:bg-gray-100 transition-colors">
+                        참여율
+                        <i class="w-3 h-3" data-lucide="chevron-down"></i>
+</button>
+</div>
+</div>
+<!-- OPEN BOARD CAROUSEL -->
+<div class="mb-12" data-component="OpenBoardCarousel">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-[18px] font-semibold text-text-primary">🙋 협업 제안 대기 중</h2>
+<div class="flex items-center gap-4">
+<a class="text-sm text-text-secondary hover:text-sally-indigo font-medium" href="#">전체보기 →</a>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded-full border border-border-color flex items-center justify-center hover:bg-gray-50 transition-colors" id="carousel-prev"><i class="w-4 h-4 text-text-secondary" data-lucide="chevron-left"></i></button>
+<button class="w-8 h-8 rounded-full border border-border-color flex items-center justify-center hover:bg-gray-50 transition-colors" id="carousel-next"><i class="w-4 h-4 text-text-secondary" data-lucide="chevron-right"></i></button>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto hide-scrollbar pb-2" id="carousel-container">
+<div class="flex gap-4 w-max">
+<!-- Card 1 -->
+<div onclick="window.location.href='02_creator_detail.html'" class="w-[260px] bg-white border border-border-color rounded-lg p-5 flex flex-col hover:border-sally-indigo/30 transition-colors cursor-pointer clickable-pulse">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-0.5 bg-green-50 text-success text-[10px] font-bold rounded-full border border-green-100">⚡ 빠른 응답</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<img alt="뷰티하나" class="w-12 h-12 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.style.display='none'" src="https://randomuser.me/api/portraits/women/44.jpg"/>
+<div>
+<div class="text-sm font-semibold text-text-primary">뷰티하나</div>
+<div class="text-xs text-text-secondary">#뷰티</div>
+</div>
+</div>
+<div class="bg-gray-50 p-3 rounded-lg mb-4 flex-1">
+<p class="text-xs text-text-secondary italic">"2월 뷰티 브랜드 협업 가능! 꼼꼼한 리뷰 약속드려요."</p>
+</div>
+<button class="w-full py-2 text-xs font-medium text-sally-indigo bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">제안하기 ▸</button>
+</div>
+<!-- Card 2 -->
+<div onclick="window.location.href='02_creator_detail.html'" class="w-[260px] bg-white border border-border-color rounded-lg p-5 flex flex-col hover:border-sally-indigo/30 transition-colors cursor-pointer clickable-pulse">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-0.5 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-full border border-yellow-100">🏆 인기</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<img alt="맛집탐험대" class="w-12 h-12 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.style.display='none'" src="https://randomuser.me/api/portraits/men/32.jpg"/>
+<div>
+<div class="text-sm font-semibold text-text-primary">맛집탐험대</div>
+<div class="text-xs text-text-secondary">#푸드</div>
+</div>
+</div>
+<div class="bg-gray-50 p-3 rounded-lg mb-4 flex-1">
+<p class="text-xs text-text-secondary italic">"서울 경기권 맛집 탐방 콘텐츠 촬영 가능해요. 연락주세요!"</p>
+</div>
+<button class="w-full py-2 text-xs font-medium text-sally-indigo bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">제안하기 ▸</button>
+</div>
+<!-- Card 3 -->
+<div onclick="window.location.href='02_creator_detail.html'" class="w-[260px] bg-white border border-border-color rounded-lg p-5 flex flex-col hover:border-sally-indigo/30 transition-colors cursor-pointer clickable-pulse">
+<div class="flex justify-between items-start mb-3">
+<div class="h-[18px]"></div> <!-- Spacer -->
+</div>
+<div class="flex items-center gap-3 mb-3">
+<img alt="홈카페연서" class="w-12 h-12 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.style.display='none'" src="https://randomuser.me/api/portraits/women/90.jpg"/>
+<div>
+<div class="text-sm font-semibold text-text-primary">홈카페연서</div>
+<div class="text-xs text-text-secondary">#홈카페</div>
+</div>
+</div>
+<div class="bg-gray-50 p-3 rounded-lg mb-4 flex-1">
+<p class="text-xs text-text-secondary italic">"감성적인 홈카페 브랜드 찾고있어요. 영상 퀄리티 보장!"</p>
+</div>
+<button class="w-full py-2 text-xs font-medium text-sally-indigo bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">제안하기 ▸</button>
+</div>
+<!-- Card 4 -->
+<div onclick="window.location.href='02_creator_detail.html'" class="w-[260px] bg-white border border-border-color rounded-lg p-5 flex flex-col hover:border-sally-indigo/30 transition-colors cursor-pointer clickable-pulse">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-0.5 bg-green-50 text-success text-[10px] font-bold rounded-full border border-green-100">⚡ 빠른 응답</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<img alt="데일리수아" class="w-12 h-12 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.style.display='none'" src="https://randomuser.me/api/portraits/women/65.jpg"/>
+<div>
+<div class="text-sm font-semibold text-text-primary">데일리수아</div>
+<div class="text-xs text-text-secondary">#라이프스타일</div>
+</div>
+</div>
+<div class="bg-gray-50 p-3 rounded-lg mb-4 flex-1">
+<p class="text-xs text-text-secondary italic">"숏폼 콘텐츠 전문! 트렌디한 편집으로 보답합니다."</p>
+</div>
+<button class="w-full py-2 text-xs font-medium text-sally-indigo bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">제안하기 ▸</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CREATOR LIST HEADER -->
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-[18px] font-semibold text-text-primary">파트너 크리에이터 <span class="text-sally-indigo">47</span>명</h2>
+<div class="relative">
+<select class="appearance-none bg-white border border-border-color text-text-primary text-sm rounded-lg pl-3 pr-8 py-2 focus:outline-none focus:border-sally-indigo cursor-pointer">
+<option>추천순</option>
+<option>팔로워 많은 순</option>
+<option>참여율 높은 순</option>
+<option>최신 등록 순</option>
+</select>
+<i class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary pointer-events-none" data-lucide="chevron-down"></i>
+</div>
+</div>
+<!-- CREATOR GRID -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12" data-component="CreatorGrid">
+<div onclick="window.location.href='02_creator_detail.html'" class="bg-bg-card border border-border-color rounded-xl p-6 card-transition flex flex-col h-full clickable-pulse">
+<!-- Profile -->
+<div class="flex items-center gap-4 mb-3">
+<img alt="뷰티하나" class="w-16 h-16 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.src='https://via.placeholder.com/64'" src="https://randomuser.me/api/portraits/women/44.jpg"/>
+<div>
+<div class="text-base font-semibold text-text-primary">뷰티하나</div>
+<div class="text-sm text-text-secondary">@beauty_hana</div>
+</div>
+</div>
+<!-- Sally Score -->
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[11px] font-semibold text-text-secondary">Sally Score</span>
+<div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full rounded-full" style="width: 87%; background: #8B5CF6;"></div>
+</div>
+<span class="text-sm font-bold" style="color: #8B5CF6;">87</span>
+</div>
+<!-- Matching Hint -->
+<div class="mb-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-xs font-medium">
+                ✨ 내 브랜드와 잘 맞을 수 있어요
+            </div>
+</div>
+<!-- Performance Badge -->
+<div class="mb-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">
+<span>🔥</span> 이번 주 참여율 +23%
+        </div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#뷰티</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#스킨케어</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#리뷰</span>
+</div>
+<!-- Platform Metrics -->
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#E1306C]" data-lucide="instagram"></i>
+<span class="text-sm font-bold text-text-primary">85K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 8%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">♥ 3.2K/게시물</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-1-ig" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-1-ig)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#FF0000]" data-lucide="youtube"></i>
+<span class="text-sm font-bold text-text-primary">45K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 3%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 12K/영상</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-1-yt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-1-yt)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+</div>
+<!-- Engagement Comparison -->
+<div class="flex items-center gap-2 mb-4 text-xs">
+<span class="font-semibold text-text-primary">참여율 5.4%</span>
+<span class="px-2 py-0.5 bg-indigo-50 text-sally-indigo rounded-full font-medium">상위 12%</span>
+</div>
+<!-- Thumbnails -->
+<div class="mb-4">
+<div class="text-xs font-medium text-text-secondary mb-2">📸 최근 콘텐츠</div>
+<div class="flex gap-2">
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 4.1K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 2.8K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1487412912498-0447578fcca8?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 3.5K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Reach Estimate -->
+<div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+<div class="flex items-center gap-1.5 mb-1">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+<span class="text-[11px] font-semibold text-emerald-700">AI 예상 성과</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-emerald-800">~15K 도달</span>
+<span class="text-text-secondary text-[10px]">•</span>
+<span class="text-sm font-bold text-emerald-800">~800 참여</span>
+</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">브랜드 프로필 기반 추정</div>
+</div>
+<!-- Pro CTA -->
+<button class="pro-trigger w-full bg-[#F7F8F9] border border-dashed border-border-color rounded-lg p-3 text-center mb-3 hover:bg-gray-100 transition-colors">
+<div class="text-xs font-semibold text-text-primary mb-0.5">✨ 왜 맞는지 자세히 보기 →</div>
+<div class="text-[10px] text-text-secondary">Pro 구독으로 AI 상세 분석 열기</div>
+</button>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-auto">
+<button class="w-full py-2.5 border border-border-color rounded-lg text-sm font-medium text-text-primary hover:bg-gray-50 transition-colors">상세보기</button>
+<button class="w-full py-2.5 bg-sally-indigo text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">캠페인 제안 ▸</button>
+</div>
+</div>
+<div onclick="window.location.href='02_creator_detail.html'" class="bg-bg-card border border-border-color rounded-xl p-6 card-transition flex flex-col h-full clickable-pulse">
+<!-- Profile -->
+<div class="flex items-center gap-4 mb-3">
+<img alt="데일리수아" class="w-16 h-16 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.src='https://via.placeholder.com/64'" src="https://randomuser.me/api/portraits/women/65.jpg"/>
+<div>
+<div class="text-base font-semibold text-text-primary">데일리수아</div>
+<div class="text-sm text-text-secondary">@daily_sua</div>
+</div>
+</div>
+<!-- Sally Score -->
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[11px] font-semibold text-text-secondary">Sally Score</span>
+<div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full rounded-full" style="width: 92%; background: #6366F1;"></div>
+</div>
+<span class="text-sm font-bold" style="color: #6366F1;">92</span>
+</div>
+<!-- Matching Hint -->
+<div class="mb-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-emerald-600 rounded-full text-xs font-medium">
+                📈 최근 3개월 팔로워 급상승 중
+            </div>
+</div>
+<!-- Performance Badge -->
+<div class="mb-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">
+<span>📈</span> 30일간 팔로워 +15K
+        </div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#라이프스타일</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#일상</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#브이로그</span>
+</div>
+<!-- Platform Metrics -->
+<div class="grid grid-cols-3 gap-2 mb-4">
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#E1306C]" data-lucide="instagram"></i>
+<span class="text-sm font-bold text-text-primary">120K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 15%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">♥ 5.1K</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-2-ig" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-2-ig)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#FF0000]" data-lucide="youtube"></i>
+<span class="text-sm font-bold text-text-primary">23K</span>
+</div>
+<span class="text-[11px] font-semibold text-red-500">▼ 2%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 8K</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sr-2-yt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#EF4444" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#EF4444" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sr-2-yt)" points="0,4 12,6 24,5 36,10 48,8 60,14 72,16 80,18 80,20 0,20"></polygon>
+<polyline fill="none" points="0,4 12,6 24,5 36,10 48,8 60,14 72,16 80,18" stroke="#EF4444" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<span class="text-black text-[10px] font-bold">TT</span>
+<span class="text-sm font-bold text-text-primary">67K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 22%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 45K</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-2-tt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-2-tt)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+</div>
+<!-- Engagement Comparison -->
+<div class="flex items-center gap-2 mb-4 text-xs">
+<span class="font-semibold text-text-primary">참여율 4.8%</span>
+<span class="px-2 py-0.5 bg-indigo-50 text-sally-indigo rounded-full font-medium">상위 18%</span>
+</div>
+<!-- Thumbnails -->
+<div class="mb-4">
+<div class="text-xs font-medium text-text-secondary mb-2">📸 최근 콘텐츠</div>
+<div class="flex gap-2">
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 6.2K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 4.9K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 5.3K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Reach Estimate -->
+<div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+<div class="flex items-center gap-1.5 mb-1">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+<span class="text-[11px] font-semibold text-emerald-700">AI 예상 성과</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-emerald-800">~22K 도달</span>
+<span class="text-text-secondary text-[10px]">•</span>
+<span class="text-sm font-bold text-emerald-800">~1.2K 참여</span>
+</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">브랜드 프로필 기반 추정</div>
+</div>
+<!-- Pro CTA -->
+<button class="pro-trigger w-full bg-[#F7F8F9] border border-dashed border-border-color rounded-lg p-3 text-center mb-3 hover:bg-gray-100 transition-colors">
+<div class="text-xs font-semibold text-text-primary mb-0.5">✨ 왜 맞는지 자세히 보기 →</div>
+<div class="text-[10px] text-text-secondary">Pro 구독으로 AI 상세 분석 열기</div>
+</button>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-auto">
+<button class="w-full py-2.5 border border-border-color rounded-lg text-sm font-medium text-text-primary hover:bg-gray-50 transition-colors">상세보기</button>
+<button class="w-full py-2.5 bg-sally-indigo text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">캠페인 제안 ▸</button>
+</div>
+</div>
+<div onclick="window.location.href='02_creator_detail.html'" class="bg-bg-card border border-border-color rounded-xl p-6 card-transition flex flex-col h-full clickable-pulse">
+<!-- Profile -->
+<div class="flex items-center gap-4 mb-3">
+<img alt="맛집탐험대" class="w-16 h-16 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.src='https://via.placeholder.com/64'" src="https://randomuser.me/api/portraits/men/32.jpg"/>
+<div>
+<div class="text-base font-semibold text-text-primary">맛집탐험대</div>
+<div class="text-sm text-text-secondary">@food_explorer</div>
+</div>
+</div>
+<!-- Sally Score -->
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[11px] font-semibold text-text-secondary">Sally Score</span>
+<div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full rounded-full" style="width: 78%; background: #8B5CF6;"></div>
+</div>
+<span class="text-sm font-bold" style="color: #8B5CF6;">78</span>
+</div>
+<!-- Matching Hint -->
+<div class="mb-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">
+                💬 댓글 반응이 특히 좋은 크리에이터
+            </div>
+</div>
+<!-- Performance Badge -->
+<div class="mb-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">
+<span>💬</span> 댓글 반응 업계 2배
+        </div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#푸드</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#맛집</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#먹방</span>
+</div>
+<!-- Platform Metrics -->
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#E1306C]" data-lucide="instagram"></i>
+<span class="text-sm font-bold text-text-primary">45K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 5%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">♥ 2.8K/게시물</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-3-ig" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-3-ig)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<span class="text-black text-[10px] font-bold">TT</span>
+<span class="text-sm font-bold text-text-primary">89K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 31%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 120K/영상</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-3-tt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-3-tt)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+</div>
+<!-- Engagement Comparison -->
+<div class="flex items-center gap-2 mb-4 text-xs">
+<span class="font-semibold text-text-primary">참여율 6.2%</span>
+<span class="px-2 py-0.5 bg-indigo-50 text-sally-indigo rounded-full font-medium">상위 8%</span>
+</div>
+<!-- Thumbnails -->
+<div class="mb-4">
+<div class="text-xs font-medium text-text-secondary mb-2">📸 최근 콘텐츠</div>
+<div class="flex gap-2">
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 3.8K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">▷ 145K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 2.1K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Reach Estimate -->
+<div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+<div class="flex items-center gap-1.5 mb-1">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+<span class="text-[11px] font-semibold text-emerald-700">AI 예상 성과</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-emerald-800">~18K 도달</span>
+<span class="text-text-secondary text-[10px]">•</span>
+<span class="text-sm font-bold text-emerald-800">~950 참여</span>
+</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">브랜드 프로필 기반 추정</div>
+</div>
+<!-- Pro CTA -->
+<button class="pro-trigger w-full bg-[#F7F8F9] border border-dashed border-border-color rounded-lg p-3 text-center mb-3 hover:bg-gray-100 transition-colors">
+<div class="text-xs font-semibold text-text-primary mb-0.5">✨ 왜 맞는지 자세히 보기 →</div>
+<div class="text-[10px] text-text-secondary">Pro 구독으로 AI 상세 분석 열기</div>
+</button>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-auto">
+<button class="w-full py-2.5 border border-border-color rounded-lg text-sm font-medium text-text-primary hover:bg-gray-50 transition-colors">상세보기</button>
+<button class="w-full py-2.5 bg-sally-indigo text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">캠페인 제안 ▸</button>
+</div>
+</div>
+<div onclick="window.location.href='02_creator_detail.html'" class="bg-bg-card border border-border-color rounded-xl p-6 card-transition flex flex-col h-full clickable-pulse">
+<!-- Profile -->
+<div class="flex items-center gap-4 mb-3">
+<img alt="스타일지은" class="w-16 h-16 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.src='https://via.placeholder.com/64'" src="https://randomuser.me/api/portraits/women/28.jpg"/>
+<div>
+<div class="text-base font-semibold text-text-primary">스타일지은</div>
+<div class="text-sm text-text-secondary">@style_jieun</div>
+</div>
+</div>
+<!-- Sally Score -->
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[11px] font-semibold text-text-secondary">Sally Score</span>
+<div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full rounded-full" style="width: 94%; background: #6366F1;"></div>
+</div>
+<span class="text-sm font-bold" style="color: #6366F1;">94</span>
+</div>
+<!-- Matching Hint -->
+<div class="mb-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-xs font-medium">
+                🎯 패션 카테고리 상위 크리에이터
+            </div>
+</div>
+<!-- Performance Badge -->
+<div class="mb-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">
+<span>🏆</span> 패션 카테고리 TOP 3
+        </div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#패션</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#코디</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#OOTD</span>
+</div>
+<!-- Platform Metrics -->
+<div class="grid grid-cols-3 gap-2 mb-4">
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#E1306C]" data-lucide="instagram"></i>
+<span class="text-sm font-bold text-text-primary">210K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 2%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">♥ 8.5K</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-4-ig" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-4-ig)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#FF0000]" data-lucide="youtube"></i>
+<span class="text-sm font-bold text-text-primary">15K</span>
+</div>
+<span class="text-[11px] font-semibold text-red-500">▼ 1%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 5K</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sr-4-yt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#EF4444" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#EF4444" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sr-4-yt)" points="0,4 12,6 24,5 36,10 48,8 60,14 72,16 80,18 80,20 0,20"></polygon>
+<polyline fill="none" points="0,4 12,6 24,5 36,10 48,8 60,14 72,16 80,18" stroke="#EF4444" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<span class="text-black text-[10px] font-bold">TT</span>
+<span class="text-sm font-bold text-text-primary">55K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 8%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 32K</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-4-tt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-4-tt)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+</div>
+<!-- Engagement Comparison -->
+<div class="flex items-center gap-2 mb-4 text-xs">
+<span class="font-semibold text-text-primary">참여율 3.9%</span>
+<span class="px-2 py-0.5 bg-indigo-50 text-sally-indigo rounded-full font-medium">상위 25%</span>
+</div>
+<!-- Thumbnails -->
+<div class="mb-4">
+<div class="text-xs font-medium text-text-secondary mb-2">📸 최근 콘텐츠</div>
+<div class="flex gap-2">
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 9.2K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 7.8K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 8.1K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Reach Estimate -->
+<div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+<div class="flex items-center gap-1.5 mb-1">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+<span class="text-[11px] font-semibold text-emerald-700">AI 예상 성과</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-emerald-800">~35K 도달</span>
+<span class="text-text-secondary text-[10px]">•</span>
+<span class="text-sm font-bold text-emerald-800">~1.5K 참여</span>
+</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">브랜드 프로필 기반 추정</div>
+</div>
+<!-- Pro CTA -->
+<button class="pro-trigger w-full bg-[#F7F8F9] border border-dashed border-border-color rounded-lg p-3 text-center mb-3 hover:bg-gray-100 transition-colors">
+<div class="text-xs font-semibold text-text-primary mb-0.5">✨ 왜 맞는지 자세히 보기 →</div>
+<div class="text-[10px] text-text-secondary">Pro 구독으로 AI 상세 분석 열기</div>
+</button>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-auto">
+<button class="w-full py-2.5 border border-border-color rounded-lg text-sm font-medium text-text-primary hover:bg-gray-50 transition-colors">상세보기</button>
+<button class="w-full py-2.5 bg-sally-indigo text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">캠페인 제안 ▸</button>
+</div>
+</div>
+<div onclick="window.location.href='02_creator_detail.html'" class="bg-bg-card border border-border-color rounded-xl p-6 card-transition flex flex-col h-full clickable-pulse">
+<!-- Profile -->
+<div class="flex items-center gap-4 mb-3">
+<img alt="트래블민호" class="w-16 h-16 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.src='https://via.placeholder.com/64'" src="https://randomuser.me/api/portraits/men/75.jpg"/>
+<div>
+<div class="text-base font-semibold text-text-primary">트래블민호</div>
+<div class="text-sm text-text-secondary">@travel_minho</div>
+</div>
+</div>
+<!-- Sally Score -->
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[11px] font-semibold text-text-secondary">Sally Score</span>
+<div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full rounded-full" style="width: 71%; background: #FF9F43;"></div>
+</div>
+<span class="text-sm font-bold" style="color: #FF9F43;">71</span>
+</div>
+<!-- Matching Hint -->
+<div class="mb-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 text-orange-600 rounded-full text-xs font-medium">
+                🔥 이번 달 인기 크리에이터
+            </div>
+</div>
+<!-- Performance Badge -->
+<div class="mb-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">
+<span>🔥</span> 이번 달 조회수 +45%
+        </div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#여행</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#해외</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#브이로그</span>
+</div>
+<!-- Platform Metrics -->
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#E1306C]" data-lucide="instagram"></i>
+<span class="text-sm font-bold text-text-primary">67K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 11%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">♥ 2.1K/게시물</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-5-ig" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-5-ig)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#FF0000]" data-lucide="youtube"></i>
+<span class="text-sm font-bold text-text-primary">120K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 7%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 35K/영상</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-5-yt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-5-yt)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+</div>
+<!-- Engagement Comparison -->
+<div class="flex items-center gap-2 mb-4 text-xs">
+<span class="font-semibold text-text-primary">참여율 4.1%</span>
+<span class="px-2 py-0.5 bg-indigo-50 text-sally-indigo rounded-full font-medium">상위 22%</span>
+</div>
+<!-- Thumbnails -->
+<div class="mb-4">
+<div class="text-xs font-medium text-text-secondary mb-2">📸 최근 콘텐츠</div>
+<div class="flex gap-2">
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 2.5K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">▷ 42K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 1.9K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Reach Estimate -->
+<div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+<div class="flex items-center gap-1.5 mb-1">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+<span class="text-[11px] font-semibold text-emerald-700">AI 예상 성과</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-emerald-800">~28K 도달</span>
+<span class="text-text-secondary text-[10px]">•</span>
+<span class="text-sm font-bold text-emerald-800">~1.1K 참여</span>
+</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">브랜드 프로필 기반 추정</div>
+</div>
+<!-- Pro CTA -->
+<button class="pro-trigger w-full bg-[#F7F8F9] border border-dashed border-border-color rounded-lg p-3 text-center mb-3 hover:bg-gray-100 transition-colors">
+<div class="text-xs font-semibold text-text-primary mb-0.5">✨ 왜 맞는지 자세히 보기 →</div>
+<div class="text-[10px] text-text-secondary">Pro 구독으로 AI 상세 분석 열기</div>
+</button>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-auto">
+<button class="w-full py-2.5 border border-border-color rounded-lg text-sm font-medium text-text-primary hover:bg-gray-50 transition-colors">상세보기</button>
+<button class="w-full py-2.5 bg-sally-indigo text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">캠페인 제안 ▸</button>
+</div>
+</div>
+<div onclick="window.location.href='02_creator_detail.html'" class="bg-bg-card border border-border-color rounded-xl p-6 card-transition flex flex-col h-full clickable-pulse">
+<!-- Profile -->
+<div class="flex items-center gap-4 mb-3">
+<img alt="홈카페연서" class="w-16 h-16 rounded-full object-cover border-2 border-[#E1E3E6]" onerror="this.src='https://via.placeholder.com/64'" src="https://randomuser.me/api/portraits/women/90.jpg"/>
+<div>
+<div class="text-base font-semibold text-text-primary">홈카페연서</div>
+<div class="text-sm text-text-secondary">@homecafe_yns</div>
+</div>
+</div>
+<!-- Sally Score -->
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[11px] font-semibold text-text-secondary">Sally Score</span>
+<div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full rounded-full" style="width: 65%; background: #FF9F43;"></div>
+</div>
+<span class="text-sm font-bold" style="color: #FF9F43;">65</span>
+</div>
+<!-- Matching Hint -->
+<div class="mb-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 text-gray-400 rounded-full text-xs font-medium">
+                - Placeholder for height
+            </div>
+</div>
+<!-- Performance Badge -->
+<div class="mb-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 text-gray-400 rounded-full text-xs font-medium opacity-0">
+<span>-</span> Placeholder for height
+        </div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#홈카페</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#커피</span><span class="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded-md">#인테리어</span>
+</div>
+<!-- Platform Metrics -->
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<i class="w-3 h-3 text-[#E1306C]" data-lucide="instagram"></i>
+<span class="text-sm font-bold text-text-primary">38K</span>
+</div>
+<span class="text-[11px] font-semibold text-red-500">▼ 3%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">♥ 1.9K/게시물</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sr-6-ig" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#EF4444" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#EF4444" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sr-6-ig)" points="0,4 12,6 24,5 36,10 48,8 60,14 72,16 80,18 80,20 0,20"></polygon>
+<polyline fill="none" points="0,4 12,6 24,5 36,10 48,8 60,14 72,16 80,18" stroke="#EF4444" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+<div class="bg-[#F7F8F9] rounded-lg p-2">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1">
+<span class="text-black text-[10px] font-bold">TT</span>
+<span class="text-sm font-bold text-text-primary">42K</span>
+</div>
+<span class="text-[11px] font-semibold text-emerald-500">▲ 18%</span>
+</div>
+<div class="text-[10px] text-text-secondary mb-1">▷ 28K/영상</div>
+<svg class="w-full mt-1" height="20" preserveaspectratio="none" viewbox="0 0 80 20">
+<defs><lineargradient id="sg-6-tt" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"></stop><stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop></lineargradient></defs>
+<polygon fill="url(#sg-6-tt)" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2 80,20 0,20"></polygon>
+<polyline fill="none" points="0,18 12,14 24,16 36,10 48,12 60,6 72,4 80,2" stroke="#10B981" stroke-linecap="round" stroke-width="1.5"></polyline>
+</svg>
+</div>
+</div>
+<!-- Engagement Comparison -->
+<div class="flex items-center gap-2 mb-4 text-xs">
+<span class="font-semibold text-text-primary">참여율 7.1%</span>
+<span class="px-2 py-0.5 bg-indigo-50 text-sally-indigo rounded-full font-medium">상위 5%</span>
+</div>
+<!-- Thumbnails -->
+<div class="mb-4">
+<div class="text-xs font-medium text-text-secondary mb-2">📸 최근 콘텐츠</div>
+<div class="flex gap-2">
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 2.2K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">▷ 35K</span>
+</div>
+</div>
+<div class="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="content" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=160&amp;h=160&amp;fit=crop"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1">
+<span class="text-white text-[10px] font-bold">♥ 1.7K</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Reach Estimate -->
+<div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+<div class="flex items-center gap-1.5 mb-1">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+<span class="text-[11px] font-semibold text-emerald-700">AI 예상 성과</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-emerald-800">~8K 도달</span>
+<span class="text-text-secondary text-[10px]">•</span>
+<span class="text-sm font-bold text-emerald-800">~450 참여</span>
+</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">브랜드 프로필 기반 추정</div>
+</div>
+<!-- Pro CTA -->
+<button class="pro-trigger w-full bg-[#F7F8F9] border border-dashed border-border-color rounded-lg p-3 text-center mb-3 hover:bg-gray-100 transition-colors">
+<div class="text-xs font-semibold text-text-primary mb-0.5">✨ 왜 맞는지 자세히 보기 →</div>
+<div class="text-[10px] text-text-secondary">Pro 구독으로 AI 상세 분석 열기</div>
+</button>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-auto">
+<button class="w-full py-2.5 border border-border-color rounded-lg text-sm font-medium text-text-primary hover:bg-gray-50 transition-colors">상세보기</button>
+<button class="w-full py-2.5 bg-sally-indigo text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">캠페인 제안 ▸</button>
+</div>
+</div></div>
+<!-- PAGINATION -->
+<div class="flex justify-center mb-10">
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-color hover:bg-gray-50"><i class="w-4 h-4" data-lucide="chevron-left"></i></button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-sally-indigo text-white font-medium">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-text-secondary font-medium">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-text-secondary font-medium">3</button>
+<span class="px-2 text-text-secondary">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-text-secondary font-medium">5</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-color hover:bg-gray-50"><i class="w-4 h-4" data-lucide="chevron-right"></i></button>
+</div>
+</div>
+</div>
+</main>
+<!-- UPGRADE MODAL -->
+<div class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300" id="upgrade-modal">
+<div class="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300" id="modal-content">
+<div class="text-center mb-6">
+<div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="w-8 h-8 text-yellow-600" data-lucide="crown"></i>
+</div>
+<h3 class="text-2xl font-bold text-text-primary mb-2">Pro 플랜으로 업그레이드</h3>
+<p class="text-text-secondary">AI가 분석한 크리에이터와의<br/>상세 궁합 점수를 확인해보세요.</p>
+</div>
+<div class="space-y-3 mb-8">
+<div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+<i class="w-5 h-5 text-sally-indigo" data-lucide="check-circle-2"></i>
+<span class="text-sm text-text-primary">브랜드 핏(Fit) 정밀 분석 보고서</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+<i class="w-5 h-5 text-sally-indigo" data-lucide="check-circle-2"></i>
+<span class="text-sm text-text-primary">예상 캠페인 성과 시뮬레이션</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+<i class="w-5 h-5 text-sally-indigo" data-lucide="check-circle-2"></i>
+<span class="text-sm text-text-primary">크리에이터 무제한 연락처 열람</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 border border-border-color rounded-xl font-medium hover:bg-gray-50 transition-colors" id="close-modal">다음에 하기</button>
+<button class="flex-1 py-3 bg-sally-indigo text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">Pro 시작하기</button>
+</div>
+</div>
+</div>
+<script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // 1. Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const mainContent = document.querySelector('main');
+        let isSidebarCollapsed = false;
+
+        sidebarToggle.addEventListener('click', () => {
+            isSidebarCollapsed = !isSidebarCollapsed;
+            if (isSidebarCollapsed) {
+                sidebar.style.width = '0px';
+                sidebar.style.padding = '0px';
+                sidebar.style.overflow = 'hidden';
+            } else {
+                sidebar.style.width = '240px';
+                sidebar.style.padding = ''; 
+                sidebar.style.overflow = '';
+            }
+        });
+
+        // 2. Category Chips Toggle
+        const chips = document.querySelectorAll('.category-chip');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // Reset all
+                chips.forEach(c => {
+                    c.setAttribute('data-active', 'false');
+                    c.className = "category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-border-color bg-white text-text-secondary hover:bg-gray-50 hover:border-gray-300 transition-colors cursor-pointer";
+                });
+                
+                // Activate clicked
+                chip.setAttribute('data-active', 'true');
+                chip.className = "category-chip px-3 py-1.5 rounded-full text-xs font-medium border border-transparent bg-sally-indigo text-white transition-colors cursor-pointer";
+            });
+        });
+
+        // 3. Carousel Scroll
+        const carousel = document.getElementById('carousel-container');
+        const prevBtn = document.getElementById('carousel-prev');
+        const nextBtn = document.getElementById('carousel-next');
+
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -280, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: 280, behavior: 'smooth' });
+        });
+
+        // 4. Modal Logic
+        const modal = document.getElementById('upgrade-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeBtn = document.getElementById('close-modal');
+        const triggers = document.querySelectorAll('.pro-trigger');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', openModal);
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+    </script>
+</body>
+</html>

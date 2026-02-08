@@ -1,0 +1,12 @@
+{
+  "title": "Keystatic CMS Integration",
+  "slug": "keystatic-cms-integration",
+  "subtitle": "Headless CMS for Next.js blog content management",
+  "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+  "techStack": "Next.js, TypeScript, Keystatic, React",
+  "liveUrl": "https://godjewel.co.kr/keystatic",
+  "githubUrl": "https://github.com/godjewel/jewel-blog",
+  "featured": true,
+  "order": 0,
+  "description": "# Keystatic CMS Integration\n\nA modern headless CMS integration for managing blog posts and projects. Built with Keystatic and Next.js App Router.\n\n## Features\n\n- **Local-first storage**: Content stored as JSON files in the repository\n- **Type-safe schema**: Full TypeScript support for content collections\n- **Markdown support**: Rich content editing with Markdoc format\n- **Collections**: Posts and Projects with customizable fields\n- **Admin interface**: Web-based UI for content management\n\n## Tech Stack\n\n- Next.js 16 with App Router\n- TypeScript 5 (strict mode)\n- Keystatic 0.5.48 for CMS functionality\n- Tailwind CSS for styling\n\n## Getting Started\n\nAccess the CMS at `/keystatic` route to manage content entries."
+}

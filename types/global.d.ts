@@ -1,6 +1,8 @@
-import { ga } from 'react-ga';
 declare global {
   interface Window {
-    ga: typeof ga;
+    dataLayer: Record<string, unknown>[];
+    gtag: (...args: unknown[]) => void;
   }
 }
+
+export {};

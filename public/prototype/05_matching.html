@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SallyLab - AI 크리에이터 매칭</title>
+    <link as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sally-indigo': '#6366F1',
+                        'sally-violet': '#8B5CF6',
+                        'sally-pink': '#EC4899',
+                        'sally-blue': '#007DFF',
+                        'bg-main': '#FFFFFF',
+                        'bg-sidebar': '#F7F8F9',
+                        'border-color': '#E1E3E6',
+                        'text-primary': '#1A1C1E',
+                        'text-secondary': '#5F6368',
+                        'success': '#10B981',
+                        'warning': '#FF9F43',
+                        'pro-yellow': '#FFC145',
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        /* Clickable pulse animation */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08); }
+        }
+        .clickable-pulse {
+            animation: subtle-pulse 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-text-primary font-sans antialiased overflow-hidden h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-[240px] bg-bg-sidebar border-r border-border-color flex-shrink-0 flex flex-col transition-all duration-300 relative h-full" data-component="Sidebar">
+        <!-- Logo -->
+        <div class="p-6 pb-2">
+            <svg fill="none" height="30" viewbox="0 0 264 56" width="140" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.73999 44.22V35.22H24.78L26.88 33.12V28.2L24.78 26.1H6.65999L-1.20997e-05 19.38V6.66003L6.65999 2.88486e-05H35.58V9.00003H13.14L11.04 11.1V15L13.14 17.1H31.26L37.92 23.76V37.56L31.26 44.22H1.73999ZM46.6608 44.22L40.0008 37.56V30.9L46.6608 24.24H61.6008V22.14L59.4408 19.98H43.7208V12.9H66.1008L72.8208 19.56V44.22H61.6008V39.96L57.4608 44.22H46.6608ZM53.2608 38.1H56.5008L61.6008 33V29.82H53.2608L51.1608 31.92V36L53.2608 38.1ZM77.6109 44.22V2.88486e-05H88.8309V44.22H77.6109ZM94.2539 44.22V2.88486e-05H105.474V44.22H94.2539ZM112.817 55.44V47.82H130.577L132.677 45.72V39.54L126.917 44.22H116.957L110.297 37.56V12.9H121.517V35.76L123.617 37.86H126.077L132.677 32.22V12.9H143.237V48.66L136.517 55.44H112.817ZM160.596 44.22V2.88486e-05H171.816V35.1H192.096V44.22H160.596ZM199.077 44.22L192.417 37.56V30.9L199.077 24.24H214.017V22.14L211.857 19.98H196.137V12.9H218.517L225.237 19.56V44.22H214.017V39.96L209.877 44.22H199.077ZM205.677 38.1H208.917L214.017 33V29.82H205.677L203.577 31.92V36L205.677 38.1ZM230.027 44.22V2.88486e-05H241.247V16.74L245.747 12.84H257.027L263.687 19.56V37.56L257.027 44.22H245.807L241.247 40.44V44.22H230.027ZM246.587 37.8H251.327L252.767 36.3V20.88L251.327 19.26H246.527L241.247 23.88V33.18L246.587 37.8Z" fill="#007DFF"></path>
+            </svg>
+        </div>
+        <!-- Main Nav -->
+        <div class="px-3 mt-6">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">MAIN</div>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="03_brand_input.html">
+                <i class="w-4 h-4" data-lucide="layout-dashboard"></i>
+                대시보드
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="01_creator_discovery.html">
+                <i class="w-4 h-4" data-lucide="users"></i>
+                크리에이터
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-[#E8EAEB] text-text-primary rounded-lg relative mb-1" href="05_matching.html">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-sally-indigo rounded-r"></div>
+                <i class="w-4 h-4 text-sally-indigo" data-lucide="megaphone"></i>
+                캠페인
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1 clickable-pulse" href="07_campaign_report.html">
+                <i class="w-4 h-4" data-lucide="bar-chart-3"></i>
+                성과 분석
+            </a>
+        </div>
+        <div class="my-4 mx-6 h-[1px] bg-border-color"></div>
+        <!-- Workspace -->
+        <div class="px-3">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">WORKSPACE</div>
+            <a class="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+                <div class="flex items-center gap-3">
+                    <i class="w-4 h-4" data-lucide="clipboard-list"></i>
+                    관심 리스트
+                </div>
+                <span class="text-xs bg-gray-200 px-1.5 py-0.5 rounded-full">3</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+                <i class="w-4 h-4" data-lucide="plus-circle"></i>
+                새 리스트 만들기
+            </a>
+        </div>
+        <!-- Bottom -->
+        <div class="mt-auto p-4 border-t border-border-color">
+            <div class="bg-pro-yellow/20 border border-pro-yellow/50 rounded-lg p-3 mb-4">
+                <div class="flex items-center gap-2 mb-1 text-yellow-800 font-bold text-xs">
+                    <i class="w-3 h-3 fill-yellow-600 text-yellow-600" data-lucide="star"></i>
+                    PRO Plan
+                </div>
+                <p class="text-[10px] text-yellow-700">AI 분석 무제한 이용 중</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white font-bold text-xs shadow-sm">R</div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-text-primary truncate">롬앤 (rom&nd)</p>
+                    <p class="text-xs text-text-secondary truncate">김서연 매니저</p>
+                </div>
+                <button class="text-text-secondary hover:text-text-primary">
+                    <i class="w-4 h-4" data-lucide="settings"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-bg-main relative" data-component="main-content">
+        
+        <!-- Header -->
+        <header class="bg-white border-b border-border-color px-8 py-5 flex-shrink-0 z-10">
+            <div class="flex items-center text-sm text-text-secondary mb-2">
+                <span>캠페인</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 mx-2"></i>
+                <span class="text-text-primary font-medium">글래스팅 멜팅 밤 런칭 캠페인</span>
+            </div>
+            <div class="flex justify-between items-end">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-2xl font-bold text-text-primary">AI 크리에이터 매칭</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-sally-indigo border border-indigo-200">
+                            신제품 런칭
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-4 mt-2 text-sm text-text-secondary">
+                        <div class="flex items-center">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1.5"></i>
+                            2026.02.15 ~ 03.15
+                        </div>
+                        <div class="w-px h-3 bg-gray-300"></div>
+                        <div class="flex items-center">
+                            <i data-lucide="wallet" class="w-4 h-4 mr-1.5"></i>
+                            예산: ₩5,000,000
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="px-4 py-2 text-sm font-medium text-text-secondary bg-white border border-border-color rounded-lg hover:bg-gray-50 transition-colors">
+                        캠페인 수정
+                    </button>
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-sally-indigo rounded-lg hover:bg-indigo-600 shadow-sm transition-colors flex items-center">
+                        <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                        매칭 리포트 다운로드
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 pb-32">
+            <div class="max-w-6xl mx-auto space-y-8">
+
+                <!-- Campaign Summary Bar -->
+                <section class="bg-white rounded-xl border border-border-color shadow-sm p-5" data-component="campaign-summary">
+                    <div class="grid grid-cols-5 gap-6 divide-x divide-gray-100">
+                        <div class="px-2">
+                            <p class="text-xs font-medium text-text-secondary uppercase tracking-wider mb-1">캠페인 목표</p>
+                            <p class="text-sm font-semibold text-text-primary flex items-center">
+                                <span class="w-2 h-2 rounded-full bg-sally-indigo mr-2"></span>
+                                브랜드 인지도 + 구매 전환
+                            </p>
+                        </div>
+                        <div class="px-4">
+                            <p class="text-xs font-medium text-text-secondary uppercase tracking-wider mb-1">타겟 오디언스</p>
+                            <p class="text-sm font-semibold text-text-primary">20-30대 여성, 뷰티 관심</p>
+                        </div>
+                        <div class="px-4">
+                            <p class="text-xs font-medium text-text-secondary uppercase tracking-wider mb-1">플랫폼</p>
+                            <div class="flex gap-2">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-pink-50 text-pink-700 border border-pink-100">
+                                    <i data-lucide="instagram" class="w-3 h-3 mr-1"></i> Instagram
+                                </span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                                    TikTok
+                                </span>
+                            </div>
+                        </div>
+                        <div class="px-4">
+                            <p class="text-xs font-medium text-text-secondary uppercase tracking-wider mb-1">콘텐츠 포맷</p>
+                            <p class="text-sm font-semibold text-text-primary">제품 리뷰 + 숏폼 영상</p>
+                        </div>
+                        <div class="px-4">
+                            <p class="text-xs font-medium text-text-secondary uppercase tracking-wider mb-1">AI 추천 결과</p>
+                            <p class="text-sm font-bold text-sally-indigo flex items-center">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5"></i>
+                                5명 매칭됨
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Strategy Proposal -->
+                <section class="bg-gradient-to-r from-indigo-50 to-white rounded-xl border border-indigo-100 shadow-sm p-6 relative overflow-hidden" data-component="ai-strategy">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <i data-lucide="brain-circuit" class="w-32 h-32 text-sally-indigo"></i>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="flex-shrink-0 w-10 h-10 bg-sally-indigo rounded-lg flex items-center justify-center shadow-md">
+                            <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-text-primary mb-1">AI 캠페인 전략 제안</h3>
+                            <p class="text-sm text-text-secondary mb-4">캠페인 목표와 예산을 분석하여 최적의 크리에이터 조합을 제안합니다.</p>
+                            
+                            <div class="bg-white bg-opacity-60 rounded-lg border border-indigo-100 p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <p class="text-xs font-semibold text-sally-indigo uppercase mb-1">추천 조합</p>
+                                    <div class="flex items-center gap-2 font-bold text-text-primary">
+                                        <span>뷰티하나</span>
+                                        <i data-lucide="plus" class="w-3 h-3 text-gray-400"></i>
+                                        <span>데일리수아</span>
+                                        <span class="text-xs font-normal text-text-secondary ml-1">(2인 조합)</span>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs font-semibold text-sally-indigo uppercase mb-1">제안 이유</p>
+                                    <p class="text-sm text-text-primary leading-relaxed">
+                                        <span class="font-medium">뷰티하나</span>의 전문적인 리뷰 콘텐츠와 <span class="font-medium">데일리수아</span>의 높은 숏폼 도달력이 시너지를 낼 수 있습니다. 
+                                        예상 총 도달 <span class="font-bold text-sally-indigo">37K</span>, 예상 전환 <span class="font-bold text-sally-indigo">75건</span> (ROI 267%)
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3 flex items-center gap-2 text-xs text-text-secondary">
+                                <i data-lucide="pie-chart" class="w-3.5 h-3.5"></i>
+                                <span>예산 분배 제안: 뷰티하나 ₩2,500,000 + 데일리수아 ₩2,500,000 (50:50)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Matching Results List -->
+                <section class="space-y-4" data-component="creator-list">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-lg font-bold text-text-primary flex items-center">
+                            매칭 결과
+                            <span class="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Top 5</span>
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-text-secondary">정렬:</span>
+                            <select class="text-sm border-none bg-transparent font-medium text-text-primary focus:ring-0 cursor-pointer">
+                                <option>매칭 점수 높은 순</option>
+                                <option>예상 도달 높은 순</option>
+                                <option>예상 전환 높은 순</option>
+                                <option>팔로워 많은 순</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Creator 1 (Selected) -->
+                    <div class="group bg-white rounded-xl border-2 border-sally-indigo shadow-md p-5 transition-all hover:shadow-lg relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-sally-indigo"></div>
+                        <div class="absolute top-0 right-0 bg-sally-indigo text-white text-xs font-bold px-3 py-1 rounded-bl-lg z-10">
+                            추천 1순위
+                        </div>
+                        
+                        <div class="flex gap-5">
+                            <!-- Checkbox & Avatar -->
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-5 h-5 text-sally-indigo border-gray-300 rounded focus:ring-sally-indigo cursor-pointer">
+                                </div>
+                                <div class="relative w-16 h-16">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="뷰티하나" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm">
+                                    <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                                        <div class="w-5 h-5 bg-gradient-to-tr from-yellow-400 to-pink-500 rounded-full flex items-center justify-center">
+                                            <i data-lucide="instagram" class="w-3 h-3 text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Info -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-text-primary flex items-center gap-2">
+                                            뷰티하나
+                                            <i data-lucide="badge-check" class="w-4 h-4 text-sally-blue fill-blue-100"></i>
+                                        </h3>
+                                        <p class="text-sm text-text-secondary">@beauty_hana</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="flex items-center gap-1 text-sally-indigo font-bold text-xl">
+                                            92점
+                                            <span class="text-xs font-normal text-text-secondary mt-1">매칭 점수</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm text-text-secondary mb-3">
+                                    <span class="flex items-center"><i data-lucide="users" class="w-3.5 h-3.5 mr-1"></i> 85K Followers</span>
+                                    <span class="flex items-center"><i data-lucide="youtube" class="w-3.5 h-3.5 mr-1"></i> 45K Subs</span>
+                                    <span class="flex items-center text-text-primary font-medium">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>
+                                        Sally Score 87
+                                    </span>
+                                </div>
+
+                                <!-- AI Reason Box -->
+                                <div class="bg-indigo-50 rounded-lg p-3 mb-3 border border-indigo-100">
+                                    <div class="flex items-start gap-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-sally-indigo mt-0.5 flex-shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium">타겟 연령대 일치율 92%, 스킨케어 리뷰 전문</p>
+                                            <p class="text-xs text-text-secondary mt-0.5">과거 유사 브랜드(H사, I사) 캠페인에서 평균 전환율 2.1% 기록</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#뷰티</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#스킨케어</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#리뷰</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 도달</p>
+                                            <p class="font-bold text-text-primary">~15K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 참여</p>
+                                            <p class="font-bold text-text-primary">~800</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 전환</p>
+                                            <p class="font-bold text-sally-indigo">~30건</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex flex-col justify-center gap-2 pl-4 border-l border-gray-100">
+                                <button class="w-24 px-3 py-2 bg-sally-indigo text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition-colors shadow-sm">
+                                    선택됨
+                                </button>
+                                <button class="w-24 px-3 py-2 bg-white text-text-secondary border border-border-color text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors clickable-pulse" onclick="window.location.href='02_creator_detail.html'">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Creator 2 (Selected) -->
+                    <div class="group bg-white rounded-xl border border-sally-indigo shadow-sm p-5 transition-all hover:shadow-md relative">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-sally-indigo opacity-50"></div>
+                        
+                        <div class="flex gap-5">
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-5 h-5 text-sally-indigo border-gray-300 rounded focus:ring-sally-indigo cursor-pointer">
+                                </div>
+                                <div class="relative w-16 h-16">
+                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="데일리수아" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm">
+                                    <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+                                        <div class="w-5 h-5 bg-black rounded-full flex items-center justify-center">
+                                            <svg class="w-3 h-3 text-white fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-text-primary flex items-center gap-2">
+                                            데일리수아
+                                        </h3>
+                                        <p class="text-sm text-text-secondary">@daily_sua</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="flex items-center gap-1 text-sally-indigo font-bold text-xl">
+                                            88점
+                                            <span class="text-xs font-normal text-text-secondary mt-1">매칭 점수</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm text-text-secondary mb-3">
+                                    <span class="flex items-center"><i data-lucide="users" class="w-3.5 h-3.5 mr-1"></i> 120K Followers</span>
+                                    <span class="flex items-center"><i data-lucide="music-2" class="w-3.5 h-3.5 mr-1"></i> 67K TikTok</span>
+                                    <span class="flex items-center text-text-primary font-medium">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>
+                                        Sally Score 92
+                                    </span>
+                                </div>
+
+                                <div class="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-100">
+                                    <div class="flex items-start gap-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium">숏폼 콘텐츠 전문, 20대 팔로워 72%</p>
+                                            <p class="text-xs text-text-secondary mt-0.5">참여율 4.8%로 동급 크리에이터 대비 상위 10%</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#라이프스타일</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#일상</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#브이로그</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 도달</p>
+                                            <p class="font-bold text-text-primary">~22K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 참여</p>
+                                            <p class="font-bold text-text-primary">~1.2K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 전환</p>
+                                            <p class="font-bold text-sally-indigo">~45건</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col justify-center gap-2 pl-4 border-l border-gray-100">
+                                <button class="w-24 px-3 py-2 bg-sally-indigo text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition-colors shadow-sm">
+                                    선택됨
+                                </button>
+                                <button class="w-24 px-3 py-2 bg-white text-text-secondary border border-border-color text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors clickable-pulse" onclick="window.location.href='02_creator_detail.html'">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Creator 3 -->
+                    <div class="group bg-white rounded-xl border border-border-color shadow-sm p-5 transition-all hover:shadow-md hover:border-gray-300">
+                        <div class="flex gap-5">
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="relative">
+                                    <input type="checkbox" class="w-5 h-5 text-sally-indigo border-gray-300 rounded focus:ring-sally-indigo cursor-pointer">
+                                </div>
+                                <div class="relative w-16 h-16">
+                                    <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="스타일지은" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm grayscale group-hover:grayscale-0 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-text-primary flex items-center gap-2">
+                                            스타일지은
+                                        </h3>
+                                        <p class="text-sm text-text-secondary">@style_jieun</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="flex items-center gap-1 text-text-primary font-bold text-xl">
+                                            85점
+                                            <span class="text-xs font-normal text-text-secondary mt-1">매칭 점수</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm text-text-secondary mb-3">
+                                    <span class="flex items-center"><i data-lucide="users" class="w-3.5 h-3.5 mr-1"></i> 210K Followers</span>
+                                    <span class="flex items-center"><i data-lucide="youtube" class="w-3.5 h-3.5 mr-1"></i> 15K Subs</span>
+                                    <span class="flex items-center text-text-primary font-medium">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>
+                                        Sally Score 94
+                                    </span>
+                                </div>
+
+                                <div class="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-100">
+                                    <div class="flex items-start gap-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium">패션+뷰티 크로스오버 크리에이터</p>
+                                            <p class="text-xs text-text-secondary mt-0.5">고급 브랜드 감성과 일치, 높은 구매력 보유 팔로워</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#패션</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#코디</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#OOTD</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 도달</p>
+                                            <p class="font-bold text-text-primary">~35K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 참여</p>
+                                            <p class="font-bold text-text-primary">~1.5K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 전환</p>
+                                            <p class="font-bold text-text-primary">~52건</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col justify-center gap-2 pl-4 border-l border-gray-100">
+                                <button class="w-24 px-3 py-2 bg-white text-sally-indigo border border-sally-indigo text-sm font-medium rounded-lg hover:bg-indigo-50 transition-colors">
+                                    선택
+                                </button>
+                                <button class="w-24 px-3 py-2 bg-white text-text-secondary border border-border-color text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors clickable-pulse" onclick="window.location.href='02_creator_detail.html'">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Creator 4 -->
+                    <div class="group bg-white rounded-xl border border-border-color shadow-sm p-5 transition-all hover:shadow-md hover:border-gray-300">
+                        <div class="flex gap-5">
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="relative">
+                                    <input type="checkbox" class="w-5 h-5 text-sally-indigo border-gray-300 rounded focus:ring-sally-indigo cursor-pointer">
+                                </div>
+                                <div class="relative w-16 h-16">
+                                    <img src="https://randomuser.me/api/portraits/women/90.jpg" alt="홈카페연서" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm grayscale group-hover:grayscale-0 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-text-primary flex items-center gap-2">
+                                            홈카페연서
+                                        </h3>
+                                        <p class="text-sm text-text-secondary">@homecafe_yns</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="flex items-center gap-1 text-text-primary font-bold text-xl">
+                                            79점
+                                            <span class="text-xs font-normal text-text-secondary mt-1">매칭 점수</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm text-text-secondary mb-3">
+                                    <span class="flex items-center"><i data-lucide="users" class="w-3.5 h-3.5 mr-1"></i> 38K Followers</span>
+                                    <span class="flex items-center"><i data-lucide="music-2" class="w-3.5 h-3.5 mr-1"></i> 42K TikTok</span>
+                                    <span class="flex items-center text-text-primary font-medium">
+                                        <span class="w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>
+                                        Sally Score 65
+                                    </span>
+                                </div>
+
+                                <div class="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-100">
+                                    <div class="flex items-start gap-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium">감성적 콘텐츠 스타일이 브랜드 톤과 부합</p>
+                                            <p class="text-xs text-text-secondary mt-0.5">높은 참여율 7.1%, 충성도 높은 팬덤</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#홈카페</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#커피</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#인테리어</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 도달</p>
+                                            <p class="font-bold text-text-primary">~8K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 참여</p>
+                                            <p class="font-bold text-text-primary">~450</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 전환</p>
+                                            <p class="font-bold text-text-primary">~15건</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col justify-center gap-2 pl-4 border-l border-gray-100">
+                                <button class="w-24 px-3 py-2 bg-white text-sally-indigo border border-sally-indigo text-sm font-medium rounded-lg hover:bg-indigo-50 transition-colors">
+                                    선택
+                                </button>
+                                <button class="w-24 px-3 py-2 bg-white text-text-secondary border border-border-color text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors clickable-pulse" onclick="window.location.href='02_creator_detail.html'">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Creator 5 -->
+                    <div class="group bg-white rounded-xl border border-border-color shadow-sm p-5 transition-all hover:shadow-md hover:border-gray-300">
+                        <div class="flex gap-5">
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="relative">
+                                    <input type="checkbox" class="w-5 h-5 text-sally-indigo border-gray-300 rounded focus:ring-sally-indigo cursor-pointer">
+                                </div>
+                                <div class="relative w-16 h-16">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="맛집탐험대" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm grayscale group-hover:grayscale-0 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-text-primary flex items-center gap-2">
+                                            맛집탐험대
+                                        </h3>
+                                        <p class="text-sm text-text-secondary">@food_explorer</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="flex items-center gap-1 text-text-primary font-bold text-xl">
+                                            72점
+                                            <span class="text-xs font-normal text-text-secondary mt-1">매칭 점수</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm text-text-secondary mb-3">
+                                    <span class="flex items-center"><i data-lucide="users" class="w-3.5 h-3.5 mr-1"></i> 45K Followers</span>
+                                    <span class="flex items-center"><i data-lucide="music-2" class="w-3.5 h-3.5 mr-1"></i> 89K TikTok</span>
+                                    <span class="flex items-center text-text-primary font-medium">
+                                        <span class="w-2 h-2 rounded-full bg-yellow-400 mr-1.5"></span>
+                                        Sally Score 78
+                                    </span>
+                                </div>
+
+                                <div class="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-100">
+                                    <div class="flex items-start gap-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm text-text-primary font-medium">TikTok 바이럴 능력 우수, 다양한 타겟층 확보</p>
+                                            <p class="text-xs text-text-secondary mt-0.5">남성 타겟 확장 가능성</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#푸드</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#맛집</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">#먹방</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 도달</p>
+                                            <p class="font-bold text-text-primary">~18K</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 참여</p>
+                                            <p class="font-bold text-text-primary">~950</p>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-200"></div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-text-secondary">예상 전환</p>
+                                            <p class="font-bold text-text-primary">~28건</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col justify-center gap-2 pl-4 border-l border-gray-100">
+                                <button class="w-24 px-3 py-2 bg-white text-sally-indigo border border-sally-indigo text-sm font-medium rounded-lg hover:bg-indigo-50 transition-colors">
+                                    선택
+                                </button>
+                                <button class="w-24 px-3 py-2 bg-white text-text-secondary border border-border-color text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors clickable-pulse" onclick="window.location.href='02_creator_detail.html'">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comparison Table -->
+                <section class="bg-white rounded-xl border border-border-color shadow-sm overflow-hidden" data-component="comparison-table">
+                    <div class="px-6 py-4 border-b border-border-color">
+                        <h3 class="text-lg font-bold text-text-primary">매칭 크리에이터 비교</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">항목</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-sally-indigo uppercase tracking-wider bg-indigo-50">뷰티하나</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-sally-indigo uppercase tracking-wider bg-indigo-50">데일리수아</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">스타일지은</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">홈카페연서</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">맛집탐험대</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">매칭 점수</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-sally-indigo bg-indigo-50">92</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-sally-indigo bg-indigo-50">88</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">85</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">79</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">72</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">예상 도달</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary bg-indigo-50">~15K</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary bg-indigo-50">~22K</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">~35K</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">~8K</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">~18K</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">예상 전환</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary bg-indigo-50">~30건</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary bg-indigo-50">~45건</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">~52건</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">~15건</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">~28건</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">CPE (예상)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary bg-indigo-50">₩625</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary bg-indigo-50">₩417</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">₩333</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">₩1,111</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">₩526</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- Sticky Footer Action Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-border-color p-4 shadow-lg z-20" data-component="action-bar">
+            <div class="max-w-6xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="flex -space-x-2">
+                        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+                        <img class="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/65.jpg" alt="">
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-text-primary">2명 선택됨</p>
+                        <p class="text-xs text-text-secondary">예상 총 예산: ₩5,000,000</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="#" class="text-sm text-text-secondary hover:text-sally-indigo underline mr-2">새로 추천받기</a>
+                    <button class="px-5 py-2.5 text-sm font-medium text-text-primary bg-white border border-border-color rounded-lg hover:bg-gray-50 transition-colors">
+                        조합 변경
+                    </button>
+                    <button class="px-6 py-2.5 text-sm font-bold text-white bg-sally-indigo rounded-lg hover:bg-indigo-600 shadow-md transition-colors flex items-center clickable-pulse" onclick="window.location.href='06_campaign_live.html'">
+                        선택한 크리에이터에게 제안 보내기
+                        <i data-lucide="send" class="w-4 h-4 ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- AI Chat Panel -->
+    <aside class="w-[340px] bg-[#FAFAFF] border-l-2 border-sally-indigo/20 flex flex-col h-full flex-shrink-0 relative z-10" style="box-shadow: -8px 0 30px -5px rgba(99,102,241,0.1);">
+        <!-- Header -->
+        <div class="h-14 bg-gradient-to-r from-sally-indigo to-sally-violet flex items-center justify-between px-4 flex-shrink-0">
+            <div class="flex items-center gap-2 text-white">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span class="font-bold">Sally AI</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-white/70 text-xs">크리에이터 매칭 어시스턴트</span>
+                <button class="text-white/80 hover:text-white">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F8F7FF]/50">
+            
+            <!-- Exchange 1 -->
+            <!-- Brand -->
+            <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-text-secondary mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    뷰티하나와 데일리수아 중 누가 글래스팅 멜팅 밤에 더 적합할까요?
+                </div>
+            </div>
+            <!-- Thinking Steps -->
+            <div class="ml-8 my-1">
+                <div class="flex items-center gap-1.5 text-xs text-sally-violet/70 font-medium mb-2">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    분석
+                </div>
+                <div class="space-y-1.5 ml-1 border-l-2 border-sally-indigo/15 pl-3">
+                    <div class="flex items-center gap-2 text-[11px] text-text-secondary">
+                        <div class="w-4 h-4 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-2.5 h-2.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        셀리 크리에이터 매칭 데이터 검토
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] text-text-secondary">
+                        <div class="w-4 h-4 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-2.5 h-2.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        립 카테고리 전환율 분석
+                    </div>
+                </div>
+            </div>
+            <!-- AI -->
+            <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mt-1">S</div>
+                <div class="flex flex-col items-start space-y-1">
+                    <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                        셀리 내부 데이터 기준, 뷰티하나의 립 카테고리 전환율이 <span class="font-bold text-sally-indigo">4.2%</span>로 데일리수아(2.8%) 대비 <span class="font-bold text-sally-indigo">50% 높습니다</span>. 다만 데일리수아는 20대 초반 도달률이 3배 높아, 두 명을 조합하면 시너지가 극대화됩니다.
+                    </div>
+                    <span class="bg-sally-indigo/10 text-sally-indigo text-[10px] px-2 py-0.5 rounded-full font-medium">셀리 독점 데이터</span>
+                </div>
+            </div>
+            <!-- Suggested Questions -->
+            <div class="flex flex-wrap gap-1.5 ml-8">
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1 clickable-pulse">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    예산별 최적 인원은?
+                </button>
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1 clickable-pulse">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    경쟁사 크리에이터 현황
+                </button>
+            </div>
+
+            <!-- Exchange 2 -->
+            <!-- Brand -->
+            <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-text-secondary mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    예산 500만원이면 크리에이터 몇 명이 적정인가요?
+                </div>
+            </div>
+            <!-- AI -->
+            <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mt-1">S</div>
+                <div class="flex flex-col items-start space-y-1">
+                    <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                        셀리 플랫폼 내 유사 예산 캠페인 <span class="font-bold text-sally-indigo">127건</span> 분석 결과, 500만원에서 마이크로 인플루언서 <span class="font-bold text-sally-indigo">2명</span> 조합 시 ROI가 평균 <span class="font-bold text-sally-indigo">267%</span>로 가장 높았습니다. 3명 이상은 콘텐츠 품질이 분산되는 경향이 있어요.
+                    </div>
+                    <span class="bg-sally-indigo/10 text-sally-indigo text-[10px] px-2 py-0.5 rounded-full font-medium">셀리 독점 데이터</span>
+                </div>
+            </div>
+            <!-- Suggested Questions -->
+            <div class="flex flex-wrap gap-1.5 ml-8">
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1 clickable-pulse">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    캠페인 일정 추천
+                </button>
+                <button class="text-[11px] bg-white border border-sally-indigo/20 text-sally-indigo/80 rounded-full px-3 py-1 hover:bg-sally-indigo/5 transition-colors flex items-center gap-1 clickable-pulse">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    예상 ROI 시뮬레이션
+                </button>
+            </div>
+
+            <!-- Exchange 3 -->
+            <!-- Brand -->
+            <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-text-secondary mr-1">롬앤</span>
+                <div class="bg-gray-100 rounded-2xl rounded-tr-sm px-4 py-3 ml-8 text-sm text-text-primary">
+                    경쟁사 에뛰드가 최근 어떤 크리에이터를 쓰고 있나요?
+                </div>
+            </div>
+            <!-- AI -->
+            <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mt-1">S</div>
+                <div class="flex flex-col items-start space-y-1">
+                    <div class="bg-white border border-border-color rounded-2xl rounded-tl-sm px-4 py-3 mr-4 text-sm text-text-primary shadow-sm">
+                        셀리 트래킹 데이터에 의하면, 에뛰드는 최근 3개월간 팔로워 5만-20만 구간의 뷰티 크리에이터 <span class="font-bold text-sally-indigo">12명</span>과 협업했습니다. '스킨케어+메이크업' 복합 콘텐츠에 집중 중이에요. 롬앤은 <span class="font-bold text-sally-indigo">립 특화 크리에이터</span>로 차별화하는 게 유리합니다.
+                    </div>
+                    <span class="bg-sally-indigo/10 text-sally-indigo text-[10px] px-2 py-0.5 rounded-full font-medium">셀리 독점 데이터</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Input Area -->
+        <div class="bg-white border-t border-border-color p-3">
+            <div class="flex items-center gap-2">
+                <input type="text" placeholder="질문을 입력하세요..." class="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-sally-indigo focus:ring-1 focus:ring-sally-indigo transition-all">
+                <button class="bg-sally-indigo text-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-indigo-600 transition-colors shadow-sm">
+                    <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

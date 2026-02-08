@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SallyLab - 브랜드 현황 분석</title>
+    <link as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        'sally-indigo': '#6366F1', 'sally-violet': '#8B5CF6', 'sally-pink': '#EC4899',
+                        'sally-blue': '#007DFF', 'bg-main': '#FFFFFF', 'bg-sidebar': '#F7F8F9',
+                        'bg-card': '#FFFFFF', 'border-color': '#E1E3E6', 'text-primary': '#1A1C1E',
+                        'text-secondary': '#5F6368', 'success': '#10B981', 'warning': '#FF9F43', 'pro-yellow': '#FFC145',
+                    },
+                    boxShadow: { 'card': '0 1px 3px rgba(0,0,0,0.1)', 'card-hover': '0 4px 12px rgba(0,0,0,0.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E1E3E6; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C4C7CC; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .chart-grid line { stroke: #E5E7EB; stroke-dasharray: 4 4; }
+        .chart-axis text { font-size: 10px; fill: #6B7280; }
+        
+        /* Clickable pulse animation */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08); }
+        }
+        .clickable-pulse {
+            animation: subtle-pulse 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-bg-main text-text-primary font-sans antialiased overflow-hidden h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-[240px] bg-bg-sidebar border-r border-border-color flex-shrink-0 flex flex-col transition-all duration-300 relative h-full" data-component="Sidebar">
+        <div class="p-6 pb-2">
+            <svg fill="none" height="30" viewbox="0 0 264 56" width="140" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.73999 44.22V35.22H24.78L26.88 33.12V28.2L24.78 26.1H6.65999L-1.20997e-05 19.38V6.66003L6.65999 2.88486e-05H35.58V9.00003H13.14L11.04 11.1V15L13.14 17.1H31.26L37.92 23.76V37.56L31.26 44.22H1.73999ZM46.6608 44.22L40.0008 37.56V30.9L46.6608 24.24H61.6008V22.14L59.4408 19.98H43.7208V12.9H66.1008L72.8208 19.56V44.22H61.6008V39.96L57.4608 44.22H46.6608ZM53.2608 38.1H56.5008L61.6008 33V29.82H53.2608L51.1608 31.92V36L53.2608 38.1ZM77.6109 44.22V2.88486e-05H88.8309V44.22H77.6109ZM94.2539 44.22V2.88486e-05H105.474V44.22H94.2539ZM112.817 55.44V47.82H130.577L132.677 45.72V39.54L126.917 44.22H116.957L110.297 37.56V12.9H121.517V35.76L123.617 37.86H126.077L132.677 32.22V12.9H143.237V48.66L136.517 55.44H112.817ZM160.596 44.22V2.88486e-05H171.816V35.1H192.096V44.22H160.596ZM199.077 44.22L192.417 37.56V30.9L199.077 24.24H214.017V22.14L211.857 19.98H196.137V12.9H218.517L225.237 19.56V44.22H214.017V39.96L209.877 44.22H199.077ZM205.677 38.1H208.917L214.017 33V29.82H205.677L203.577 31.92V36L205.677 38.1ZM230.027 44.22V2.88486e-05H241.247V16.74L245.747 12.84H257.027L263.687 19.56V37.56L257.027 44.22H245.807L241.247 40.44V44.22H230.027ZM246.587 37.8H251.327L252.767 36.3V20.88L251.327 19.26H246.527L241.247 23.88V33.18L246.587 37.8Z" fill="#007DFF"></path>
+            </svg>
+        </div>
+        <div class="px-3 mt-6">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">MAIN</div>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-[#E8EAEB] text-text-primary rounded-lg relative mb-1" href="03_brand_input.html">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-sally-indigo rounded-r"></div>
+                <i class="w-4 h-4 text-sally-indigo" data-lucide="layout-dashboard"></i>
+                대시보드
+            </a>
+            <a class="clickable-pulse flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="01_creator_discovery.html">
+                <i class="w-4 h-4" data-lucide="users"></i>
+                크리에이터
+            </a>
+            <a class="clickable-pulse flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="05_matching.html">
+                <i class="w-4 h-4" data-lucide="megaphone"></i>
+                캠페인
+            </a>
+            <a class="clickable-pulse flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="07_campaign_report.html">
+                <i class="w-4 h-4" data-lucide="bar-chart-3"></i>
+                성과 분석
+            </a>
+        </div>
+        <div class="my-4 mx-6 h-[1px] bg-border-color"></div>
+        <div class="px-3">
+            <div class="px-3 mb-2 text-[11px] font-bold text-text-secondary uppercase tracking-wider">WORKSPACE</div>
+            <a class="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+                <div class="flex items-center gap-3">
+                    <i class="w-4 h-4" data-lucide="clipboard-list"></i>
+                    관심 리스트
+                </div>
+                <span class="text-xs bg-gray-200 px-1.5 py-0.5 rounded-full">3</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-white hover:text-text-primary mb-1" href="#">
+                <i class="w-4 h-4" data-lucide="plus-circle"></i>
+                새 리스트 만들기
+            </a>
+        </div>
+        <div class="mt-auto p-4 border-t border-border-color">
+            <div class="bg-pro-yellow/20 border border-pro-yellow/50 rounded-lg p-3 mb-4">
+                <div class="flex items-center gap-2 mb-1 text-yellow-800 font-bold text-xs">
+                    <i class="w-3 h-3 fill-yellow-600 text-yellow-600" data-lucide="star"></i>
+                    PRO Plan
+                </div>
+                <p class="text-[10px] text-yellow-700">AI 분석 무제한 이용 중</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-white font-bold text-xs shadow-sm">R</div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-text-primary truncate">롬앤 (rom&nd)</p>
+                    <p class="text-xs text-text-secondary truncate">김서연 매니저</p>
+                </div>
+                <button class="text-text-secondary hover:text-text-primary">
+                    <i class="w-4 h-4" data-lucide="settings"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto bg-bg-main relative" data-component="main-content">
+        <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-border-color px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-bold text-text-primary">브랜드 현황 분석</h1>
+                <div class="h-6 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
+                    <div class="w-5 h-5 rounded-full bg-gradient-to-br from-sally-indigo to-sally-violet flex items-center justify-center text-[10px] font-bold text-white">R</div>
+                    <span class="text-sm font-medium text-text-secondary">롬앤 (rom&nd)</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs text-success font-medium bg-success/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <i data-lucide="check-circle" class="w-3 h-3"></i> 분석 완료
+                </span>
+                <span class="text-xs text-text-secondary bg-gray-50 px-2 py-1 rounded border border-gray-100">2026.02.04 09:30</span>
+                <button class="relative p-2 text-text-secondary hover:text-text-primary hover:bg-gray-100 rounded-full transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-8 max-w-7xl mx-auto space-y-6">
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-4 gap-5" data-component="kpi-grid">
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card hover:shadow-card-hover transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-sm font-medium text-text-secondary mb-1">브랜드 인지도 지수</p>
+                            <h3 class="text-2xl font-bold text-text-primary">78<span class="text-sm font-normal text-text-secondary ml-1">/100</span></h3>
+                        </div>
+                        <div class="p-2 bg-sally-indigo/10 rounded-lg text-sally-indigo"><i data-lucide="target" class="w-5 h-5"></i></div>
+                    </div>
+                    <svg class="w-full h-8 mb-2" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <path d="M0 25 L17 22 L34 24 L51 18 L68 15 L85 12 L102 8 L120 5" fill="none" stroke="#6366F1" stroke-width="2"/>
+                        <path d="M0 25 L17 22 L34 24 L51 18 L68 15 L85 12 L102 8 L120 5 V30 H0Z" fill="url(#kpi1g)" opacity="0.15"/>
+                        <defs><linearGradient id="kpi1g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#6366F1" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-success font-medium flex items-center bg-success/10 px-1.5 py-0.5 rounded">
+                            <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +5%
+                        </span>
+                        <span class="text-text-secondary">vs 업계 평균 <span class="font-bold text-text-primary">65</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card hover:shadow-card-hover transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-sm font-medium text-text-secondary mb-1">SNS 통합 팔로워</p>
+                            <h3 class="text-2xl font-bold text-text-primary">1.45M</h3>
+                        </div>
+                        <div class="p-2 bg-sally-blue/10 rounded-lg text-sally-blue"><i data-lucide="users" class="w-5 h-5"></i></div>
+                    </div>
+                    <svg class="w-full h-8 mb-2" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <path d="M0 28 L17 25 L34 22 L51 20 L68 16 L85 13 L102 9 L120 4" fill="none" stroke="#007DFF" stroke-width="2"/>
+                        <path d="M0 28 L17 25 L34 22 L51 20 L68 16 L85 13 L102 9 L120 4 V30 H0Z" fill="url(#kpi2g)" opacity="0.15"/>
+                        <defs><linearGradient id="kpi2g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#007DFF"/><stop offset="100%" stop-color="#007DFF" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-success font-medium flex items-center bg-success/10 px-1.5 py-0.5 rounded">
+                            <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +12%
+                        </span>
+                        <span class="text-text-secondary">vs 업계 평균 <span class="font-bold text-text-primary">820K</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card hover:shadow-card-hover transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-sm font-medium text-text-secondary mb-1">평균 참여율</p>
+                            <h3 class="text-2xl font-bold text-text-primary">3.8%</h3>
+                        </div>
+                        <div class="p-2 bg-success/10 rounded-lg text-success"><i data-lucide="activity" class="w-5 h-5"></i></div>
+                    </div>
+                    <svg class="w-full h-8 mb-2" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <path d="M0 20 L17 22 L34 18 L51 15 L68 17 L85 10 L102 8 L120 6" fill="none" stroke="#10B981" stroke-width="2"/>
+                        <path d="M0 20 L17 22 L34 18 L51 15 L68 17 L85 10 L102 8 L120 6 V30 H0Z" fill="url(#kpi3g)" opacity="0.15"/>
+                        <defs><linearGradient id="kpi3g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-success font-medium flex items-center bg-success/10 px-1.5 py-0.5 rounded">
+                            <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +1.7%p
+                        </span>
+                        <span class="text-text-secondary">vs 업계 평균 <span class="font-bold text-text-primary">2.1%</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card hover:shadow-card-hover transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-sm font-medium text-text-secondary mb-1">경쟁력 순위</p>
+                            <h3 class="text-2xl font-bold text-text-primary">Top 15%</h3>
+                        </div>
+                        <div class="p-2 bg-sally-violet/10 rounded-lg text-sally-violet"><i data-lucide="trophy" class="w-5 h-5"></i></div>
+                    </div>
+                    <svg class="w-full h-8 mb-2" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <path d="M0 22 L17 20 L34 22 L51 18 L68 14 L85 16 L102 10 L120 7" fill="none" stroke="#8B5CF6" stroke-width="2"/>
+                        <path d="M0 22 L17 20 L34 22 L51 18 L68 14 L85 16 L102 10 L120 7 V30 H0Z" fill="url(#kpi4g)" opacity="0.15"/>
+                        <defs><linearGradient id="kpi4g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-sally-violet font-medium bg-sally-violet/10 px-1.5 py-0.5 rounded">뷰티 카테고리</span>
+                        <span class="text-text-secondary">vs 업계 중간 <span class="font-bold text-text-primary">50%</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Positioning Map + Target Audience -->
+            <div class="grid grid-cols-12 gap-6" data-component="analysis-section">
+                <div class="col-span-7 bg-white p-6 rounded-xl border border-border-color shadow-card">
+                    <div class="flex justify-between items-center mb-5">
+                        <h3 class="text-lg font-bold text-text-primary flex items-center">
+                            <i data-lucide="map" class="w-5 h-5 mr-2 text-sally-indigo"></i>
+                            브랜드 포지셔닝 맵
+                        </h3>
+                        <span class="text-xs text-text-secondary bg-gray-50 px-2 py-1 rounded">8개 브랜드 비교</span>
+                    </div>
+                    <div class="relative w-full h-72 bg-gray-50 rounded-lg border border-gray-100 overflow-hidden">
+                        <svg width="100%" height="100%" viewBox="0 0 600 300">
+                            <rect x="20" y="20" width="280" height="130" fill="#EEF2FF" opacity="0.5" rx="4"/>
+                            <rect x="300" y="20" width="280" height="130" fill="#FDF2F8" opacity="0.5" rx="4"/>
+                            <rect x="20" y="150" width="280" height="130" fill="#F0FDF4" opacity="0.5" rx="4"/>
+                            <rect x="300" y="150" width="280" height="130" fill="#FFFBEB" opacity="0.5" rx="4"/>
+                            <line x1="300" y1="20" x2="300" y2="280" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="4 3"/>
+                            <line x1="20" y1="150" x2="580" y2="150" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="4 3"/>
+                            <text x="300" y="14" text-anchor="middle" font-size="11" fill="#6B7280" font-weight="600">감성적 (Emotional)</text>
+                            <text x="300" y="295" text-anchor="middle" font-size="11" fill="#6B7280" font-weight="600">실용적 (Functional)</text>
+                            <text x="15" y="152" text-anchor="start" font-size="11" fill="#6B7280" font-weight="600" transform="rotate(-90,15,152)">저가</text>
+                            <text x="590" y="152" text-anchor="end" font-size="11" fill="#6B7280" font-weight="600" transform="rotate(-90,590,152)">고가</text>
+                            <circle cx="180" cy="95" r="5" fill="#9CA3AF" opacity="0.7"/><text x="180" y="115" text-anchor="middle" font-size="10" fill="#6B7280">에뛰드</text>
+                            <circle cx="145" cy="125" r="5" fill="#9CA3AF" opacity="0.7"/><text x="145" y="140" text-anchor="middle" font-size="10" fill="#6B7280">페리페라</text>
+                            <circle cx="355" cy="175" r="5" fill="#9CA3AF" opacity="0.7"/><text x="355" y="195" text-anchor="middle" font-size="10" fill="#6B7280">클리오</text>
+                            <circle cx="500" cy="135" r="5" fill="#9CA3AF" opacity="0.7"/><text x="500" y="155" text-anchor="middle" font-size="10" fill="#6B7280">MAC</text>
+                            <circle cx="120" cy="170" r="5" fill="#9CA3AF" opacity="0.7"/><text x="120" y="185" text-anchor="middle" font-size="10" fill="#6B7280">이니스프리</text>
+                            <circle cx="100" cy="200" r="5" fill="#9CA3AF" opacity="0.7"/><text x="100" y="218" text-anchor="middle" font-size="10" fill="#6B7280">토니모리</text>
+                            <circle cx="380" cy="75" r="5" fill="#9CA3AF" opacity="0.7"/><text x="380" y="65" text-anchor="middle" font-size="10" fill="#6B7280">3CE</text>
+                            <circle cx="270" cy="85" r="18" fill="#6366F1" fill-opacity="0.12" stroke="#6366F1" stroke-opacity="0.3" stroke-width="1"/>
+                            <circle cx="270" cy="85" r="8" fill="#6366F1" stroke="white" stroke-width="2.5"/>
+                            <text x="270" y="65" text-anchor="middle" font-size="13" font-weight="bold" fill="#4F46E5">rom&nd</text>
+                        </svg>
+                    </div>
+                    <p class="mt-4 text-sm text-text-secondary leading-relaxed">
+                        롬앤은 <span class="font-bold text-text-primary">합리적인 가격대</span>이면서도 <span class="font-bold text-text-primary">높은 감성 가치</span>를 제공하는 독보적 포지션을 점유. 경쟁사 대비 '스토리텔링'과 '팬덤' 요소가 강합니다.
+                    </p>
+                </div>
+
+                <div class="col-span-5 bg-white p-6 rounded-xl border border-border-color shadow-card flex flex-col">
+                    <div class="flex justify-between items-center mb-5">
+                        <h3 class="text-lg font-bold text-text-primary flex items-center">
+                            <i data-lucide="users-2" class="w-5 h-5 mr-2 text-sally-pink"></i>
+                            타겟 오디언스 프로필
+                        </h3>
+                    </div>
+                    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg border border-gray-100 p-5 mb-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-11 h-11 rounded-full bg-sally-pink/10 flex items-center justify-center text-xl">👩🏻</div>
+                            <div>
+                                <h4 class="font-bold text-text-primary">트렌드 세터 K-뷰티 유저</h4>
+                                <p class="text-xs text-text-secondary">20-30대 여성, SNS 헤비 유저</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-0.5 bg-white border border-gray-200 rounded text-[11px] font-medium text-text-secondary">#트렌드세터</span>
+                            <span class="px-2 py-0.5 bg-white border border-gray-200 rounded text-[11px] font-medium text-text-secondary">#가성비중시</span>
+                            <span class="px-2 py-0.5 bg-white border border-gray-200 rounded text-[11px] font-medium text-text-secondary">#색조관심</span>
+                            <span class="px-2 py-0.5 bg-white border border-gray-200 rounded text-[11px] font-medium text-text-secondary">#SNS리뷰</span>
+                            <span class="px-2 py-0.5 bg-white border border-gray-200 rounded text-[11px] font-medium text-text-secondary">#셀프뷰티</span>
+                        </div>
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-text-secondary w-20">연령대</span>
+                                <div class="flex-1 mx-3 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-sally-indigo rounded-full" style="width:82%"></div></div>
+                                <span class="font-bold text-text-primary w-8 text-right text-xs">82%</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-text-secondary w-20">성별 (여성)</span>
+                                <div class="flex-1 mx-3 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-sally-pink rounded-full" style="width:91%"></div></div>
+                                <span class="font-bold text-text-primary w-8 text-right text-xs">91%</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-text-secondary w-20">모바일 구매</span>
+                                <div class="flex-1 mx-3 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-sally-blue rounded-full" style="width:76%"></div></div>
+                                <span class="font-bold text-text-primary w-8 text-right text-xs">76%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="flex-1 bg-gray-50 rounded-lg p-3 border border-gray-100 text-center">
+                            <svg class="mx-auto mb-1" width="64" height="64" viewBox="0 0 64 64">
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="#E5E7EB" stroke-width="6"/>
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="#6366F1" stroke-width="6" stroke-dasharray="73.5 102.5" stroke-dashoffset="0" transform="rotate(-90,32,32)"/>
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="#EC4899" stroke-width="6" stroke-dasharray="49.3 126.7" stroke-dashoffset="-73.5" transform="rotate(-90,32,32)"/>
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="#8B5CF6" stroke-width="6" stroke-dasharray="31.7 144.3" stroke-dashoffset="-122.8" transform="rotate(-90,32,32)"/>
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="#FFC145" stroke-width="6" stroke-dasharray="21.1 154.9" stroke-dashoffset="-154.5" transform="rotate(-90,32,32)"/>
+                            </svg>
+                            <p class="text-[10px] text-text-secondary font-medium">관심 카테고리</p>
+                            <div class="flex flex-wrap justify-center gap-1 mt-1">
+                                <span class="flex items-center gap-0.5 text-[9px]"><span class="w-1.5 h-1.5 rounded-full bg-sally-indigo"></span>뷰티 42%</span>
+                                <span class="flex items-center gap-0.5 text-[9px]"><span class="w-1.5 h-1.5 rounded-full bg-sally-pink"></span>패션 28%</span>
+                                <span class="flex items-center gap-0.5 text-[9px]"><span class="w-1.5 h-1.5 rounded-full bg-sally-violet"></span>라이프 18%</span>
+                                <span class="flex items-center gap-0.5 text-[9px]"><span class="w-1.5 h-1.5 rounded-full bg-pro-yellow"></span>여행 12%</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-gray-50 rounded-lg p-3 border border-gray-100">
+                            <p class="text-[10px] text-text-secondary font-medium mb-2 text-center">활동 시간대</p>
+                            <svg class="w-full" height="60" viewBox="0 0 140 60">
+                                <rect x="5" y="45" width="14" height="10" rx="2" fill="#E5E7EB"/><text x="12" y="58" text-anchor="middle" font-size="7" fill="#9CA3AF">6-9</text>
+                                <rect x="25" y="35" width="14" height="20" rx="2" fill="#C7D2FE"/><text x="32" y="58" text-anchor="middle" font-size="7" fill="#9CA3AF">9-12</text>
+                                <rect x="45" y="30" width="14" height="25" rx="2" fill="#A5B4FC"/><text x="52" y="58" text-anchor="middle" font-size="7" fill="#9CA3AF">12-15</text>
+                                <rect x="65" y="25" width="14" height="30" rx="2" fill="#818CF8"/><text x="72" y="58" text-anchor="middle" font-size="7" fill="#9CA3AF">15-18</text>
+                                <rect x="85" y="10" width="14" height="45" rx="2" fill="#6366F1"/><text x="92" y="58" text-anchor="middle" font-size="7" fill="#6366F1" font-weight="bold">18-21</text>
+                                <rect x="105" y="5" width="14" height="50" rx="2" fill="#4F46E5"/><text x="112" y="58" text-anchor="middle" font-size="7" fill="#4F46E5" font-weight="bold">21-24</text>
+                                <rect x="125" y="38" width="14" height="17" rx="2" fill="#C7D2FE"/><text x="132" y="58" text-anchor="middle" font-size="7" fill="#9CA3AF">0-6</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SNS Channel Analysis -->
+            <div class="grid grid-cols-3 gap-5" data-component="sns-grid">
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center text-white">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-text-primary">Instagram</h4>
+                            <p class="text-xs text-text-secondary">@romand_official</p>
+                        </div>
+                        <span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-text-secondary">Main</span>
+                    </div>
+                    <div class="flex justify-between items-end mb-3">
+                        <div><p class="text-xs text-text-secondary mb-0.5">팔로워</p><p class="text-xl font-bold">1.2M</p></div>
+                        <div class="text-right"><p class="text-xs text-text-secondary mb-0.5">참여율</p><p class="text-xl font-bold text-success">3.8%</p></div>
+                    </div>
+                    <svg class="w-full h-10 mb-3" viewBox="0 0 100 40" preserveAspectRatio="none">
+                        <path d="M0 35 Q10 30,20 32 T40 25 T60 20 T80 15 T100 5" fill="none" stroke="#EC4899" stroke-width="2"/>
+                        <path d="M0 35 Q10 30,20 32 T40 25 T60 20 T80 15 T100 5 V40 H0Z" fill="url(#gi)" opacity="0.1"/>
+                        <defs><linearGradient id="gi" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EC4899"/><stop offset="100%" stop-color="#EC4899" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs border-t border-gray-100 pt-3">
+                        <span class="text-success flex items-center font-medium"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>30일 성장 +2.3%</span>
+                    </div>
+                    <div class="mt-2 p-2 bg-gray-50 rounded-lg">
+                        <p class="text-[10px] text-text-secondary mb-0.5">최고 성과 콘텐츠</p>
+                        <p class="text-xs font-medium text-text-primary truncate">"글래스팅 립 스와치" — <span class="text-sally-pink font-bold">45.2K</span> 좋아요</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-text-primary">TikTok</h4>
+                            <p class="text-xs text-text-secondary">@romand_official</p>
+                        </div>
+                        <span class="text-xs font-bold bg-red-100 text-red-600 px-2 py-1 rounded">Hot</span>
+                    </div>
+                    <div class="flex justify-between items-end mb-3">
+                        <div><p class="text-xs text-text-secondary mb-0.5">팔로워</p><p class="text-xl font-bold">180K</p></div>
+                        <div class="text-right"><p class="text-xs text-text-secondary mb-0.5">참여율</p><p class="text-xl font-bold text-success">5.2%</p></div>
+                    </div>
+                    <svg class="w-full h-10 mb-3" viewBox="0 0 100 40" preserveAspectRatio="none">
+                        <path d="M0 30 Q20 35,40 20 T70 15 T100 2" fill="none" stroke="#000" stroke-width="2"/>
+                        <path d="M0 30 Q20 35,40 20 T70 15 T100 2 V40 H0Z" fill="url(#gt)" opacity="0.08"/>
+                        <defs><linearGradient id="gt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#000"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs border-t border-gray-100 pt-3">
+                        <span class="text-success flex items-center font-medium"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>30일 성장 +8.7%</span>
+                    </div>
+                    <div class="mt-2 p-2 bg-gray-50 rounded-lg">
+                        <p class="text-[10px] text-text-secondary mb-0.5">최고 성과 콘텐츠</p>
+                        <p class="text-xs font-medium text-text-primary truncate">"#romandgrwm" — <span class="text-text-primary font-bold">1.2M</span> 조회</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-border-color shadow-card">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white">
+                            <i data-lucide="youtube" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-text-primary">YouTube</h4>
+                            <p class="text-xs text-text-secondary">롬앤 공식</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end mb-3">
+                        <div><p class="text-xs text-text-secondary mb-0.5">구독자</p><p class="text-xl font-bold">45K</p></div>
+                        <div class="text-right"><p class="text-xs text-text-secondary mb-0.5">평균 조회수</p><p class="text-xl font-bold">18K</p></div>
+                    </div>
+                    <svg class="w-full h-10 mb-3" viewBox="0 0 100 40" preserveAspectRatio="none">
+                        <path d="M0 25 L20 25 L40 20 L60 22 L80 15 L100 10" fill="none" stroke="#DC2626" stroke-width="2"/>
+                        <path d="M0 25 L20 25 L40 20 L60 22 L80 15 L100 10 V40 H0Z" fill="url(#gy)" opacity="0.1"/>
+                        <defs><linearGradient id="gy" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#DC2626" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <div class="flex items-center justify-between text-xs border-t border-gray-100 pt-3">
+                        <span class="text-success flex items-center font-medium"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i>30일 성장 +1.5%</span>
+                    </div>
+                    <div class="mt-2 p-2 bg-gray-50 rounded-lg">
+                        <p class="text-[10px] text-text-secondary mb-0.5">최고 성과 콘텐츠</p>
+                        <p class="text-xs font-medium text-text-primary truncate">"신제품 리뷰" — <span class="text-red-600 font-bold">52K</span> 조회</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Competitor Comparison -->
+            <div class="bg-white rounded-xl border border-border-color shadow-card overflow-hidden" data-component="competitor-table">
+                <div class="p-5 border-b border-border-color flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-text-primary flex items-center">
+                        <i data-lucide="git-compare" class="w-5 h-5 mr-2 text-sally-indigo"></i>
+                        경쟁사 비교 분석
+                    </h3>
+                    <span class="text-xs text-sally-indigo bg-sally-indigo/10 px-2 py-1 rounded font-medium">AI 자동 분석</span>
+                </div>
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gray-50 text-text-secondary text-xs">
+                            <th class="text-left px-5 py-3 font-semibold">지표</th>
+                            <th class="text-center px-4 py-3 font-bold text-sally-indigo bg-sally-indigo/5">롬앤</th>
+                            <th class="text-center px-4 py-3 font-semibold">에뛰드</th>
+                            <th class="text-center px-4 py-3 font-semibold">클리오</th>
+                            <th class="text-center px-4 py-3 font-semibold">페리페라</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr>
+                            <td class="px-5 py-3 text-text-secondary font-medium">통합 팔로워</td>
+                            <td class="text-center px-4 py-3 font-bold text-sally-indigo bg-sally-indigo/5">1.45M</td>
+                            <td class="text-center px-4 py-3">2.1M</td>
+                            <td class="text-center px-4 py-3">890K</td>
+                            <td class="text-center px-4 py-3">650K</td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-3 text-text-secondary font-medium">Instagram 참여율</td>
+                            <td class="text-center px-4 py-3 font-bold text-success bg-sally-indigo/5">3.8%</td>
+                            <td class="text-center px-4 py-3">2.1%</td>
+                            <td class="text-center px-4 py-3">2.8%</td>
+                            <td class="text-center px-4 py-3">3.2%</td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-3 text-text-secondary font-medium">TikTok 참여율</td>
+                            <td class="text-center px-4 py-3 font-bold text-success bg-sally-indigo/5">5.2%</td>
+                            <td class="text-center px-4 py-3">3.5%</td>
+                            <td class="text-center px-4 py-3">4.1%</td>
+                            <td class="text-center px-4 py-3">4.8%</td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-3 text-text-secondary font-medium">브랜드 인지도</td>
+                            <td class="text-center px-4 py-3 font-bold bg-sally-indigo/5">78</td>
+                            <td class="text-center px-4 py-3 font-bold text-sally-indigo">85</td>
+                            <td class="text-center px-4 py-3">72</td>
+                            <td class="text-center px-4 py-3">68</td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-3 text-text-secondary font-medium">평균 CPE</td>
+                            <td class="text-center px-4 py-3 font-bold text-success bg-sally-indigo/5">₩420</td>
+                            <td class="text-center px-4 py-3">₩680</td>
+                            <td class="text-center px-4 py-3">₩520</td>
+                            <td class="text-center px-4 py-3">₩450</td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-3 text-text-secondary font-medium">콘텐츠 발행 빈도</td>
+                            <td class="text-center px-4 py-3 font-bold bg-sally-indigo/5">주 4.2회</td>
+                            <td class="text-center px-4 py-3">주 5.1회</td>
+                            <td class="text-center px-4 py-3">주 3.0회</td>
+                            <td class="text-center px-4 py-3">주 3.8회</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Monthly Trend Chart -->
+            <div class="bg-white p-6 rounded-xl border border-border-color shadow-card" data-component="monthly-trend">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-lg font-bold text-text-primary flex items-center">
+                        <i data-lucide="trending-up" class="w-5 h-5 mr-2 text-sally-indigo"></i>
+                        월간 성장 트렌드
+                    </h3>
+                    <div class="flex items-center gap-4 text-xs">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sally-indigo rounded"></span>팔로워 증가율</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sally-pink rounded"></span>참여율</span>
+                    </div>
+                </div>
+                <svg class="w-full" height="200" viewBox="0 0 700 200">
+                    <line x1="60" y1="20" x2="60" y2="170" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="60" y1="170" x2="680" y2="170" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="60" y1="95" x2="680" y2="95" stroke="#E5E7EB" stroke-width="0.5" stroke-dasharray="4 3"/>
+                    <line x1="60" y1="57" x2="680" y2="57" stroke="#E5E7EB" stroke-width="0.5" stroke-dasharray="4 3"/>
+                    <line x1="60" y1="132" x2="680" y2="132" stroke="#E5E7EB" stroke-width="0.5" stroke-dasharray="4 3"/>
+                    <text x="50" y="173" text-anchor="end" font-size="10" fill="#9CA3AF">0%</text>
+                    <text x="50" y="135" text-anchor="end" font-size="10" fill="#9CA3AF">3%</text>
+                    <text x="50" y="98" text-anchor="end" font-size="10" fill="#9CA3AF">6%</text>
+                    <text x="50" y="60" text-anchor="end" font-size="10" fill="#9CA3AF">9%</text>
+                    <text x="50" y="25" text-anchor="end" font-size="10" fill="#9CA3AF">12%</text>
+                    <text x="163" y="188" text-anchor="middle" font-size="11" fill="#6B7280">9월</text>
+                    <text x="267" y="188" text-anchor="middle" font-size="11" fill="#6B7280">10월</text>
+                    <text x="370" y="188" text-anchor="middle" font-size="11" fill="#6B7280">11월</text>
+                    <text x="473" y="188" text-anchor="middle" font-size="11" fill="#6B7280">12월</text>
+                    <text x="577" y="188" text-anchor="middle" font-size="11" fill="#6B7280">1월</text>
+                    <text x="680" y="188" text-anchor="middle" font-size="11" fill="#6366F1" font-weight="bold">2월</text>
+                    <path d="M163 145 L267 135 L370 120 L473 105 L577 80 L680 50" fill="none" stroke="#6366F1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M163 145 L267 135 L370 120 L473 105 L577 80 L680 50 V170 H163Z" fill="url(#tg1)" opacity="0.12"/>
+                    <path d="M163 140 L267 132 L370 138 L473 125 L577 118 L680 108" fill="none" stroke="#EC4899" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M163 140 L267 132 L370 138 L473 125 L577 118 L680 108 V170 H163Z" fill="url(#tg2)" opacity="0.08"/>
+                    <circle cx="163" cy="145" r="3.5" fill="#6366F1" stroke="white" stroke-width="2"/>
+                    <circle cx="267" cy="135" r="3.5" fill="#6366F1" stroke="white" stroke-width="2"/>
+                    <circle cx="370" cy="120" r="3.5" fill="#6366F1" stroke="white" stroke-width="2"/>
+                    <circle cx="473" cy="105" r="3.5" fill="#6366F1" stroke="white" stroke-width="2"/>
+                    <circle cx="577" cy="80" r="3.5" fill="#6366F1" stroke="white" stroke-width="2"/>
+                    <circle cx="680" cy="50" r="4.5" fill="#6366F1" stroke="white" stroke-width="2.5"/>
+                    <circle cx="163" cy="140" r="3" fill="#EC4899" stroke="white" stroke-width="2"/>
+                    <circle cx="267" cy="132" r="3" fill="#EC4899" stroke="white" stroke-width="2"/>
+                    <circle cx="370" cy="138" r="3" fill="#EC4899" stroke="white" stroke-width="2"/>
+                    <circle cx="473" cy="125" r="3" fill="#EC4899" stroke="white" stroke-width="2"/>
+                    <circle cx="577" cy="118" r="3" fill="#EC4899" stroke="white" stroke-width="2"/>
+                    <circle cx="680" cy="108" r="3.5" fill="#EC4899" stroke="white" stroke-width="2.5"/>
+                    <defs>
+                        <linearGradient id="tg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#6366F1" stop-opacity="0"/></linearGradient>
+                        <linearGradient id="tg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EC4899"/><stop offset="100%" stop-color="#EC4899" stop-opacity="0"/></linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Content Performance -->
+            <div class="bg-white p-6 rounded-xl border border-border-color shadow-card" data-component="content-performance">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-lg font-bold text-text-primary flex items-center">
+                        <i data-lucide="image" class="w-5 h-5 mr-2 text-sally-violet"></i>
+                        인기 콘텐츠 TOP 4
+                    </h3>
+                </div>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="group rounded-xl border border-border-color overflow-hidden hover:shadow-card-hover transition-shadow">
+                        <div class="relative h-32 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&h=200&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="">
+                            <div class="absolute top-2 left-2 w-6 h-6 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center"><i data-lucide="instagram" class="w-3 h-3 text-white"></i></div>
+                            <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">1위</div>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs font-medium text-text-primary truncate mb-1">글래스팅 멜팅 밤 스와치</p>
+                            <div class="flex items-center gap-2 text-[10px] text-text-secondary">
+                                <span class="flex items-center gap-0.5"><i data-lucide="heart" class="w-3 h-3 text-red-400"></i>45.2K</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="message-circle" class="w-3 h-3"></i>1.2K</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="share-2" class="w-3 h-3"></i>892</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group rounded-xl border border-border-color overflow-hidden hover:shadow-card-hover transition-shadow">
+                        <div class="relative h-32 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="">
+                            <div class="absolute top-2 left-2 w-6 h-6 rounded-full bg-black flex items-center justify-center"><svg class="w-3 h-3 fill-white" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg></div>
+                            <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">2위</div>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs font-medium text-text-primary truncate mb-1">#romandgrwm 챌린지</p>
+                            <div class="flex items-center gap-2 text-[10px] text-text-secondary">
+                                <span class="flex items-center gap-0.5"><i data-lucide="eye" class="w-3 h-3"></i>1.2M</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="heart" class="w-3 h-3 text-red-400"></i>89K</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="share-2" class="w-3 h-3"></i>12K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group rounded-xl border border-border-color overflow-hidden hover:shadow-card-hover transition-shadow">
+                        <div class="relative h-32 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=300&h=200&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="">
+                            <div class="absolute top-2 left-2 w-6 h-6 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 flex items-center justify-center"><i data-lucide="instagram" class="w-3 h-3 text-white"></i></div>
+                            <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">3위</div>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs font-medium text-text-primary truncate mb-1">쥬시 래스팅 틴트 컬렉션</p>
+                            <div class="flex items-center gap-2 text-[10px] text-text-secondary">
+                                <span class="flex items-center gap-0.5"><i data-lucide="heart" class="w-3 h-3 text-red-400"></i>38.7K</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="message-circle" class="w-3 h-3"></i>956</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="share-2" class="w-3 h-3"></i>634</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group rounded-xl border border-border-color overflow-hidden hover:shadow-card-hover transition-shadow">
+                        <div class="relative h-32 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&h=200&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="">
+                            <div class="absolute top-2 left-2 w-6 h-6 rounded-full bg-red-600 flex items-center justify-center"><i data-lucide="youtube" class="w-3 h-3 text-white"></i></div>
+                            <div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">4위</div>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs font-medium text-text-primary truncate mb-1">신제품 전색상 리뷰</p>
+                            <div class="flex items-center gap-2 text-[10px] text-text-secondary">
+                                <span class="flex items-center gap-0.5"><i data-lucide="eye" class="w-3 h-3"></i>52K</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="heart" class="w-3 h-3 text-red-400"></i>3.1K</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="message-circle" class="w-3 h-3"></i>287</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hashtag Cloud -->
+            <div class="bg-white p-6 rounded-xl border border-border-color shadow-card" data-component="hashtag-cloud">
+                <h3 class="text-lg font-bold text-text-primary flex items-center mb-4">
+                    <i data-lucide="hash" class="w-5 h-5 mr-2 text-sally-violet"></i>
+                    트렌딩 해시태그 & 키워드
+                </h3>
+                <div class="flex flex-wrap gap-2 items-center justify-center py-4">
+                    <span class="px-4 py-2 rounded-full bg-sally-indigo/10 text-sally-indigo font-bold text-lg">#롬앤</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-pink/10 text-sally-pink font-bold text-base">#romand</span>
+                    <span class="px-4 py-2 rounded-full bg-sally-violet/10 text-sally-violet font-bold text-lg">#글래스팅</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-indigo/10 text-sally-indigo font-semibold text-sm">#립틴트</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-pink/10 text-sally-pink font-semibold text-base">#juicylasting</span>
+                    <span class="px-2.5 py-1 rounded-full bg-sally-violet/10 text-sally-violet font-medium text-sm">#kbeauty</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-indigo/10 text-sally-indigo font-semibold text-sm">#뷰티</span>
+                    <span class="px-4 py-2 rounded-full bg-sally-pink/10 text-sally-pink font-bold text-base">#립스와치</span>
+                    <span class="px-2.5 py-1 rounded-full bg-gray-100 text-text-secondary font-medium text-xs">#데일리메이크업</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-violet/10 text-sally-violet font-semibold text-sm">#멜팅밤</span>
+                    <span class="px-2.5 py-1 rounded-full bg-gray-100 text-text-secondary font-medium text-xs">#코스메틱</span>
+                    <span class="px-2.5 py-1 rounded-full bg-sally-indigo/10 text-sally-indigo font-medium text-sm">#romandlip</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-pink/10 text-sally-pink font-semibold text-sm">#grwm</span>
+                    <span class="px-2.5 py-1 rounded-full bg-gray-100 text-text-secondary font-medium text-xs">#뷰티유튜버</span>
+                    <span class="px-2.5 py-1 rounded-full bg-sally-violet/10 text-sally-violet font-medium text-xs">#색조</span>
+                    <span class="px-3 py-1.5 rounded-full bg-sally-indigo/10 text-sally-indigo font-semibold text-sm">#수분틴트</span>
+                </div>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="bg-gradient-to-br from-sally-indigo/5 to-sally-violet/5 border border-sally-indigo/20 rounded-xl p-6 relative overflow-hidden" data-component="ai-insights">
+                <div class="absolute top-0 right-0 p-4 opacity-5">
+                    <i data-lucide="sparkles" class="w-40 h-40 text-sally-indigo"></i>
+                </div>
+                <h3 class="text-lg font-bold text-sally-indigo flex items-center mb-5">
+                    <i data-lucide="bot" class="w-6 h-6 mr-2"></i>
+                    AI 분석 인사이트
+                    <span class="ml-3 text-xs font-normal text-text-secondary bg-white px-2 py-0.5 rounded-full">5개 인사이트</span>
+                </h3>
+                <div class="space-y-4 relative z-10">
+                    <div class="flex items-start gap-3 bg-white/70 rounded-lg p-3 border border-white">
+                        <div class="w-6 h-6 rounded-full bg-sally-indigo text-white flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-xs">1</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-text-primary text-sm">브랜드 톤 분석</span>
+                                <span class="text-[10px] bg-success/10 text-success px-1.5 py-0.5 rounded font-medium">신뢰도 94%</span>
+                            </div>
+                            <p class="text-text-secondary text-sm leading-relaxed">'감성적 + 트렌디 + 자연스러운' 톤에 맞는 크리에이터 <span class="font-bold text-sally-indigo">47명</span>이 매칭됨</p>
+                            <span class="inline-block mt-1.5 text-[10px] bg-sally-indigo/10 text-sally-indigo px-2 py-0.5 rounded font-medium">액션: AI 크리에이터 추천 확인하기</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 bg-white/70 rounded-lg p-3 border border-white">
+                        <div class="w-6 h-6 rounded-full bg-sally-indigo text-white flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-xs">2</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-text-primary text-sm">경쟁사 대비 강점</span>
+                                <span class="text-[10px] bg-success/10 text-success px-1.5 py-0.5 rounded font-medium">신뢰도 91%</span>
+                            </div>
+                            <p class="text-text-secondary text-sm leading-relaxed">참여율이 경쟁사 대비 가장 높음. <span class="font-bold text-sally-indigo">'가성비 뷰티' 컨셉 캠페인</span>을 추천합니다.</p>
+                            <span class="inline-block mt-1.5 text-[10px] bg-sally-indigo/10 text-sally-indigo px-2 py-0.5 rounded font-medium">액션: 캠페인 전략 수립하기</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 bg-white/70 rounded-lg p-3 border border-white">
+                        <div class="w-6 h-6 rounded-full bg-sally-indigo text-white flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-xs">3</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-text-primary text-sm">TikTok 성장 기회</span>
+                                <span class="text-[10px] bg-sally-indigo/10 text-sally-indigo px-1.5 py-0.5 rounded font-medium">신뢰도 88%</span>
+                            </div>
+                            <p class="text-text-secondary text-sm leading-relaxed">TikTok 성장 잠재력 최고. 숏폼 크리에이터 협업으로 <span class="font-bold text-sally-indigo">Z세대 유입</span> 강화 가능</p>
+                            <span class="inline-block mt-1.5 text-[10px] bg-sally-indigo/10 text-sally-indigo px-2 py-0.5 rounded font-medium">액션: TikTok 크리에이터 탐색</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 bg-white/70 rounded-lg p-3 border border-white">
+                        <div class="w-6 h-6 rounded-full bg-sally-violet text-white flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-xs">4</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-text-primary text-sm">타겟 확장 가능성</span>
+                                <span class="text-[10px] bg-sally-indigo/10 text-sally-indigo px-1.5 py-0.5 rounded font-medium">신뢰도 85%</span>
+                            </div>
+                            <p class="text-text-secondary text-sm leading-relaxed">30대 후반~40대 초반 '클린 뷰티' 관심층으로 <span class="font-bold text-sally-violet">타겟 확장</span> 기회 발견</p>
+                            <span class="inline-block mt-1.5 text-[10px] bg-sally-violet/10 text-sally-violet px-2 py-0.5 rounded font-medium">액션: 타겟 확장 시뮬레이션</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 bg-white/70 rounded-lg p-3 border border-white">
+                        <div class="w-6 h-6 rounded-full bg-sally-violet text-white flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-xs">5</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-text-primary text-sm">캠페인 타이밍 제안</span>
+                                <span class="text-[10px] bg-success/10 text-success px-1.5 py-0.5 rounded font-medium">신뢰도 92%</span>
+                            </div>
+                            <p class="text-text-secondary text-sm leading-relaxed">2월 셋째 주 캠페인 시작 시 <span class="font-bold text-sally-indigo">참여율 23% 상승</span> 예측 (발렌타인 + 봄 시즌 효과)</p>
+                            <span class="inline-block mt-1.5 text-[10px] bg-success/10 text-success px-2 py-0.5 rounded font-medium">액션: 캠페인 일정 설정하기</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="flex items-center justify-between pt-4 border-t border-border-color">
+                <a href="03_brand_input.html" class="text-sm text-text-secondary hover:text-sally-indigo flex items-center transition-colors">
+                    <i data-lucide="pencil" class="w-4 h-4 mr-1.5"></i>
+                    브랜드 정보 수정
+                </a>
+                <div class="flex gap-3">
+                    <button class="px-5 py-2.5 rounded-lg border border-border-color bg-white text-text-primary font-medium text-sm hover:bg-gray-50 transition-colors flex items-center shadow-sm">
+                        <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                        상세 리포트 다운로드
+                    </button>
+                    <button onclick="window.location.href='05_matching.html'" class="clickable-pulse px-6 py-2.5 rounded-lg bg-sally-indigo text-white font-bold text-sm hover:bg-sally-indigo/90 transition-all shadow-lg shadow-sally-indigo/20 flex items-center">
+                        <i data-lucide="target" class="w-4 h-4 mr-2"></i>
+                        AI 크리에이터 추천 받기
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

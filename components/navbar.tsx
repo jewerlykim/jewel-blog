@@ -1,122 +1,130 @@
-import { useRouter } from "next/router";
-import Image from "next/image";
-import { useState } from "react";
+'use client';
+
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+
+interface NavLink {
+  href: string;
+  label: string;
+}
 
 const Navbar = () => {
-  const router = useRouter();
+  const currentPath = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const currentPath = router.pathname;
+
+  const navLinks: NavLink[] = [
+    { href: '/', label: '홈' },
+    { href: '/projects', label: '프로젝트' },
+    { href: '/posts', label: '포스트' },
+    { href: '/guestbook', label: '방명록' },
+    { href: '/about', label: '소개' },
+    { href: '/prototype', label: '프로토타입' },
+  ];
+
+  const isActive = (href: string): boolean => {
+    if (href === '/') {
+      return currentPath === '/';
+    }
+    return currentPath.startsWith(href);
+  };
+
+  const getLinkClasses = (href: string): string => {
+    const baseClasses =
+      'text-sm font-medium px-3 py-2 rounded-md transition-all duration-200';
+    const activeClasses = isActive(href)
+      ? 'text-accent bg-surface-elevated'
+      : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated/50';
+    return `${baseClasses} ${activeClasses}`;
+  };
 
   return (
-    <main>
-      <div>
-        <nav className="bg-white shadow py-4">
-          <div className="px-8 mx-auto max-w-7xl">
-            <div className="flex items-center justify-between h-16 ">
-              <div className="sm:hidden" />
+    <nav className="fixed top-4 left-4 right-4 z-50 bg-surface/95 backdrop-blur-md border border-border rounded-lg shadow-lg">
+      <div className="px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
+            <Image
+              src="/jewel-tiger-logo-big.png"
+              width={40}
+              height={40}
+              alt="JEWELOG logo"
+            />
+            <h1 className="text-text-primary font-bold text-lg hidden sm:block">
+              JEWELOG
+            </h1>
+          </Link>
 
-              <a className="flex items-center" href="/">
-                <Image
-                  src="/jewel-tiger-logo-big.png"
-                  width={50}
-                  height={50}
-                  alt="logo"
-                />
-                <h1 className="text-black my-auto">
-                  JEWELOG
-                </h1>
-              </a>
-              {/* 메뉴 */}
-              <div className="hidden sm:block">
-                <div className="flex items-baseline ml-10 space-x-4">
-                  <a
-                    className={`text-md font-medium px-3 py-2 rounded-md ${currentPath === "/" ? "text-gray-800" : "text-gray-300"
-                      } hover:text-gray-800`}
-                    href="/"
-                  >
-                    홈
-                  </a>
-                  <a
-                    className={`text-md font-medium px-3 py-2 rounded-md ${currentPath === "/posts"
-                      ? "text-gray-800"
-                      : "text-gray-300"
-                      } hover:text-gray-800`}
-                    href="/posts"
-                  >
-                    포스트
-                  </a>
-                  <a
-                    className={`text-md font-medium px-3 py-2 rounded-md ${currentPath === "/guestbook"
-                      ? "text-gray-800"
-                      : "text-gray-300"
-                      } hover:text-gray-800`}
-                    href="/guestbook"
-                  >
-                    방명록
-                  </a>
-                </div>
-
-              </div>
-
-
-
-
-
-              <div className="sm:hidden">
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  aria-controls="mobile-menu"
-                  aria-expanded="false"
+          {/* Desktop Menu */}
+          <div className="hidden sm:block">
+            <div className="flex items-center gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={getLinkClasses(link.href)}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
                 >
-                  <span className="sr-only">Open main menu</span>
-                  {/* Hamburger Icon */}
-                  <svg
-                    className="block h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
-              </div>
-              <div className={`sm:hidden ${isOpen ? 'block' : 'hidden'} absolute border-2 rounded bg-white right-2 top-[8%] z-10 shadow`}>
-
-                <a
-                  className={`text-md font-medium px-3 py-2 rounded-md ${currentPath === "/" ? "text-gray-800" : "text-gray-300"
-                    } hover:text-gray-800 block`}
-                  href="/"
-                >
-                  홈
-                </a>
-                <a
-                  className={`text-md font-medium block px-3 py-2 rounded-md ${currentPath === "/posts"
-                    ? "text-gray-800"
-                    : "text-gray-300"
-                    } hover:text-gray-800`}
-                  href="/posts"
-                >
-                  포스트
-                </a>
-                <a
-                  className={`text-md font-medium block bg-white px-3 py-2 rounded-md ${currentPath === "/guestbook"
-                    ? "text-gray-800"
-                    : "text-gray-300"
-                    } hover:text-gray-800`}
-                  href="/guestbook"
-                >
-                  방명록
-                </a>
-
-              </div>
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
-        </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="sm:hidden p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+          >
+            <svg
+              className="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d={
+                  isOpen
+                    ? 'M6 18L18 6M6 6l12 12'
+                    : 'M4 6h16M4 12h16M4 18h16'
+                }
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div
+            id="mobile-menu"
+            className="sm:hidden border-t border-border mt-4 pt-4"
+          >
+            <div className="space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`${getLinkClasses(link.href)} block w-full text-left`}
+                  onClick={() => setIsOpen(false)}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    </main>
+    </nav>
   );
 };
 

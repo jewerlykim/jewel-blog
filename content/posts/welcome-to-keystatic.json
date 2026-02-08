@@ -1,0 +1,9 @@
+{
+  "title": "Welcome to Keystatic",
+  "slug": "welcome-to-keystatic",
+  "date": "2026-02-08",
+  "category": "general",
+  "tags": "keystatic, cms, starter",
+  "image": null,
+  "content": "# Welcome to Keystatic\n\nThis is your first post created with Keystatic CMS. You can now manage your blog content through the Keystatic interface.\n\n## Getting Started\n\n- Edit posts through the Keystatic UI at `/keystatic`\n- Add tags separated by commas\n- Choose a category for your post\n- Upload featured images for each post\n\nHappy blogging!"
+}
