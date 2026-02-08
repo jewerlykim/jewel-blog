@@ -7,10 +7,11 @@ import Image from 'next/image';
 
 const CATEGORIES = [
   { label: 'All', value: 'all' },
-  { label: 'AI Insight', value: 'ai-insight' },
+  { label: 'AI', value: 'ai' },
+  { label: 'Engineering', value: 'engineering' },
   { label: 'Business', value: 'business' },
-  { label: 'Projects', value: 'projects' },
-  { label: 'Movies', value: 'movies' },
+  { label: 'Design', value: 'design' },
+  { label: 'Culture', value: 'culture' },
   { label: 'General', value: 'general' },
 ];
 
@@ -95,14 +96,18 @@ export default function Posts() {
 
                 {/* Thumbnail */}
                 <div className="w-full sm:w-[240px] flex-shrink-0">
-                  <div className="relative w-full aspect-[16/10] rounded-lg overflow-hidden bg-[#111]">
-                    <Image
-                      src={post.image || '/jewel-tiger-logo-big.png'}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                  {post.image ? (
+                    <div className="relative w-full aspect-[16/10] rounded-lg overflow-hidden bg-[#111]">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full aspect-[16/10] rounded-lg bg-[#111]" />
+                  )}
                 </div>
               </Link>
             ))}

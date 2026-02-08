@@ -27,10 +27,11 @@ export default config({
         category: fields.select({
           label: 'Category',
           options: [
-            { label: 'AI Insight', value: 'ai-insight' },
+            { label: 'AI', value: 'ai' },
+            { label: 'Engineering', value: 'engineering' },
             { label: 'Business', value: 'business' },
-            { label: 'Projects', value: 'projects' },
-            { label: 'Movies', value: 'movies' },
+            { label: 'Design', value: 'design' },
+            { label: 'Culture', value: 'culture' },
             { label: 'General', value: 'general' },
           ],
           defaultValue: 'general',

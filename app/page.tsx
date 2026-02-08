@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { reader } from '../lib/reader';
+import PostData from '../types/PostData';
+import HomePosts from '../components/home/home.posts';
 
 export const metadata: Metadata = {
   title: 'Jewel — AI Engineer, Writer, Builder',
@@ -23,46 +26,31 @@ export const metadata: Metadata = {
   },
 };
 
-const FILTERS = [
-  'Research',
-  'Engineering',
-  'AI',
-  'Business',
-  'Design',
-  'Culture',
-];
+async function getPosts(): Promise<PostData[]> {
+  try {
+    const posts = await reader.collections.posts.all();
+    return posts.map((post, index) => ({
+      id: index,
+      slug: post.slug,
+      title: post.entry.title || '',
+      date: post.entry.date || '',
+      image: post.entry.image || '',
+      content: '',
+      category: post.entry.category || '',
+      tags: Array.isArray(post.entry.tags)
+        ? post.entry.tags.join(',')
+        : '',
+    }));
+  } catch {
+    return [];
+  }
+}
 
-const POSTS = [
-  {
-    author: 'Jewel',
-    title: 'Designing a New Relationship with AI',
-    category: 'AI',
-    date: '25 November 2024',
-  },
-  {
-    author: 'Jewel',
-    title: 'How to Build an AI Assistant that Drives Immediate Value',
-    category: 'Engineering',
-    date: '07 August 2024',
-  },
-  {
-    author: 'Jewel',
-    title: 'Evolving with Intent',
-    category: 'Design',
-    date: '28 February 2024',
-  },
-  {
-    author: 'Jewel',
-    title: 'The Business of Intelligence',
-    category: 'Business',
-    date: '15 January 2024',
-  },
-];
+export default async function Home() {
+  const posts = await getPosts();
 
-export default function Home() {
   return (
     <main className="min-h-screen bg-background text-text-primary">
-      {/* Hero Section */}
       <section className="px-6 sm:px-12 lg:px-24 py-24 sm:py-32">
         <h1 className="font-serif text-5xl sm:text-7xl lg:text-8xl font-normal leading-[1.05] tracking-tight max-w-4xl">
           I write about
@@ -71,57 +59,8 @@ export default function Home() {
         </h1>
       </section>
 
-      {/* Filter Pills */}
-      <section className="px-6 sm:px-12 lg:px-24 pb-8">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-xs text-[#666] uppercase tracking-widest mr-2">
-            Filters
-          </span>
-          {FILTERS.map((filter) => (
-            <button
-              key={filter}
-              className="rounded-full border border-[#333] px-4 py-1.5 text-sm text-[#666] hover:text-white hover:border-[#666] transition-colors duration-200"
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </section>
+      <HomePosts posts={posts} />
 
-      {/* Blog Post Rows */}
-      <section className="px-6 sm:px-12 lg:px-24">
-        {POSTS.map((post, i) => (
-          <article
-            key={i}
-            className="border-t border-[#1a1a1a] py-12 sm:py-16 flex flex-col sm:flex-row gap-8 sm:gap-12 group cursor-pointer"
-          >
-            {/* Left: Text */}
-            <div className="flex-1 flex flex-col justify-center min-w-0">
-              <p className="text-xs text-[#666] uppercase tracking-widest mb-3">
-                {post.author}
-              </p>
-              <h2 className="text-xl sm:text-2xl font-semibold text-white leading-snug mb-4 group-hover:text-[#999] transition-colors duration-200">
-                {post.title}
-              </h2>
-              <div className="flex items-center gap-3 text-xs text-[#666]">
-                <span>{post.category}</span>
-                <span className="w-1 h-1 rounded-full bg-[#333]" />
-                <span>{post.date}</span>
-              </div>
-            </div>
-
-            {/* Right: Thumbnail Placeholder */}
-            <div className="w-full sm:w-[320px] lg:w-[400px] flex-shrink-0">
-              <div className="w-full aspect-[16/10] rounded-lg bg-[#111]" />
-            </div>
-          </article>
-        ))}
-
-        {/* Last border */}
-        <div className="border-t border-[#1a1a1a]" />
-      </section>
-
-      {/* Show More */}
       <section className="px-6 sm:px-12 lg:px-24 py-12 flex justify-center">
         <Link
           href="/insights"
@@ -131,7 +70,6 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* Newsletter Section */}
       <section className="px-6 sm:px-12 lg:px-24 py-24 sm:py-32 border-t border-[#1a1a1a]">
         <div className="max-w-2xl">
           <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal leading-[1.1] mb-12">

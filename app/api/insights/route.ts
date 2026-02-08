@@ -16,7 +16,7 @@ export async function GET() {
       slug: post.slug,
       title: post.entry.title || '',
       date: post.entry.date || '',
-      image: post.entry.image || '/jewel-tiger-logo-big.png',
+      image: post.entry.image || '',
       content: '',
       category: post.entry.category || '',
       tags: Array.isArray(post.entry.tags)
