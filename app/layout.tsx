@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: 'Jewel',
   description: 'AI Engineer, Writer, Builder',
   icons: {
-    icon: '/jewel-tiger-logo.png',
+    icon: '/icon.svg',
   },
 };
 
