@@ -23,14 +23,6 @@ const Footer = () => (
           >
             GitHub
           </a>
-          <a
-            href="https://twitter.com/GODJEWELKBS"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm text-text-secondary hover:text-white transition-colors"
-          >
-            X
-          </a>
         </div>
 
         <div className="flex flex-col gap-3">

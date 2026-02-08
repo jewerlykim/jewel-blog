@@ -184,14 +184,7 @@ export default function About() {
                   >
                     LinkedIn
                   </a>
-                  <a
-                    href="https://twitter.com/jewerlykim"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-white hover:text-[#999] transition-colors duration-200 text-sm"
-                  >
-                    X (Twitter)
-                  </a>
+
                 </div>
               </div>
 
